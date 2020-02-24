@@ -1,0 +1,6 @@
+/.idea/**
+!/.idea/encodings.xml
+!/.idea/codeStyles
+!/.idea/codeStyles/*
+!/.idea/inspectionProfiles
+!/.idea/inspectionProfiles/*
