@@ -391,9 +391,9 @@
             $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
             $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
-            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
-            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
-            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
+            $oWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
+            $oContactProjectSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
+            $oContactWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
 
             $iWBSSet = $oWBSSet->Count();
             $iContactProjectSet = $oContactProjectSet->Count();
@@ -407,7 +407,6 @@
 
         	  $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
             $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
-
 
             $oPage->add('<table style="vertical-align:top"><tr>');
             $oPage->add('</tr><tr>');
@@ -486,13 +485,14 @@
 
                 $aScope = array(
 									'title' => Dict::S('GanttDashlet/Label'),
-									'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'closed\'',
+									'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
+									'extra_params'=>'',
 									'depends_on' => 'wbss_parent_list',
 									'target_depends_on' =>'parent_wbs_id',
 									'label' => 'name',
-									'start_date' => 'start_date',
-									'end_date' =>'end_date',
-									'additional_info1' => 'ref',
+									'start_date' => 're_estimated_start_date',
+									'end_date' =>'re_estimated_end_date',
+									'additional_info1' => 'wbs_owner_id_friendlyname',
 									'additional_info2' => '',
 									'percentage' => 'completion',
 									'parent' => 'project_id',
@@ -502,7 +502,7 @@
 											'label' => 'title',
 											'start_date' => 'start_date',
 											'end_date' =>'end_date',
-											'additional_info1' => 'ref',
+											'additional_info1' => 'agent_id_friendlyname',
 											'additional_info2' => '',
 											'percentage' => '',
 											'parent' => '',
@@ -510,6 +510,8 @@
 							);
 							$oView = new Gantt($aScope);
 							$oView->Display($oPage);
+				      $oPage->add_ready_script('setTimeout( function(){ if($("ul >li > [data-tab-id=Summary]").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
+							$oPage->add_ready_script('$("ul >li > [data-tab-id=Summary]").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
 
             }
       	}
@@ -1238,9 +1240,6 @@
 							<attribute id="acceptance">
 								<read_only/>
 							</attribute>
-							<attribute id="risks_list">
-								<read_only/>
-							</attribute>
 							<attribute id="completion">
 								<read_only/>
 							</attribute>
@@ -1263,9 +1262,6 @@
 							<attribute id="name">
 								<read_only/>
 								<mandatory/>
-							</attribute>
-							<attribute id="projectchanges_list">
-								<read_only/>
 							</attribute>
 							<attribute id="project_id">
 								<read_only/>
@@ -1410,9 +1406,6 @@
 						<attribute id="acceptance">
 							<read_only/>
 						</attribute>
-						<attribute id="risks_list">
-							<read_only/>
-						</attribute>
 						<attribute id="completion">
 							<read_only/>
 						</attribute>
@@ -1435,9 +1428,6 @@
 						<attribute id="name">
 							<read_only/>
 							<mandatory/>
-						</attribute>
-						<attribute id="projectchanges_list">
-							<read_only/>
 						</attribute>
 						<attribute id="project_id">
 							<read_only/>
