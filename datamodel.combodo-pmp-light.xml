@@ -21,54 +21,51 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
-	{
-				if (!$bEditMode)
-        {
+					<code><![CDATA[
+						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
+			{
             $iContactid = $this->GetKey();
-            $sOQLProject = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.status != 'close' AND l1.contact_id= :contact";
-            $sOQLWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'close' AND wbs.status NOT IN ('cancel','closed') AND l2.contact_id=:contact";
+            $sOQLProject = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.status != 'closed' AND l1.contact_id= :contact";
+            $sOQLWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'closed' AND wbs.status NOT IN ('cancel','closed') AND l2.contact_id=:contact";
 
             $oOQLProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLProject), array(), array('contact' => $iContactid));
             $oOQLWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('contact' => $iContactid));
-
 
             $iContactProjectSet = $oOQLProjectSet->Count();
             $iContactWBSSet = $oOQLWBSSet->Count();
 
             $oPage->SetCurrentTab(Dict::S('Class:Contact/Tab:PMP'));
 
-
             if ( $iContactProjectSet> 0)
             {
                 $aDetails = array();
-                $aExtraParam = array ('menu'=>true,
-	                'zlist' => false,
-	                'display_limit'=>false,
-	                'view_link'=>false,
-	                'extra_fields' => 'role,project_id,influence,power,allocated_percent,allocated_days',
-                );
-                $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
-                $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
-                $oBlock->Display($oPage, 'project_contact', $aExtraParam);
-            }
-            if ( $iContactWBSSet> 0)
-            {
-                $aDetails = array();
-                $aExtraParam = array ('menu'=>true,
-	                'zlist' => false,
-	                'display_limit'=>false,
-	                'view_link'=>false,
-	                'extra_fields' => 'role,project_id,wbs_id,influence,power,allocated_percent,allocated_days',
-                );
-                $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
-                $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
-                $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
-            }
-	    	}
-	      parent::DisplayBareRelations($oPage, $bEditMode);
+            $aExtraParam = array ('menu'=>true,
+            'zlist' => false,
+            'display_limit'=>false,
+            'view_link'=>false,
+            'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
+            );
+            $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
+            $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
+            $oBlock->Display($oPage, 'project_contact', $aExtraParam);
+        }
+        if ( $iContactWBSSet> 0)
+        {
+            $aDetails = array();
+            $aExtraParam = array ('menu'=>true,
+            'zlist' => false,
+            'display_limit'=>false,
+            'view_link'=>false,
+            'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
+            );
+            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
+            $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
+            $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
+         }
+				 parent::DisplayBareRelations($oPage, $bEditMode);
 
-	}]]></code>
+			}
+						]]></code>
 				</method>
 			</methods>
 			<presentation>
@@ -288,13 +285,14 @@
 				<field id="status" xsi:type="AttributeEnum">
 					<sql>status</sql>
 					<values>
-						<value id="initiate">initiate</value>
-						<value id="plan">plan</value>
-						<value id="execute">execute</value>
-						<value id="monitor">monitor</value>
-						<value id="close">close</value>
+						<value id="initiated">initiated</value>
+						<value id="planned">planned</value>
+						<value id="executed">executed</value>
+						<value id="monitored">monitored</value>
+						<value id="closed">closed</value>
+						<value id="cancelled">cancelled</value>
 					</values>
-					<default_value/>
+					<default_value>initiated</default_value>
 					<is_null_allowed>false</is_null_allowed>
 					<display_style/>
 					<dependencies/>
@@ -347,7 +345,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function OnInsert()
+					<code><![CDATA[
+
+							public function OnInsert()
 	{
         parent::OnInsert();
 		$this->Set('last_update', time());
@@ -358,7 +358,9 @@
                {
                     $this->Set('revised_end_date',$this->Get('end_date'));
                }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="OnUpdate">
 					<comment>/**
@@ -368,11 +370,15 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function OnUpdate()
+					<code><![CDATA[
+
+							public function OnUpdate()
 	{
 		parent::OnUpdate();
 		$this->Set('last_update', time());
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="DisplayBareRelations">
 					<comment>/**
@@ -382,106 +388,112 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
+					<code><![CDATA[
+						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
 	{
-		        if (!$bEditMode)
-        {
+
             $iProjectid = $this->GetKey();
             $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
             $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
             $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
-            $oWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
-            $oContactProjectSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
-            $oContactWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
+            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
+            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
+            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
 
             $iWBSSet = $oWBSSet->Count();
             $iContactProjectSet = $oContactProjectSet->Count();
             $iContactWBSSet = $oContactWBSSet->Count();
 						$iWBSCosts=0;
-
             while ($oWBS = $oWBSSet->Fetch())
             {
-                $iWBSCosts += $oWBS->Get('wbs_cost');
+            		$iWBSCosts += $oWBS->Get('wbs_cost');
             }
 
         	  $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
             $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
 
-            $oPage->add('<table style="vertical-align:top"><tr>');
-            $oPage->add('</tr><tr>');
-            $oPage->add('<td style="vertical-align:left">');
-            $oPage->add('<fieldset>');
-			      $oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
 
-            $aDetails = array();
-						$sDisplayValue = $this->GetAsHTML('title');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'title').'</span>', 'value' => $sDisplayValue);
-
-						$sDisplayValue = $this->GetAsHTML('status');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'status').'</span>', 'value' => $sDisplayValue);
-
-						$sDisplayValue = $this->GetAsHTML('agent_id');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'agent_id').'</span>', 'value' => $sDisplayValue);
-
-						$sDisplayValue = $this->GetAsHTML('revised_end_date');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'revised_end_date').'</span>', 'value' => $sDisplayValue);
-
-						$sDisplayValue = $this->GetAsHTML('calculated_end_date');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span>', 'value' => $sDisplayValue);
-
-						$oPage->Details($aDetails);
+						$oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
+						$oPage->add('<tbody><tr>');
+						$oPage->add('<td style="vertical-align:top; width:50%" class="">');
+						$oPage->add('<fieldset>');
+						$oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
+						$oPage->add('<div class="details">');
+						$oPage->add('<div class="field_container field_small" data-attcode="title">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'title').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('title').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="status">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'status').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('status').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="agent_id">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'agent_id').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('agent_id').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="revised_end_date">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'revised_end_date').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('revised_end_date').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="calculated_end_date">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('calculated_end_date').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('</div></div>');
 						$oPage->add('</fieldset>');
 						$oPage->add('</td>');
-
-						$oPage->add('<td style="vertical-align:left">');
+						$oPage->add('<td style="vertical-align:top; width:50%" class="">');
 						$oPage->add('<fieldset>');
 						$oPage->add('<legend>'.Dict::S('Class:Project:Summary_costs').'</legend>');
-						$aDetails = array();
-						$sDisplayValue = $this->GetAsHTML('estimated_budget');
-						$aDetails[] = array('label' => '<span>'.MetaModel::GetLabel('Project', 'estimated_budget').'</span>', 'value' => $sDisplayValue);
-						$aDetails[] = array('label' => '<span> Sum of deliverables costs</span>', 'value' => $iWBSCosts);
-
-						$oPage->Details($aDetails);
+						$oPage->add('<div class="details">');
+						$oPage->add('<div class="field_container field_small" data-attcode="estimated_budget">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="costs_spent">');
+						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'costs_spent').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('costs_spent').'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
+						$oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
+						$oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
+						$oPage->add('</div>');
+						$oPage->add('</div></div>');
 						$oPage->add('</fieldset>');
 						$oPage->add('</td>');
-						$oPage->add('</tr>');
-						$oPage->add('</table>');
+						$oPage->add('</tr></tbody></table>');
 
-            if ( $iContactProjectSet> 0)
+						if ( $iContactProjectSet> 0)
             {
-                $aDetails = array();
                 $aExtraParam = array ('menu'=>true,
 	                'zlist' => false,
 	                'display_limit'=>false,
 	                'view_link'=>false,
-	                'extra_fields' => 'role,contact_id,influence,power,allocated_percent,allocated_days',
+	                'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
                 );
-                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:Project/Attribute:contacts_list+'));
+                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'));
                 $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
                 $oBlock->Display($oPage, 'project_contacts', $aExtraParam);
             }
-             if ( $iContactWBSSet> 0)
+            if ( $iContactWBSSet> 0)
             {
-                $aDetails = array();
                 $aExtraParam = array ('menu'=>true,
 	                'zlist' => false,
 	                'display_limit'=>false,
 	                'view_link'=>false,
-	                'extra_fields' => 'role,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
+	                'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
                 );
-                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list+'));
+                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'));
                 $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
                 $oBlock->Display($oPage, 'WBS_contacts', $aExtraParam);
             }
-
             if ($iWBSSet > 0)
             {
-                $aDetails = array();
-                $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-                $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list'));
-                $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
-                $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
+              $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+              $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list_displaybare'));
+              $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
+              $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
 
                 $aScope = array(
 									'title' => Dict::S('GanttDashlet/Label'),
@@ -512,64 +524,12 @@
 							$oView->Display($oPage);
 				      $oPage->add_ready_script('setTimeout( function(){ if($("ul >li > [data-tab-id=Summary]").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
 							$oPage->add_ready_script('$("ul >li > [data-tab-id=Summary]").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
-
             }
-      	}
 
-	    parent::DisplayBareRelations($oPage, $bEditMode);
-	}]]></code>
-        </method>
-        <method id="GetInitialStateAttributeFlags">
-          <comment>/**
- *
- * @author Axelle Bost
- */</comment>
-          <static>false</static>
-          <access>public </access>
-          <code><![CDATA[	public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
-	{
-							$aHiddenAttributes = array('creation_date','last_update');
-							if (in_array($sAttCode, $aHiddenAttributes))
-							{
-									return(OPT_ATT_HIDDEN | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons));
-							}
-							else
-							{
-									return parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
-							}
-
-							$aReadAttributes = array('calculated_end_date');
-							if (in_array($sAttCode, $aReadAttributes))
-							{
-									return(OPT_ATT_READONLY | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons));
-							}
-							else
-							{
-									return parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
-							}
-
-	}]]></code>
-        </method>
-        <method id="GetAttributeFlags">
-          <comment>/**
- *
- * @author Axelle Bost
- */</comment>
-          <static>false</static>
-          <access>public </access>
-          <code><![CDATA[	public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
-	{
-						$aLimitedAttributes = array('creation_date','last_update','calculated_end_date');
-						if (in_array($sAttCode, $aLimitedAttributes))
-						{
-								return(OPT_ATT_READONLY | parent::GetAttributeFlags($sAttCode, $aReasons));
-						}
-						else
-						{
-								return parent::GetAttributeFlags($sAttCode, $aReasons);
-						}
-	}]]></code>
-        </method>
+				    parent::DisplayBareRelations($oPage, $bEditMode);
+				    $oPage->RemoveTab('Ticket:ImpactAnalysis');
+				}]]></code>
+				</method>
 				<method id="GetProjectEndDates">
 					<comment>/**
 						*
@@ -578,7 +538,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function GetProjectEndDates()
+					<code><![CDATA[
+
+							public function GetProjectEndDates()
 	{
 		{
 			 	      if ( $this->Get('revised_end_date') != NULL  )
@@ -595,7 +557,9 @@
               return array('end_date_project_integer'=> $iEndDateProject, 'end_date_project_string'=> $sEndDateProject);
                }
 	    }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="DoCheckToWrite">
 					<comment>/**
@@ -605,7 +569,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function DoCheckToWrite()
+					<code><![CDATA[
+
+							public function DoCheckToWrite()
 	{
 
 		     parent::DoCheckToWrite();
@@ -618,7 +584,9 @@
         $this->m_aCheckIssues[] = Dict::Format('Project:Error:ProjectEndDateMustBeGreaterThanWBSEndDate');
       }
 
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="PrefillCreationForm">
 					<comment>/**
@@ -629,13 +597,17 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function PrefillCreationForm(&$aContextParam)
+					<code><![CDATA[
+
+							public function PrefillCreationForm(&$aContextParam)
 	{
 	    if (empty($this->Get('start_date')))
 	    {
 	        $this->Set('start_date', time());
 	    }
-	}]]></code>
+	}
+
+						]]></code>
 					<arguments>
 						<argument id="1">
 							<mandatory>false</mandatory>
@@ -651,10 +623,14 @@
 					</comment>
 					<static>true</static>
 					<access>public</access>
-					<code><![CDATA[	public static function GetTicketRefFormat()
+					<code><![CDATA[
+
+							public static function GetTicketRefFormat()
 	{
 		return 'Proj-%06d';
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 			</methods>
 			<presentation>
@@ -831,6 +807,9 @@
 										<item id="last_update">
 											<rank>60</rank>
 										</item>
+										<item id="close_date">
+											<rank>70</rank>
+										</item>
 									</items>
 									<rank>10</rank>
 								</item>
@@ -859,7 +838,310 @@
 					</items>
 				</default_search>
 			</presentation>
-			<parent>Ticket</parent>
+			<parent>Ticket</parent>   <lifecycle>
+			<attribute>status</attribute>
+			<stimuli>
+				<stimulus id="ev_plan" xsi:type="StimulusUserAction"/>
+				<stimulus id="ev_execute" xsi:type="StimulusUserAction"/>
+				<stimulus id="ev_reexecute" xsi:type="StimulusUserAction"/>
+				<stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+				<stimulus id="ev_monitor" xsi:type="StimulusUserAction"/>
+				<stimulus id="ev_cancel" xsi:type="StimulusUserAction"/>
+			</stimuli>
+			<states>
+				<state id="initiated">
+					<flags>
+						<attribute id="creation_date">
+							<hidden/>
+						</attribute>
+						<attribute id="last_update">
+							<hidden/>
+						</attribute>
+						<attribute id="contingency_reserve">
+							<hidden/>
+						</attribute>
+						<attribute id="costs_spent">
+							<hidden/>
+						</attribute>
+						<attribute id="wbs_cost">
+							<hidden/>
+						</attribute>
+						<attribute id="close_date">
+							<hidden/>
+						</attribute>
+						<attribute id="calculated_end_date">
+							<read_only/>
+						</attribute>
+						<attribute id="revised_end_date">
+							<hidden/>
+						</attribute>
+						<attribute id="end_date">
+							<mandatory/>
+						</attribute>
+					</flags>
+					<transitions>
+						<transition id="ev_plan">
+							<stimulus>ev_plan</stimulus>
+							<target>planned</target>
+							<actions/>
+						</transition>
+						<transition id="ev_cancel">
+							<stimulus>ev_cancel</stimulus>
+							<target>cancelled</target>
+							<actions>
+								<action>
+									<verb>SetCurrentDate</verb>
+									<params>
+										<param xsi:type="attcode">close_date</param>
+									</params>
+								</action>
+							</actions>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+					</transitions>
+				</state>
+				<state id="planned">
+					<flags>
+						<attribute id="creation_date">
+							<read_only/>
+						</attribute>
+						<attribute id="last_update">
+							<read_only/>
+						</attribute>
+						<attribute id="contingency_reserve">
+							<read_only/>
+						</attribute>
+						<attribute id="costs_spent">
+							<hidden/>
+						</attribute>
+						<attribute id="wbs_cost">
+							<read_only/>
+						</attribute>
+						<attribute id="agent_id">
+							<must_prompt/>
+						</attribute>
+						<attribute id="revised_end_date"/>
+						<attribute id="constraints">
+							<must_prompt/>
+						</attribute>
+						<attribute id="exclusions">
+							<must_prompt/>
+						</attribute>
+						<attribute id="requirement">
+							<must_prompt/>
+						</attribute>
+					</flags>
+					<transitions>
+						<transition id="ev_execute">
+							<stimulus>ev_execute</stimulus>
+							<target>executed</target>
+							<actions/>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+						<transition id="ev_cancel">
+							<stimulus>ev_cancel</stimulus>
+							<target>cancelled</target>
+							<actions>
+								<action>
+									<verb>SetCurrentDate</verb>
+									<params>
+										<param xsi:type="attcode">close_date</param>
+									</params>
+								</action>
+							</actions>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+					</transitions>
+					<inherit_flags_from>initiated</inherit_flags_from>
+				</state>
+				<state id="executed">
+					<flags>
+						<attribute id="costs_spent">
+							<read_only/>
+						</attribute>
+					</flags>
+					<transitions>
+						<transition id="ev_monitor">
+							<stimulus>ev_monitor</stimulus>
+							<target>monitored</target>
+							<actions/>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+						<transition id="ev_cancel">
+							<stimulus>ev_cancel</stimulus>
+							<target>cancelled</target>
+							<actions>
+								<action>
+									<verb>SetCurrentDate</verb>
+									<params>
+										<param xsi:type="attcode">close_date</param>
+									</params>
+								</action>
+							</actions>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+					</transitions>
+					<inherit_flags_from>planned</inherit_flags_from>
+				</state>
+				<state id="monitored">
+					<flags/>
+					<transitions>
+						<transition id="ev_close">
+							<stimulus>ev_close</stimulus>
+							<target>closed</target>
+							<actions>
+								<action>
+									<verb>SetCurrentDate</verb>
+									<params>
+										<param xsi:type="attcode">close_date</param>
+									</params>
+								</action>
+							</actions>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+						<transition id="ev_reexecute">
+							<stimulus>ev_reexecute</stimulus>
+							<target>executed</target>
+							<actions/>
+							<flags>
+								<attribute id="private_log">
+									<must_prompt/>
+								</attribute>
+							</flags>
+						</transition>
+					</transitions>
+					<inherit_flags_from>executed</inherit_flags_from>
+				</state>
+				<state id="closed">
+					<flags>
+						<attribute id="agent_id">
+							<read_only/>
+						</attribute>
+						<attribute id="calculated_end_date">
+							<read_only/>
+						</attribute>
+						<attribute id="caller_id">
+							<read_only/>
+						</attribute>
+						<attribute id="close_date">
+							<read_only/>
+						</attribute>
+						<attribute id="constraints">
+							<read_only/>
+						</attribute>
+						<attribute id="contacts_list">
+							<read_only/>
+						</attribute>
+						<attribute id="contingency_reserve">
+							<read_only/>
+						</attribute>
+						<attribute id="costs_spent">
+							<read_only/>
+						</attribute>
+						<attribute id="creation_date">
+							<read_only/>
+						</attribute>
+						<attribute id="description">
+							<read_only/>
+						</attribute>
+						<attribute id="end_date">
+							<read_only/>
+						</attribute>
+						<attribute id="estimated_budget">
+							<read_only/>
+						</attribute>
+						<attribute id="exclusions">
+							<read_only/>
+						</attribute>
+						<attribute id="functionalcis_list">
+							<read_only/>
+						</attribute>
+						<attribute id="last_update">
+							<read_only/>
+						</attribute>
+						<attribute id="mgt_reserve_budget">
+							<read_only/>
+						</attribute>
+						<attribute id="org_id">
+							<read_only/>
+						</attribute>
+						<attribute id="private_log">
+							<read_only/>
+						</attribute>
+						<attribute id="projectchanges_list">
+							<read_only/>
+						</attribute>
+						<attribute id="requirement">
+							<read_only/>
+						</attribute>
+						<attribute id="revised_end_date">
+							<read_only/>
+						</attribute>
+						<attribute id="risks_list">
+							<read_only/>
+						</attribute>
+						<attribute id="start_date">
+							<read_only/>
+						</attribute>
+						<attribute id="team_id">
+							<read_only/>
+						</attribute>
+						<attribute id="title">
+							<read_only/>
+						</attribute>
+						<attribute id="wbss_list">
+							<read_only/>
+						</attribute>
+						<attribute id="wbs_cost">
+							<read_only/>
+						</attribute>
+					</flags>
+					<transitions/>
+				</state>
+				<state id="cancelled">
+					<flags>
+						<attribute id="agent_id">
+							<read_only/>
+						</attribute>
+						<attribute id="caller_id">
+							<read_only/>
+						</attribute>
+						<attribute id="close_date">
+							<read_only/>
+						</attribute>
+						<attribute id="last_update">
+							<read_only/>
+						</attribute>
+					</flags>
+					<transitions/>
+					<inherit_flags_from>closed</inherit_flags_from>
+				</state>
+			</states>
+		</lifecycle>
 		</class>
 		<class id="lnkContactToTicket" _created_in="itop-tickets" _delta="must_exist">
 			<fields>
@@ -1116,7 +1398,7 @@
 						<attribute id="project_id"/>
 					</dependencies>
 				</field>
-				<field id="completion" xsi:type="AttributePercentage">
+				<field id="completion" xsi:type="AttributePercentageCompletion">
 					<sql>completion</sql>
 					<default_value/>
 					<is_null_allowed>true</is_null_allowed>
@@ -1228,6 +1510,13 @@
 									<action>
 										<verb>StartChildWBS</verb>
 									</action>
+									<action>
+										<verb>Set</verb>
+										<params>
+											<param xsi:type="attcode">completion</param>
+											<param xsi:type="string">100</param>
+										</params>
+									</action>
 								</actions>
 							</transition>
 						</transitions>
@@ -1306,6 +1595,11 @@
 							<transition id="ev_reopen">
 								<stimulus>ev_reopen</stimulus>
 								<target>running</target>
+								<actions>
+									<action>
+										<verb>SuspendChildWBS</verb>
+									</action>
+								</actions>
 								<actions/>
 							</transition>
 						</transitions>
@@ -1517,7 +1811,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
+					<code><![CDATA[
+
+							public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
 	{
         if ((MetaModel::IsValidAttCode('WBS','wbs_cost')) && ($sAttCode == 'wbs_cost'))
         {
@@ -1533,7 +1829,9 @@
         {
             return parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
         }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="GetAttributeFlags">
 					<comment>/**
@@ -1543,7 +1841,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
+					<code><![CDATA[
+
+							public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 	{
 						if ((MetaModel::IsValidAttCode('WBS','delay')) && ($sAttCode == 'delay'))
             {
@@ -1560,7 +1860,9 @@
                 return parent::GetAttributeFlags($sAttCode, $aReasons);
             }
 
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="OnInsert">
 					<comment>/**
@@ -1570,7 +1872,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function OnInsert()
+					<code><![CDATA[
+
+							public function OnInsert()
 	{
 				 parent::OnInsert();
 
@@ -1599,7 +1903,9 @@
          $this->Set('delay',$aInitialDates['delay']);
 
 
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="OnUpdate">
 					<comment>/**
@@ -1609,7 +1915,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function OnUpdate()
+					<code><![CDATA[
+
+							public function OnUpdate()
 	{
          parent::OnUpdate();
          $this->WBS_costs_budget();
@@ -1666,7 +1974,9 @@
                // I update delay to be used in future for calculation
                $this->Set('delay',$idelay);
            }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="StartChildWBS">
 					<comment>/**
@@ -1677,7 +1987,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function StartChildWBS()
+					<code><![CDATA[
+
+							public function StartChildWBS()
 	{
       // check my dependant deliverable
       $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
@@ -1696,7 +2008,9 @@
            }
       }
       return true;
-	}]]></code>
+	}
+
+						]]></code>
 					<arguments/>
 				</method>
 				<method id="AfterInsert">
@@ -1707,7 +2021,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function AfterInsert()
+					<code><![CDATA[
+
+							public function AfterInsert()
 	{
           parent::AfterInsert();
           //Im on child, I look for my parents
@@ -1730,7 +2046,9 @@
               $this->DBUpdate();
           }
           $this->SetProjectCalculatedEndDate();
-	}    	]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="AfterUpdate">
 					<comment>/**
@@ -1740,7 +2058,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function AfterUpdate()
+					<code><![CDATA[
+
+							public function AfterUpdate()
 	{
 	      parent::AfterUpdate();
 	      $this->SetProjectCalculatedEndDate();
@@ -1763,7 +2083,9 @@
 	               //I postpone end date of my dependant deliverable
 	          }
 	      }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="WBS_costs_budget">
 					<comment>/**
@@ -1773,7 +2095,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function WBS_costs_budget()
+					<code><![CDATA[
+
+							public function WBS_costs_budget()
 	{
 		       	if ( ($this->Get('labor_cost') != NULL) || ($this->Get('material_cost') != NULL ) )
                 {
@@ -1785,7 +2109,9 @@
             	      $iWBSfreebudget = ($this->Get('wbs_budget') - $iWBScost);
                       $this->Set('available_budget', $iWBSfreebudget);
             	}
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="SetWBSStartEndDates">
 					<comment>/**
@@ -1795,7 +2121,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function SetWBSStartEndDates()
+					<code><![CDATA[
+
+							public function SetWBSStartEndDates()
 	{
 	 	 //if re_estimated_start_date is set on ticket, it will be considered instead of start_date
 
@@ -1825,7 +2153,9 @@
 
 
             return array('start_date_integer'=> $iStartDate, 'end_date_integer'=> $iEndDate, 'delay'=> $idelay, 'start_date_string'=> $sStartDate, 'end_date_string'=> $sEndDate, 'freetime_integer' => $ifreeTime );
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="MakeTicketRef">
 					<comment>/**
@@ -1835,11 +2165,15 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function MakeTicketRef($iNextId)
+					<code><![CDATA[
+
+							public function MakeTicketRef($iNextId)
 	{
 		$sFormat = 'Del-%06d';
         return sprintf($sFormat, $iNextId);
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="DBInsertNoReload">
 					<comment>/**
@@ -1849,14 +2183,18 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function DBInsertNoReload()
+					<code><![CDATA[
+
+							public function DBInsertNoReload()
 			{
 				    $iNextId = ItopCounter::incClass(get_class($this));
 		        $sRef = $this->MakeTicketRef($iNextId);
 		        $this->Set('ref', $sRef);
 		        $iKey = parent::DBInsertNoReload();
 		        return $iKey;
-			}]]></code>
+			}
+
+						]]></code>
 				</method>
 				<method id="PrefillCreationForm">
 					<comment>/**
@@ -1867,13 +2205,17 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function PrefillCreationForm(&$aContextParam)
+					<code><![CDATA[
+
+							public function PrefillCreationForm(&$aContextParam)
 	{
 	    if (empty($this->Get('start_date')))
 	    {
 	        $this->Set('start_date', time());
 	    }
-	}]]></code>
+	}
+
+						]]></code>
 					<arguments>
 						<argument id="1">
 							<mandatory>false</mandatory>
@@ -1889,7 +2231,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function DoCheckToWrite()
+					<code><![CDATA[
+
+							public function DoCheckToWrite()
 	{
 		  parent::DoCheckToWrite();
       if (($this->Get('start_date') > $this->Get('end_date')) || ($this->Get('re_estimated_start_date') > $this->Get('re_estimated_end_date')))
@@ -1909,7 +2253,9 @@
 	           }
           }
       }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="SetProjectCalculatedEndDate">
 					<comment>/**
@@ -1919,7 +2265,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function SetProjectCalculatedEndDate()
+					<code><![CDATA[
+
+							public function SetProjectCalculatedEndDate()
 	{
 				      //deliverable is attached to a project
 		          if ($this->Get('project_id') != 0)
@@ -1938,7 +2286,9 @@
                         $oProject->DBUpdate();
                    }
               }
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="SetProjectWBScalculated">
 					<comment>/**
@@ -1948,7 +2298,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function SetProjectWBScalculated()
+					<code><![CDATA[
+
+							public function SetProjectWBScalculated()
 	{
 						// Costs of all project's WBS related are added to wbs_cost field of project associated
             $iProjectId = $this->Get('project_id');
@@ -1962,7 +2314,9 @@
 		        $oProject = MetaModel::GetObject('Project', $iProjectId, false);
             $oProject->Set('wbs_cost',$iWBSCosts);
             $oProject->DBUpdate();
-	}]]></code>
+	}
+
+						]]></code>
 				</method>
 				<method id="PrefillSearchForm">
 					<comment>/**
@@ -1973,7 +2327,9 @@
 					</comment>
 					<static>false</static>
 					<access>public</access>
-					<code><![CDATA[	public function PrefillSearchForm(&$aContextParam)
+					<code><![CDATA[
+
+							public function PrefillSearchForm(&$aContextParam)
 	{
 	    // If we want to search for objects of class 'WBS' or a sub-class of 'WBS'
 	    if ($aContextParam['dest_class'] == 'WBS' || is_subclass_of($aContextParam['dest_class'], 'WBS'))
@@ -1988,13 +2344,42 @@
 	        }
 	    }
 	    return true;
-	}]]></code>
+	}
+
+						]]></code>
 					<arguments>
 						<argument id="1">
 							<mandatory>false</mandatory>
 							<type>reference</type>
 						</argument>
 					</arguments>
+				</method>
+				<method id="SuspendChildWBS">
+					<comment>/**
+						*
+						* @author Axelle Bost
+						* @return bool Return true on success or false to prevent the transition to happen
+						*/</comment>
+					<static>false</static>
+					<access>public </access>
+					<code><![CDATA[	public function SuspendChildWBS()
+	{
+	      // check my dependant deliverable
+          $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
+          $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
+          $iParentToExclude = $this->GetKey();
+
+          while($oChildWBS = $oChildWBSSet->Fetch())
+          {
+               // for each child, if its status is running, I block it to pending_parent
+               if ($oChildWBS->Get('status') == 'running')
+               {
+                	$oChildWBS->ApplyStimulus('ev_pending_parent');
+               }
+          }
+		return true;
+	}]]></code>
+					<arguments/>
 				</method>
 			</methods>
 			<presentation>
@@ -2438,10 +2823,10 @@
 						<item id="category">
 							<rank>10</rank>
 						</item>
-						<item id="contact_id">
+						<item id="wbs_id">
 							<rank>20</rank>
 						</item>
-						<item id="wbs_id">
+						<item id="contact_id">
 							<rank>30</rank>
 						</item>
 						<item id="project_id">
