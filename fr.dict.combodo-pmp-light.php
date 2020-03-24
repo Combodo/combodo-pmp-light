@@ -114,6 +114,9 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'UI-ProjectManagementOverview-Last-3Months' => 'Projets des 3 derniers mois (par client)',
 	'UI-ProjectManagementOverview-OpenProjectByStatus' => 'Projets ouverts par statut',
 
+	'Class:Project/CreateDeliverable' => 'Créer un délivrable...',
+	'Class:Project/CreateDeliverableForm' =>'Créer un délivrable pour %1$s',
+	'Class:Project/ReportLabel' => 'Créée depuis %1$s',
 ));
 
 // WBS class

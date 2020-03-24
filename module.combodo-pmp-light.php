@@ -5,7 +5,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-pmp-light/1.0.0',
+	'combodo-pmp-light/0.1.0',
 	array(
 		// Identification
 		//
@@ -15,21 +15,20 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => array(
-			'itop-tickets/2.0.0',
+			'itop-tickets/2.7.0',
 			'itop-config-mgmt/2.0.0',
-			'combodo-gantt-view/1.0.0',
+			'combodo-gantt-view/0.1.0',
 
 		),
 		'mandatory' => false,
 		'visible' => true,
 		'installer' => 'PMPLightInstaller',
 
-
 		// Components
 		//
 		'datamodel' => array(
+			'src/Attribute/AttributePercentageCompletion.php',
 			'model.combodo-pmp-light.php',
-			'src/Model/AttributeCompletionPercentage.php',
 		),
 		'webservice' => array(
 			
@@ -69,12 +68,9 @@ if (!class_exists('PMPLightInstaller'))
 			$aNewRule = array(
 				'source_scope' => 'SELECT Project WHERE status NOT IN (\'close\',\'monitor\')',
 				'allowed_profiles' => 'Project Manager,Administrator',
-				'menu_label' => 'Class:Project/CreateDeliverable',
-				'menu_label/FR FR' => 'Créer un délivrable...',
-				'form_label' => 'Create a deliverable from %1$s',
-				'form_label/FR FR' => 'Créer un délivrable pour %1$s',
-				'report_label' => 'Created from %1$s',
-				'report_label/FR FR' => 'Créée depuis %1$s',
+				'menu_label' => Dict::s('Class:Project/CreateDeliverable'),
+				'form_label' => Dict::s('Class:Project/CreateDeliverableForm'),
+				'report_label' =>  Dict::s('Class:Project/ReportLabel'),
 				'dest_class' => 'WBS',
 				'preset' =>
 					array (

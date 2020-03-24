@@ -115,6 +115,10 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI-ProjectManagementOverview-Last-12Months' => 'Projects of the last 12 months (per project start date)',
 	'UI-ProjectManagementOverview-Last-3Months' => 'Projects of the last 3 months (per customer)',
 	'UI-ProjectManagementOverview-OpenProjectByStatus' => 'Open projects by status',
+
+	'Class:Project/CreateDeliverable' => 'Create deliverable',
+	'Class:Project/CreateDeliverableForm' =>'Create a deliverable from %1$s',
+	'Class:Project/ReportLabel' => 'Created from %1$s',
 ));
 
 

@@ -1,8 +1,7 @@
 <?php
 
-class AttributeCompletionPercentage extends AttributePercentage
+class AttributePercentageCompletion extends AttributePercentage
 {
-
 	public function GetAsHTML($sValue, $oHostObject = null, $bLocalize = true)
 	{
 		$iWidth = 5; // Total width of the percentage bar graph, in em...

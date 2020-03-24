@@ -23,48 +23,48 @@
 					<access>public</access>
 					<code><![CDATA[
 						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
-			{
-            $iContactid = $this->GetKey();
-            $sOQLProject = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.status != 'closed' AND l1.contact_id= :contact";
-            $sOQLWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'closed' AND wbs.status NOT IN ('cancel','closed') AND l2.contact_id=:contact";
+						{
+		            $iContactid = $this->GetKey();
+		            $sOQLProject = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.status != 'closed' AND l1.contact_id= :contact";
+		            $sOQLWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'closed' AND wbs.status NOT IN ('cancel','closed') AND l2.contact_id=:contact";
 
-            $oOQLProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLProject), array(), array('contact' => $iContactid));
-            $oOQLWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('contact' => $iContactid));
+		            $oOQLProjectSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLProject), array(), array('contact' => $iContactid));
+		            $oOQLWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('contact' => $iContactid));
 
-            $iContactProjectSet = $oOQLProjectSet->Count();
-            $iContactWBSSet = $oOQLWBSSet->Count();
+		            $iContactProjectSet = $oOQLProjectSet->Count();
+		            $iContactWBSSet = $oOQLWBSSet->Count();
 
-            $oPage->SetCurrentTab(Dict::S('Class:Contact/Tab:PMP'));
+		            $oPage->SetCurrentTab(Dict::S('Class:Contact/Tab:PMP'));
 
-            if ( $iContactProjectSet> 0)
-            {
-                $aDetails = array();
-            $aExtraParam = array ('menu'=>true,
-            'zlist' => false,
-            'display_limit'=>false,
-            'view_link'=>false,
-            'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
-            );
-            $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
-            $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
-            $oBlock->Display($oPage, 'project_contact', $aExtraParam);
-        }
-        if ( $iContactWBSSet> 0)
-        {
-            $aDetails = array();
-            $aExtraParam = array ('menu'=>true,
-            'zlist' => false,
-            'display_limit'=>false,
-            'view_link'=>false,
-            'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
-            );
-            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
-            $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
-            $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
-         }
-				 parent::DisplayBareRelations($oPage, $bEditMode);
+		            if ( $iContactProjectSet> 0)
+		            {
+		                $aDetails = array();
+				            $aExtraParam = array ('menu'=>true,
+					            'zlist' => false,
+					            'display_limit'=>false,
+					            'view_link'=>false,
+					            'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
+				            );
+				            $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
+				            $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
+				            $oBlock->Display($oPage, 'project_contact', $aExtraParam);
+				        }
+				        if ( $iContactWBSSet> 0)
+				        {
+				            $aDetails = array();
+				            $aExtraParam = array ('menu'=>true,
+					            'zlist' => false,
+					            'display_limit'=>false,
+					            'view_link'=>false,
+					            'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
+				            );
+				            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
+				            $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
+				            $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
+				         }
+								 parent::DisplayBareRelations($oPage, $bEditMode);
 
-			}
+						}
 						]]></code>
 				</method>
 			</methods>
@@ -223,7 +223,7 @@
 				</details>
 			</presentation>
 		</class>
-		<class id="Project" _created_in="itop-tickets" _delta="define">
+		<class id="Project" _delta="define">
 			<properties>
 				<category>bizmodel,searchable</category>
 				<abstract>false</abstract>
@@ -346,21 +346,19 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function OnInsert()
-	{
-        parent::OnInsert();
-		$this->Set('last_update', time());
-		$this->Set('creation_date', time());
+							{
+								  parent::OnInsert();
+									$this->Set('last_update', time());
+									$this->Set('creation_date', time());
 
-	   //  I copy end date in revised_end date if this one is null
-         if ($this->Get('revised_end_date') == NULL )
-               {
-                    $this->Set('revised_end_date',$this->Get('end_date'));
-               }
-	}
-
-						]]></code>
+							  	//  I copy end date in revised_end date if this one is null
+								 if ($this->Get('revised_end_date') == NULL )
+		             {
+		                  $this->Set('revised_end_date',$this->Get('end_date'));
+		             }
+							}
+					]]></code>
 				</method>
 				<method id="OnUpdate">
 					<comment>/**
@@ -371,14 +369,12 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function OnUpdate()
-	{
-		parent::OnUpdate();
-		$this->Set('last_update', time());
-	}
-
-						]]></code>
+							{
+								parent::OnUpdate();
+								$this->Set('last_update', time());
+							}
+					]]></code>
 				</method>
 				<method id="DisplayBareRelations">
 					<comment>/**
@@ -390,145 +386,163 @@
 					<access>public</access>
 					<code><![CDATA[
 						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
-	{
+						{
+		            $iProjectid = $this->GetKey();
+		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
+		            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
+		            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
-            $iProjectid = $this->GetKey();
-            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
-            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
-            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
+		            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
+		            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
+		            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
 
-            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
-            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
-            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
+		            $iWBSSet = $oWBSSet->Count();
+		            $iContactProjectSet = $oContactProjectSet->Count();
+		            $iContactWBSSet = $oContactWBSSet->Count();
+								$iWBSCosts=0;
+		            while ($oWBS = $oWBSSet->Fetch())
+		            {
+		                $iWBSCosts += $oWBS->Get('wbs_cost');
+		            }
 
-            $iWBSSet = $oWBSSet->Count();
-            $iContactProjectSet = $oContactProjectSet->Count();
-            $iContactWBSSet = $oContactWBSSet->Count();
-						$iWBSCosts=0;
-            while ($oWBS = $oWBSSet->Fetch())
-            {
-            		$iWBSCosts += $oWBS->Get('wbs_cost');
-            }
+		            $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
+		            $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
 
-        	  $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
-            $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
+								$oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
+								$oPage->add('<tbody><tr>');
+								$oPage->add('<td style="vertical-align:top; width:50%" class="">');
+								$oPage->add('<fieldset>');
+								$oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
+								$oPage->add('<div class="details">');
+								$oPage->add('<div class="field_container field_small" data-attcode="title">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'title').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('title').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="status">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'status').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('status').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="agent_id">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'agent_id').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('agent_id').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="revised_end_date">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'revised_end_date').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('revised_end_date').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="calculated_end_date">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('calculated_end_date').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('</div></div>');
+								$oPage->add('</fieldset>');
+								$oPage->add('</td>');
+								$oPage->add('<td style="vertical-align:top; width:50%" class="">');
+								$oPage->add('<fieldset>');
+								$oPage->add('<legend>'.Dict::S('Class:Project:Summary_costs').'</legend>');
+								$oPage->add('<div class="details">');
+								$oPage->add('<div class="field_container field_small" data-attcode="estimated_budget">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="costs_spent">');
+								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'costs_spent').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('costs_spent').'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
+								$oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
+								$oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
+								$oPage->add('</div>');
+								$oPage->add('</div>');
+								$oPage->add('</fieldset>');
+								$oPage->add('</td>');
+								$oPage->add('</tr></tbody></table>');
 
+								if ( $iContactProjectSet> 0)
+		            {
+		                $aExtraParam = array ('menu'=>true,
+			                'zlist' => false,
+			                'display_limit'=>false,
+			                'view_link'=>false,
+			                'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
+		                );
+		                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'));
+		                $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
+		                $oBlock->Display($oPage, 'project_contacts', $aExtraParam);
+		            }
+		            if ( $iContactWBSSet> 0)
+		            {
+		                $aExtraParam = array ('menu'=>true,
+			                'zlist' => false,
+			                'display_limit'=>false,
+			                'view_link'=>false,
+			                'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
+		                );
+		                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'));
+		                $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
+		                $oBlock->Display($oPage, 'WBS_contacts', $aExtraParam);
+		            }
+		            if ($iWBSSet > 0)
+		            {
+			              $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+			              $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list_displaybare'));
+			              $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
+			              $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
 
-						$oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
-						$oPage->add('<tbody><tr>');
-						$oPage->add('<td style="vertical-align:top; width:50%" class="">');
-						$oPage->add('<fieldset>');
-						$oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
-						$oPage->add('<div class="details">');
-						$oPage->add('<div class="field_container field_small" data-attcode="title">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'title').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('title').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="status">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'status').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('status').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="agent_id">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'agent_id').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('agent_id').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="revised_end_date">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'revised_end_date').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('revised_end_date').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="calculated_end_date">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('calculated_end_date').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('</div></div>');
-						$oPage->add('</fieldset>');
-						$oPage->add('</td>');
-						$oPage->add('<td style="vertical-align:top; width:50%" class="">');
-						$oPage->add('<fieldset>');
-						$oPage->add('<legend>'.Dict::S('Class:Project:Summary_costs').'</legend>');
-						$oPage->add('<div class="details">');
-						$oPage->add('<div class="field_container field_small" data-attcode="estimated_budget">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="costs_spent">');
-						$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'costs_spent').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('costs_spent').'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
-						$oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
-						$oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
-						$oPage->add('</div>');
-						$oPage->add('</div></div>');
-						$oPage->add('</fieldset>');
-						$oPage->add('</td>');
-						$oPage->add('</tr></tbody></table>');
-
-						if ( $iContactProjectSet> 0)
-            {
-                $aExtraParam = array ('menu'=>true,
-	                'zlist' => false,
-	                'display_limit'=>false,
-	                'view_link'=>false,
-	                'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
-                );
-                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'));
-                $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
-                $oBlock->Display($oPage, 'project_contacts', $aExtraParam);
-            }
-            if ( $iContactWBSSet> 0)
-            {
-                $aExtraParam = array ('menu'=>true,
-	                'zlist' => false,
-	                'display_limit'=>false,
-	                'view_link'=>false,
-	                'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
-                );
-                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'));
-                $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
-                $oBlock->Display($oPage, 'WBS_contacts', $aExtraParam);
-            }
-            if ($iWBSSet > 0)
-            {
-              $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-              $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list_displaybare'));
-              $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
-              $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
-
-                $aScope = array(
-									'title' => Dict::S('GanttDashlet/Label'),
-									'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
-									'extra_params'=>'',
-									'depends_on' => 'wbss_parent_list',
-									'target_depends_on' =>'parent_wbs_id',
-									'label' => 'name',
-									'start_date' => 're_estimated_start_date',
-									'end_date' =>'re_estimated_end_date',
-									'additional_info1' => 'wbs_owner_id_friendlyname',
-									'additional_info2' => '',
-									'percentage' => 'completion',
-									'parent' => 'project_id',
-									'class' => 'WBS',
-									'parent_fields'=>array(
-											'class' => 'Project',
-											'label' => 'title',
-											'start_date' => 'start_date',
-											'end_date' =>'end_date',
-											'additional_info1' => 'agent_id_friendlyname',
+		                $aScope = array(
+											'title' => Dict::S('GanttDashlet/Label'),
+											'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
+											'extra_params'=>'',
+											'depends_on' => 'wbss_parent_list',
+											'target_depends_on' =>'parent_wbs_id',
+											'label' => 'name',
+											'start_date' => 're_estimated_start_date',
+											'end_date' =>'re_estimated_end_date',
+											'additional_info1' => 'wbs_owner_id_friendlyname',
 											'additional_info2' => '',
-											'percentage' => '',
-											'parent' => '',
-									)
-							);
-							$oView = new Gantt($aScope);
-							$oView->Display($oPage);
-				      $oPage->add_ready_script('setTimeout( function(){ if($("ul >li > [data-tab-id=Summary]").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
-							$oPage->add_ready_script('$("ul >li > [data-tab-id=Summary]").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
-            }
+											'percentage' => 'completion',
+											'parent' => 'project_id',
+											'class' => 'WBS',
+											'status' => 'status',
+											'status_active' => array('running'),
+											'status_suspended' => array('cancel'),
+											'status_waiting' => array('pending_parent'),
+											'status_done' => array('closed'),
+										  'status_failed' => array(''),
+											'save_allowed' => false,
+											'parent_fields'=>array(
+													'class' => 'Project',
+													'label' => 'title',
+													'start_date' => 'start_date',
+													'end_date' =>'end_date',
+													'additional_info1' => 'agent_id_friendlyname',
+													'additional_info2' => '',
+													'percentage' => '',
+													'parent' => '',
+											)
+										);
+										$oPage->add('<fieldset>');
+										$oPage->add('<legend>'.Dict::S('GanttDashlet/Label').'</legend>');
+										$oView = new Gantt($aScope);
+										$oView->Display($oPage);
+										if($oPage->isPrintableVersion())
+										{
+										     $oPage->add_ready_script('fKBInitCallback();');
+										     $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
+										     $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
+										}
+										else
+							      {
+									      $oPage->add_ready_script('setTimeout( function(){ if($("ul >li > [data-tab-id=Summary]").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
+												$oPage->add_ready_script('$("ul >li > [data-tab-id=Summary]").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
+										}
+										$oPage->add('</fieldset>');
+		            }
 
-				    parent::DisplayBareRelations($oPage, $bEditMode);
-				    $oPage->RemoveTab('Ticket:ImpactAnalysis');
-				}]]></code>
+						    parent::DisplayBareRelations($oPage, $bEditMode);
+						    $oPage->RemoveTab('Ticket:ImpactAnalysis');
+					  }
+				]]></code>
 				</method>
 				<method id="GetProjectEndDates">
 					<comment>/**
@@ -539,27 +553,23 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
-							public function GetProjectEndDates()
-	{
-		{
-			 	      if ( $this->Get('revised_end_date') != NULL  )
-                           {
-                              $sEndDateProject = $this->Get('revised_end_date');
-                           }
-                    else
-                            {
-                               $sEndDateProject = $this->Get('end_date');
-                            }
-                    $iEndDateProject = AttributeDateTime::GetAsUnixSeconds($sEndDateProject);
-               if ($iEndDateProject != NULL)
-               {
-              return array('end_date_project_integer'=> $iEndDateProject, 'end_date_project_string'=> $sEndDateProject);
-               }
-	    }
-	}
-
-						]]></code>
+						public function GetProjectEndDates()
+						{
+				       if ( $this->Get('revised_end_date') != NULL  )
+	             {
+	                 $sEndDateProject = $this->Get('revised_end_date');
+	             }
+	             else
+	             {
+	                $sEndDateProject = $this->Get('end_date');
+	             }
+	             $iEndDateProject = AttributeDateTime::GetAsUnixSeconds($sEndDateProject);
+	             if ($iEndDateProject != NULL)
+	             {
+	                return array('end_date_project_integer'=> $iEndDateProject, 'end_date_project_string'=> $sEndDateProject);
+	             }
+						}
+					]]></code>
 				</method>
 				<method id="DoCheckToWrite">
 					<comment>/**
@@ -570,23 +580,19 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function DoCheckToWrite()
-	{
-
-		     parent::DoCheckToWrite();
-      if ($this->Get('start_date') > $this->Get('end_date'))
-      {
-         $this->m_aCheckIssues[] = Dict::Format('Project:Error:EndDateMustBeGreaterThanStartDate');
-      }
-      if ($this->Get('calculated_end_date') > $this->Get('revised_end_date'))
-      {
-        $this->m_aCheckIssues[] = Dict::Format('Project:Error:ProjectEndDateMustBeGreaterThanWBSEndDate');
-      }
-
-	}
-
-						]]></code>
+							{
+								  parent::DoCheckToWrite();
+						      if ($this->Get('start_date') > $this->Get('end_date'))
+						      {
+						         $this->m_aCheckIssues[] = Dict::Format('Project:Error:EndDateMustBeGreaterThanStartDate');
+						      }
+						      if ($this->Get('calculated_end_date') > $this->Get('revised_end_date'))
+						      {
+						        $this->m_aCheckIssues[] = Dict::Format('Project:Error:ProjectEndDateMustBeGreaterThanWBSEndDate');
+						      }
+							}
+					]]></code>
 				</method>
 				<method id="PrefillCreationForm">
 					<comment>/**
@@ -598,15 +604,13 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function PrefillCreationForm(&$aContextParam)
-	{
-	    if (empty($this->Get('start_date')))
-	    {
-	        $this->Set('start_date', time());
-	    }
-	}
-
+							{
+							    if (empty($this->Get('start_date')))
+							    {
+							        $this->Set('start_date', time());
+							    }
+							}
 						]]></code>
 					<arguments>
 						<argument id="1">
@@ -624,12 +628,10 @@
 					<static>true</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public static function GetTicketRefFormat()
-	{
-		return 'Proj-%06d';
-	}
-
+							{
+								return 'Proj-%06d';
+							}
 						]]></code>
 				</method>
 			</methods>
@@ -1263,7 +1265,7 @@
 				</list>
 			</presentation>
 		</class>
-		<class id="WBS" _created_in="itop-tickets" _delta="define">
+		<class id="WBS" _delta="define">
 			<properties>
 				<category>bizmodel,searchable</category>
 				<abstract>false</abstract>
@@ -1812,25 +1814,23 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
-	{
-        if ((MetaModel::IsValidAttCode('WBS','wbs_cost')) && ($sAttCode == 'wbs_cost'))
-        {
-            return OPT_ATT_READONLY;
-        }
+							{
+						        if ((MetaModel::IsValidAttCode('WBS','wbs_cost')) && ($sAttCode == 'wbs_cost'))
+						        {
+						            return OPT_ATT_READONLY;
+						        }
 
-        $aLimitedAttributes = array('re_estimated_start_date','re_estimated_end_date','delay','wbss_child_list');
-        if (in_array($sAttCode, $aLimitedAttributes))
-        {
-            return(OPT_ATT_HIDDEN | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons));
-        }
-        else
-        {
-            return parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
-        }
-	}
-
+						        $aLimitedAttributes = array('re_estimated_start_date','re_estimated_end_date','delay','wbss_child_list');
+						        if (in_array($sAttCode, $aLimitedAttributes))
+						        {
+						            return(OPT_ATT_HIDDEN | parent::GetInitialStateAttributeFlags($sAttCode, $aReasons));
+						        }
+						        else
+						        {
+						            return parent::GetInitialStateAttributeFlags($sAttCode, $aReasons);
+						        }
+							}
 						]]></code>
 				</method>
 				<method id="GetAttributeFlags">
@@ -1844,24 +1844,22 @@
 					<code><![CDATA[
 
 							public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
-	{
-						if ((MetaModel::IsValidAttCode('WBS','delay')) && ($sAttCode == 'delay'))
-            {
-                return OPT_ATT_HIDDEN;
-            }
-				    $aLimitedAttributes = array('start_date','end_date','wbs_cost','wbss_child_list');
-				    if (in_array($sAttCode, $aLimitedAttributes))
+							{
+									if ((MetaModel::IsValidAttCode('WBS','delay')) && ($sAttCode == 'delay'))
+			            {
+			                return OPT_ATT_HIDDEN;
+			            }
+							    $aLimitedAttributes = array('start_date','end_date','wbs_cost','wbss_child_list');
+							    if (in_array($sAttCode, $aLimitedAttributes))
 
-            {
-                return(OPT_ATT_READONLY | parent::GetAttributeFlags($sAttCode, $aReasons));
-            }
-            else
-            {
-                return parent::GetAttributeFlags($sAttCode, $aReasons);
-            }
-
-	}
-
+			            {
+			                return(OPT_ATT_READONLY | parent::GetAttributeFlags($sAttCode, $aReasons));
+			            }
+			            else
+			            {
+			                return parent::GetAttributeFlags($sAttCode, $aReasons);
+			            }
+							}
 						]]></code>
 				</method>
 				<method id="OnInsert">
@@ -1873,38 +1871,34 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function OnInsert()
-	{
-				 parent::OnInsert();
+							{
+										 parent::OnInsert();
 
-         $this->WBS_costs_budget();
-         $this->SetProjectWBScalculated();
-         $aInitialDates = array();
-         $aInitialDates = $this->SetWBSStartEndDates();
+						         $this->WBS_costs_budget();
+						         $this->SetProjectWBScalculated();
+						         $aInitialDates = array();
+						         $aInitialDates = $this->SetWBSStartEndDates();
 
-         if (MetaModel::IsValidAttCode('WBS','freetime'))
-         {
-              $this->Set('freetime',$aInitialDates['freetime_integer']);
-         }
+						         if (MetaModel::IsValidAttCode('WBS','freetime'))
+						         {
+						              $this->Set('freetime',$aInitialDates['freetime_integer']);
+						         }
 
-          // I copy start date in estimate_start date
-         if ($this->Get('re_estimated_start_date') == NULL )
-         {
-               $this->Set('re_estimated_start_date',$this->Get('start_date'));
-         }
+						          // I copy start date in estimate_start date
+						         if ($this->Get('re_estimated_start_date') == NULL )
+						         {
+						               $this->Set('re_estimated_start_date',$this->Get('start_date'));
+						         }
 
-         //  I copy end date in estimate_end date
-         if ($this->Get('re_estimated_end_date') == NULL )
-         {
-              $this->Set('re_estimated_end_date',$this->Get('end_date'));
-         }
-         // I set delay to be used in future for calculation
-         $this->Set('delay',$aInitialDates['delay']);
-
-
-	}
-
+						         //  I copy end date in estimate_end date
+						         if ($this->Get('re_estimated_end_date') == NULL )
+						         {
+						              $this->Set('re_estimated_end_date',$this->Get('end_date'));
+						         }
+						         // I set delay to be used in future for calculation
+						         $this->Set('delay',$aInitialDates['delay']);
+							}
 						]]></code>
 				</method>
 				<method id="OnUpdate">
@@ -1918,63 +1912,63 @@
 					<code><![CDATA[
 
 							public function OnUpdate()
-	{
-         parent::OnUpdate();
-         $this->WBS_costs_budget();
-         $this->SetProjectWBScalculated();
-         $aInitialDates = array();
-         $aInitialDates = $this->SetWBSStartEndDates();
-         if (MetaModel::IsValidAttCode('WBS','freetime'))
-         {
-             $this->Set('freetime',$aInitialDates['freetime_integer']);
-         }
+							{
+				         parent::OnUpdate();
+				         $this->WBS_costs_budget();
+				         $this->SetProjectWBScalculated();
+				         $aInitialDates = array();
+				         $aInitialDates = $this->SetWBSStartEndDates();
+				         if (MetaModel::IsValidAttCode('WBS','freetime'))
+				         {
+				             $this->Set('freetime',$aInitialDates['freetime_integer']);
+				         }
 
-          //Im on child, I look for my parents
-          $oParentWBSSet = $this->Get('wbss_parent_list');
-          if ($oParentWBSSet->Count() > 0)
-          {
-              $oParentWBSSet->Rewind();
-              $bParentActive=false;
-              while ($oLink = $oParentWBSSet->Fetch())
-              {
-	                $iKey = $oLink->Get('parent_wbs_id');
-	                $oParentWBS = MetaModel::GetObject('WBS', $iKey);
-	                if (!in_array($oParentWBS->Get('status'),array('cancel','closed')))
-	                {
-		                  if($oParentWBS->Get('re_estimated_end_date') > $this->Get('re_estimated_start_date'))
-		                  {
-		                       $this->Set('re_estimated_start_date',$oParentWBS->Get('re_estimated_end_date'));
-		                       $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($oParentWBS->Get('re_estimated_end_date'));
-		                       $iEndDate = $iNewStartDate+$this->Get('delay');
-		                       $this->Set('re_estimated_end_date',$iEndDate);
-		                  }
-		                  $bParentActive=true;
-	                }
-              }
-              if ($bParentActive && ($this->Get('status') == 'running'))
-           	  {
-	                $this->ApplyStimulus('ev_pending_parent');
-              }
-          }
-          else
-          {
-	           if ($this->Get('status') == 'pending_parent')
-	           {
-		              $this->ApplyStimulus('ev_running');
-	           }
-          }
+				          //Im on child, I look for my parents
+				          $oParentWBSSet = $this->Get('wbss_parent_list');
+				          if ($oParentWBSSet->Count() > 0)
+				          {
+				              $oParentWBSSet->Rewind();
+				              $bParentActive=false;
+				              while ($oLink = $oParentWBSSet->Fetch())
+				              {
+					                $iKey = $oLink->Get('parent_wbs_id');
+					                $oParentWBS = MetaModel::GetObject('WBS', $iKey);
+					                if (!in_array($oParentWBS->Get('status'),array('cancel','closed')))
+					                {
+						                  if ($oParentWBS->Get('re_estimated_end_date') > $this->Get('re_estimated_start_date'))
+						                  {
+						                       $this->Set('re_estimated_start_date',$oParentWBS->Get('re_estimated_end_date'));
+						                       $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($oParentWBS->Get('re_estimated_end_date'));
+						                       $iEndDate = $iNewStartDate+$this->Get('delay');
+						                       $this->Set('re_estimated_end_date',$iEndDate);
+						                  }
+						                  $bParentActive=true;
+					                }
+				              }
+				              if ($bParentActive && ($this->Get('status') == 'running'))
+				              {
+					                $this->ApplyStimulus('ev_pending_parent');
+				              }
+				          }
+				          else
+				          {
+					           if ($this->Get('status') == 'pending_parent')
+					           {
+						              $this->ApplyStimulus('ev_running');
+					           }
+				          }
 
-          //I updated my startdate or enddate (due to parent WBS or not)
-           $aChanges = $this->ListChanges();
-           if (array_key_exists('re_estimated_start_date', $aChanges) || array_key_exists('re_estimated_end_date', $aChanges))
-           {
-               $iStartDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_start_date'));
-               $iEndDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_end_date'));
-               $idelay = $iEndDate - $iStartDate;
-               // I update delay to be used in future for calculation
-               $this->Set('delay',$idelay);
-           }
-	}
+				          //I updated my startdate or enddate (due to parent WBS or not)
+				           $aChanges = $this->ListChanges();
+				           if (array_key_exists('re_estimated_start_date', $aChanges) || array_key_exists('re_estimated_end_date', $aChanges))
+				           {
+				               $iStartDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_start_date'));
+				               $iEndDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_end_date'));
+				               $idelay = $iEndDate - $iStartDate;
+				               // I update delay to be used in future for calculation
+				               $this->Set('delay',$idelay);
+				           }
+							}
 
 						]]></code>
 				</method>
@@ -1988,28 +1982,26 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function StartChildWBS()
-	{
-      // check my dependant deliverable
-      $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
-      $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
-      $iParentToExclude = $this->GetKey();
+							{
+						      // check my dependant deliverable
+						      $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
+						      $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
+						      $iParentToExclude = $this->GetKey();
 
-      while($oChildWBS = $oChildWBSSet->Fetch())
-      {
-           // for each child, check if it has another parent deliverable not closed
-           $sOQL = "SELECT WBS AS parent JOIN lnkWBSToWBS AS ln ON ln.parent_wbs_id=parent.id  WHERE ln.child_wbs_id=:child_wbs AND parent.id !=:child_wbs AND parent.id != $iParentToExclude AND $iParentToExclude != :child_wbs AND parent.status NOT IN ('closed','cancel')";
-           $oParentChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('child_wbs' => $oChildWBS->GetKey()));
+						      while ($oChildWBS = $oChildWBSSet->Fetch())
+						      {
+						           // for each child, check if it has another parent deliverable not closed
+						           $sOQL = "SELECT WBS AS parent JOIN lnkWBSToWBS AS ln ON ln.parent_wbs_id=parent.id  WHERE ln.child_wbs_id=:child_wbs AND parent.id !=:child_wbs AND parent.id != $iParentToExclude AND $iParentToExclude != :child_wbs AND parent.status NOT IN ('closed','cancel')";
+						           $oParentChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQL), array(), array('child_wbs' => $oChildWBS->GetKey()));
 
-           if (($oParentChildWBSSet->Count() == 0) && ($oChildWBS->Get('status') == 'pending_parent'))
-           {
-                $oChildWBS->ApplyStimulus('ev_running');
-           }
-      }
-      return true;
-	}
-
+						           if (($oParentChildWBSSet->Count() == 0) && ($oChildWBS->Get('status') == 'pending_parent'))
+						           {
+						                $oChildWBS->ApplyStimulus('ev_running');
+						           }
+						      }
+						      return true;
+							}
 						]]></code>
 					<arguments/>
 				</method>
@@ -2024,29 +2016,28 @@
 					<code><![CDATA[
 
 							public function AfterInsert()
-	{
-          parent::AfterInsert();
-          //Im on child, I look for my parents
-          $sOQL = "SELECT WBS AS parent JOIN lnkWBSToWBS AS ln ON ln.parent_wbs_id=parent.id WHERE ln.child_wbs_id=:child_wbs AND parent.status NOT IN ('closed','cancel')";
-          $oParentWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQL), array('re_estimated_end_date' => false), array('child_wbs' => $this->GetKey()));
-          if ($oParentWBSSet->Count() > 0)
-          {
-             while($oParentWBS = $oParentWBSSet->Fetch())
-             {
-
-                if($oParentWBS->Get('re_estimated_end_date') > $this->Get('re_estimated_start_date'))
-                {
-                     $this->Set('re_estimated_start_date',$oParentWBS->Get('re_estimated_end_date'));
-                     $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($oParentWBS->Get('re_estimated_end_date'));
-                     $iEndDate = $iNewStartDate+$this->Get('delay');
-                     $this->Set('re_estimated_end_date',$iEndDate);
-                }
-              }
-              $this->ApplyStimulus('ev_pending_parent');
-              $this->DBUpdate();
-          }
-          $this->SetProjectCalculatedEndDate();
-	}
+							{
+				          parent::AfterInsert();
+				          //Im on child, I look for my parents
+				          $sOQL = "SELECT WBS AS parent JOIN lnkWBSToWBS AS ln ON ln.parent_wbs_id=parent.id WHERE ln.child_wbs_id=:child_wbs AND parent.status NOT IN ('closed','cancel')";
+				          $oParentWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQL), array('re_estimated_end_date' => false), array('child_wbs' => $this->GetKey()));
+				          if ($oParentWBSSet->Count() > 0)
+				          {
+				             while ($oParentWBS = $oParentWBSSet->Fetch())
+				             {
+				                if ($oParentWBS->Get('re_estimated_end_date') > $this->Get('re_estimated_start_date'))
+				                {
+				                     $this->Set('re_estimated_start_date',$oParentWBS->Get('re_estimated_end_date'));
+				                     $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($oParentWBS->Get('re_estimated_end_date'));
+				                     $iEndDate = $iNewStartDate+$this->Get('delay');
+				                     $this->Set('re_estimated_end_date',$iEndDate);
+				                }
+				              }
+				              $this->ApplyStimulus('ev_pending_parent');
+				              $this->DBUpdate();
+				          }
+				          $this->SetProjectCalculatedEndDate();
+							}
 
 						]]></code>
 				</method>
@@ -2061,30 +2052,29 @@
 					<code><![CDATA[
 
 							public function AfterUpdate()
-	{
-	      parent::AfterUpdate();
-	      $this->SetProjectCalculatedEndDate();
-        $this->StartChildWBS();
+							{
+						      parent::AfterUpdate();
+						      $this->SetProjectCalculatedEndDate();
+					        $this->StartChildWBS();
 
-        // check my dependant deliverable
-	      $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
-	      $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
-	      $iParentToExclude = $this->GetKey();
+					        // check my dependant deliverable
+						      $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
+						      $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
+						      $iParentToExclude = $this->GetKey();
 
-	      while($oChildWBS = $oChildWBSSet->Fetch())
-	      {
-	          if($oChildWBS->Get('re_estimated_start_date') < $this->Get('re_estimated_end_date'))
-	          {
-	               $oChildWBS->Set('re_estimated_start_date',$this->Get('re_estimated_end_date'));
-	               $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_end_date'));
-	               $iEndDate = $iNewStartDate+$oChildWBS->Get('delay');
-	               $oChildWBS->Set('re_estimated_end_date',$iEndDate);
-	               $oChildWBS->DBUpdate();
-	               //I postpone end date of my dependant deliverable
-	          }
-	      }
-	}
-
+						      while ($oChildWBS = $oChildWBSSet->Fetch())
+						      {
+						          if ($oChildWBS->Get('re_estimated_start_date') < $this->Get('re_estimated_end_date'))
+						          {
+						               $oChildWBS->Set('re_estimated_start_date',$this->Get('re_estimated_end_date'));
+						               $iNewStartDate = AttributeDateTime::GetAsUnixSeconds($this->Get('re_estimated_end_date'));
+						               $iEndDate = $iNewStartDate+$oChildWBS->Get('delay');
+						               $oChildWBS->Set('re_estimated_end_date',$iEndDate);
+						               $oChildWBS->DBUpdate();
+						               //I postpone end date of my dependant deliverable
+						          }
+						      }
+							}
 						]]></code>
 				</method>
 				<method id="WBS_costs_budget">
@@ -2098,18 +2088,18 @@
 					<code><![CDATA[
 
 							public function WBS_costs_budget()
-	{
-		       	if ( ($this->Get('labor_cost') != NULL) || ($this->Get('material_cost') != NULL ) )
-                {
+							{
+					        if ( ($this->Get('labor_cost') != NULL) || ($this->Get('material_cost') != NULL ) )
+	                {
                       $iWBScost= ($this->Get('labor_cost') + $this->Get('material_cost'));
                       $this->Set('wbs_cost', $iWBScost);
-                }
-            	if  ($this->Get('wbs_budget') != NULL)
-            	{
-            	      $iWBSfreebudget = ($this->Get('wbs_budget') - $iWBScost);
-                      $this->Set('available_budget', $iWBSfreebudget);
-            	}
-	}
+	                }
+		              if  ($this->Get('wbs_budget') != NULL)
+		              {
+	                    $iWBSfreebudget = ($this->Get('wbs_budget') - $iWBScost);
+	                    $this->Set('available_budget', $iWBSfreebudget);
+		              }
+							}
 
 						]]></code>
 				</method>
@@ -2122,39 +2112,34 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function SetWBSStartEndDates()
-	{
-	 	 //if re_estimated_start_date is set on ticket, it will be considered instead of start_date
+							{
+							   //if re_estimated_start_date is set on ticket, it will be considered instead of start_date
+				         if ($this->Get('re_estimated_start_date') == NULL )
+	               {
+	                     $sStartDate = $this->Get('start_date');
+	               }
+				         else
+	               {
+	                   $sStartDate = $this->Get('re_estimated_start_date');
+	               }
+				         //if re_estimated_end_date is set set on source ticket, it will be considered instead of end_date
+				         if ($this->Get('re_estimated_end_date') == NULL )
+	               {
+	                    $sEndDate = $this->Get('end_date');
+	               }
+				         else
+	               {
+	                    $sEndDate = $this->Get('re_estimated_end_date');
+	               }
 
-         if ($this->Get('re_estimated_start_date') == NULL )
-               {
-                     $sStartDate = $this->Get('start_date');
-               }
-         else
-               {
-                   $sStartDate = $this->Get('re_estimated_start_date');
-               }
-         //if re_estimated_end_date is set set on source ticket, it will be considered instead of end_date
-         if ($this->Get('re_estimated_end_date') == NULL )
-               {
-                    $sEndDate = $this->Get('end_date');
-               }
-         else
-               {
-                    $sEndDate = $this->Get('re_estimated_end_date');
-               }
-
-         $iStartDate = AttributeDateTime::GetAsUnixSeconds($sStartDate);
-         $iEndDate = AttributeDateTime::GetAsUnixSeconds($sEndDate);
-         $idelay = $iEndDate - $iStartDate;
-         $oNow = new DateTime();
-         $ifreeTime = ($iEndDate - $oNow->format('U'));
-
-
-            return array('start_date_integer'=> $iStartDate, 'end_date_integer'=> $iEndDate, 'delay'=> $idelay, 'start_date_string'=> $sStartDate, 'end_date_string'=> $sEndDate, 'freetime_integer' => $ifreeTime );
-	}
-
+				         $iStartDate = AttributeDateTime::GetAsUnixSeconds($sStartDate);
+				         $iEndDate = AttributeDateTime::GetAsUnixSeconds($sEndDate);
+				         $idelay = $iEndDate - $iStartDate;
+				         $oNow = new DateTime();
+				         $ifreeTime = ($iEndDate - $oNow->format('U'));
+				         return array('start_date_integer'=> $iStartDate, 'end_date_integer'=> $iEndDate, 'delay'=> $idelay, 'start_date_string'=> $sStartDate, 'end_date_string'=> $sEndDate, 'freetime_integer' => $ifreeTime );
+							}
 						]]></code>
 				</method>
 				<method id="MakeTicketRef">
@@ -2166,13 +2151,11 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
-							public function MakeTicketRef($iNextId)
-	{
-		$sFormat = 'Del-%06d';
-        return sprintf($sFormat, $iNextId);
-	}
-
+						public function MakeTicketRef($iNextId)
+						{
+								$sFormat = 'Del-%06d';
+					      return sprintf($sFormat, $iNextId);
+						}
 						]]></code>
 				</method>
 				<method id="DBInsertNoReload">
@@ -2184,16 +2167,14 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
-							public function DBInsertNoReload()
-			{
-				    $iNextId = ItopCounter::incClass(get_class($this));
-		        $sRef = $this->MakeTicketRef($iNextId);
-		        $this->Set('ref', $sRef);
-		        $iKey = parent::DBInsertNoReload();
-		        return $iKey;
-			}
-
+						public function DBInsertNoReload()
+						{
+							    $iNextId = ItopCounter::incClass(get_class($this));
+					        $sRef = $this->MakeTicketRef($iNextId);
+					        $this->Set('ref', $sRef);
+					        $iKey = parent::DBInsertNoReload();
+					        return $iKey;
+						}
 						]]></code>
 				</method>
 				<method id="PrefillCreationForm">
@@ -2206,15 +2187,13 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function PrefillCreationForm(&$aContextParam)
-	{
-	    if (empty($this->Get('start_date')))
-	    {
-	        $this->Set('start_date', time());
-	    }
-	}
-
+							{
+							    if (empty($this->Get('start_date')))
+							    {
+							        $this->Set('start_date', time());
+							    }
+							}
 						]]></code>
 					<arguments>
 						<argument id="1">
@@ -2232,29 +2211,27 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function DoCheckToWrite()
-	{
-		  parent::DoCheckToWrite();
-      if (($this->Get('start_date') > $this->Get('end_date')) || ($this->Get('re_estimated_start_date') > $this->Get('re_estimated_end_date')))
-      {
-         $this->m_aCheckIssues[] = Dict::Format('Project:Error:EndDateMustBeGreaterThanStartDate');
-      }
-      $oParentWBSSet = $this->Get('wbss_parent_list');
-      if ($oParentWBSSet->Count() > 0)
-      {
-          $oParentWBSSet->Rewind();
-          while ($oLink = $oParentWBSSet->Fetch())
-          {
-	           $iKey = $oLink->Get('parent_wbs_id');
-	           if ($this->GetKey()== $iKey)
-	           {
-	             $this->m_aCheckIssues[] = Dict::Format('WBS:Error:ParentCantBeChildren');
-	           }
-          }
-      }
-	}
-
+							{
+								  parent::DoCheckToWrite();
+						      if (($this->Get('start_date') > $this->Get('end_date')) || ($this->Get('re_estimated_start_date') > $this->Get('re_estimated_end_date')))
+						      {
+						         $this->m_aCheckIssues[] = Dict::Format('Project:Error:EndDateMustBeGreaterThanStartDate');
+						      }
+						      $oParentWBSSet = $this->Get('wbss_parent_list');
+						      if ($oParentWBSSet->Count() > 0)
+						      {
+						          $oParentWBSSet->Rewind();
+						          while ($oLink = $oParentWBSSet->Fetch())
+						          {
+							           $iKey = $oLink->Get('parent_wbs_id');
+							           if ($this->GetKey()== $iKey)
+							           {
+							             $this->m_aCheckIssues[] = Dict::Format('WBS:Error:ParentCantBeChildren');
+							           }
+						          }
+						      }
+							}
 						]]></code>
 				</method>
 				<method id="SetProjectCalculatedEndDate">
@@ -2266,28 +2243,26 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function SetProjectCalculatedEndDate()
-	{
-				      //deliverable is attached to a project
-		          if ($this->Get('project_id') != 0)
-             	{
-                   $oProject = MetaModel::GetObject('Project', $this->Get('project_id'));
-                   //if project calculated end date is below end date of deliverable
-                   if ($oProject->Get('calculated_end_date') < $this->Get('re_estimated_end_date'))
-                   {
-                        //I set project calculated end date = end date of deliverable
-                        $oProject->Set('calculated_end_date', $this->Get('re_estimated_end_date'));
-                        //If project revised end date is below to end date of deliverable
-                        if ($oProject->Get('revised_end_date') < $this->Get('re_estimated_end_date'))
-                        {
-                            $oProject->Set('revised_end_date', $this->Get('re_estimated_end_date'));
-                        }
-                        $oProject->DBUpdate();
-                   }
-              }
-	}
-
+							{
+						      //deliverable is attached to a project
+				          if ($this->Get('project_id') != 0)
+		              {
+	                   $oProject = MetaModel::GetObject('Project', $this->Get('project_id'));
+	                   //if project calculated end date is below end date of deliverable
+	                   if ($oProject->Get('calculated_end_date') < $this->Get('re_estimated_end_date'))
+	                   {
+	                        //I set project calculated end date = end date of deliverable
+	                        $oProject->Set('calculated_end_date', $this->Get('re_estimated_end_date'));
+	                        //If project revised end date is below to end date of deliverable
+	                        if ($oProject->Get('revised_end_date') < $this->Get('re_estimated_end_date'))
+	                        {
+	                            $oProject->Set('revised_end_date', $this->Get('re_estimated_end_date'));
+	                        }
+	                        $oProject->DBUpdate();
+	                   }
+		              }
+							}
 						]]></code>
 				</method>
 				<method id="SetProjectWBScalculated">
@@ -2299,23 +2274,21 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function SetProjectWBScalculated()
-	{
-						// Costs of all project's WBS related are added to wbs_cost field of project associated
-            $iProjectId = $this->Get('project_id');
-				    $sOQLWBS =  "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel')";
-				    $oWBSSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectId));
-				    $iWBSCosts = 0;
-				    while ($oWBS = $oWBSSet->Fetch())
-            {
-                  $iWBSCosts += $oWBS->Get('wbs_cost');
-            }
-		        $oProject = MetaModel::GetObject('Project', $iProjectId, false);
-            $oProject->Set('wbs_cost',$iWBSCosts);
-            $oProject->DBUpdate();
-	}
-
+							{
+									// Costs of all project's WBS related are added to wbs_cost field of project associated
+			            $iProjectId = $this->Get('project_id');
+							    $sOQLWBS =  "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel')";
+							    $oWBSSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectId));
+							    $iWBSCosts = 0;
+							    while ($oWBS = $oWBSSet->Fetch())
+			            {
+		                  $iWBSCosts += $oWBS->Get('wbs_cost');
+			            }
+					        $oProject = MetaModel::GetObject('Project', $iProjectId, false);
+			            $oProject->Set('wbs_cost',$iWBSCosts);
+			            $oProject->DBUpdate();
+							}
 						]]></code>
 				</method>
 				<method id="PrefillSearchForm">
@@ -2328,24 +2301,22 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
-							public function PrefillSearchForm(&$aContextParam)
-	{
-	    // If we want to search for objects of class 'WBS' or a sub-class of 'WBS'
-	    if ($aContextParam['dest_class'] == 'WBS' || is_subclass_of($aContextParam['dest_class'], 'WBS'))
-	    {
-	        // If 'project_id' of the source WBS is not empty
-	        if (!empty($this->Get('project_id')))
-	        {
-	            // We remove any criteria set by the default search
-	            $aContextParam['filter']->ResetCondition();
-	            // We set a criteria on the 'org_id' of the searched class with the Contract provider value
-	            $aContextParam['filter']->AddCondition('project_id', $this->Get('project_id'));
-	        }
-	    }
-	    return true;
-	}
-
+						public function PrefillSearchForm(&$aContextParam)
+						{
+						    // If we want to search for objects of class 'WBS' or a sub-class of 'WBS'
+						    if ($aContextParam['dest_class'] == 'WBS' || is_subclass_of($aContextParam['dest_class'], 'WBS'))
+						    {
+						        // If 'project_id' of the source WBS is not empty
+						        if (!empty($this->Get('project_id')))
+						        {
+						            // We remove any criteria set by the default search
+						            $aContextParam['filter']->ResetCondition();
+						            // We set a criteria on the 'org_id' of the searched class with the Contract provider value
+						            $aContextParam['filter']->AddCondition('project_id', $this->Get('project_id'));
+						        }
+						    }
+						    return true;
+						}
 						]]></code>
 					<arguments>
 						<argument id="1">
@@ -2362,23 +2333,25 @@
 						*/</comment>
 					<static>false</static>
 					<access>public </access>
-					<code><![CDATA[	public function SuspendChildWBS()
-	{
-	      // check my dependant deliverable
-          $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
-          $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
-          $iParentToExclude = $this->GetKey();
+					<code><![CDATA[
+							public function SuspendChildWBS()
+							{
+					      	// check my dependant deliverable
+				          $sOQLchild = "SELECT WBS AS child JOIN lnkWBSToWBS AS ln ON ln.child_wbs_id=child.id  WHERE ln.parent_wbs_id=:parent_wbs AND child.id != :parent_wbs";
+				          $oChildWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQLchild), array(), array('parent_wbs' => $this->GetKey()));
+				          $iParentToExclude = $this->GetKey();
 
-          while($oChildWBS = $oChildWBSSet->Fetch())
-          {
-               // for each child, if its status is running, I block it to pending_parent
-               if ($oChildWBS->Get('status') == 'running')
-               {
-                	$oChildWBS->ApplyStimulus('ev_pending_parent');
-               }
-          }
-		return true;
-	}]]></code>
+				          while ($oChildWBS = $oChildWBSSet->Fetch())
+				          {
+				               // for each child, if its status is running, I block it to pending_parent
+				               if ($oChildWBS->Get('status') == 'running')
+				               {
+				                  $oChildWBS->ApplyStimulus('ev_pending_parent');
+				               }
+				          }
+									return true;
+							}
+					]]></code>
 					<arguments/>
 				</method>
 			</methods>
@@ -2602,7 +2575,7 @@
 			</presentation>
 			<parent>cmdbAbstractObject</parent>
 		</class>
-		<class id="lnkWBSToWBS" _created_in="itop-tickets" _delta="define">
+		<class id="lnkWBSToWBS" _delta="define">
 			<properties>
 				<category>bizmodel</category>
 				<abstract>false</abstract>
@@ -2714,7 +2687,7 @@
 			</presentation>
 			<parent>cmdbAbstractObject</parent>
 		</class>
-		<class id="lnkContactToWBS" _created_in="itop-tickets" _delta="define">
+		<class id="lnkContactToWBS" _delta="define">
 			<properties>
 				<category>bizmodel</category>
 				<abstract>false</abstract>
