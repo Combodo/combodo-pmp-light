@@ -533,8 +533,8 @@
 										}
 										else
 							      {
-									      $oPage->add_ready_script('setTimeout( function(){ if($("ul >li > [data-tab-id=Summary]").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
-												$oPage->add_ready_script('$("ul >li > [data-tab-id=Summary]").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
+									      $oPage->add_ready_script('setTimeout( function(){ if($("#ui-id-2").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
+												$oPage->add_ready_script('$("#ui-id-2").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
 										}
 										$oPage->add('</fieldset>');
 		            }
