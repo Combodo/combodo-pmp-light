@@ -404,6 +404,7 @@
 		            {
 		                $iWBSCosts += $oWBS->Get('wbs_cost');
 		            }
+								$oPage->add_linked_stylesheet('../css/font-awesome/css/all.min.css');
 
 		            $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
 		            $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
@@ -504,11 +505,6 @@
 											'parent' => 'project_id',
 											'class' => 'WBS',
 											'status' => 'status',
-											'status_active' => array('running'),
-											'status_suspended' => array('cancel'),
-											'status_waiting' => array('pending_parent'),
-											'status_done' => array('closed'),
-										  'status_failed' => array(''),
 											'save_allowed' => false,
 											'parent_fields'=>array(
 													'class' => 'Project',
@@ -527,14 +523,14 @@
 										$oView->Display($oPage);
 										if($oPage->isPrintableVersion())
 										{
-										     $oPage->add_ready_script('fKBInitCallback();');
+										     $oPage->add_ready_script('fGtInitCallback();');
 										     $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
 										     $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
 										}
 										else
 							      {
-									      $oPage->add_ready_script('setTimeout( function(){ if($("#ui-id-2").closest("li").hasClass( "ui-tabs-active" )){ fKBInitCallback(); }}, 500);');
-												$oPage->add_ready_script('$("#ui-id-2").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fKBInitCallback(); }}, 500); });');
+									      $oPage->add_ready_script('setTimeout( function(){ if($("#ui-id-2").closest("li").hasClass( "ui-tabs-active" )){ fGtInitCallback(); }}, 500);');
+												$oPage->add_ready_script('$("#ui-id-2").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fGtInitCallback(); }}, 500); });');
 										}
 										$oPage->add('</fieldset>');
 		            }
@@ -840,7 +836,8 @@
 					</items>
 				</default_search>
 			</presentation>
-			<parent>Ticket</parent>   <lifecycle>
+			<parent>Ticket</parent>
+			<lifecycle>
 			<attribute>status</attribute>
 			<stimuli>
 				<stimulus id="ev_plan" xsi:type="StimulusUserAction"/>
@@ -857,9 +854,6 @@
 							<hidden/>
 						</attribute>
 						<attribute id="last_update">
-							<hidden/>
-						</attribute>
-						<attribute id="contingency_reserve">
 							<hidden/>
 						</attribute>
 						<attribute id="costs_spent">
@@ -912,9 +906,6 @@
 							<read_only/>
 						</attribute>
 						<attribute id="last_update">
-							<read_only/>
-						</attribute>
-						<attribute id="contingency_reserve">
 							<read_only/>
 						</attribute>
 						<attribute id="costs_spent">
@@ -1058,9 +1049,6 @@
 						<attribute id="contacts_list">
 							<read_only/>
 						</attribute>
-						<attribute id="contingency_reserve">
-							<read_only/>
-						</attribute>
 						<attribute id="costs_spent">
 							<read_only/>
 						</attribute>
@@ -1094,16 +1082,10 @@
 						<attribute id="private_log">
 							<read_only/>
 						</attribute>
-						<attribute id="projectchanges_list">
-							<read_only/>
-						</attribute>
 						<attribute id="requirement">
 							<read_only/>
 						</attribute>
 						<attribute id="revised_end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="risks_list">
 							<read_only/>
 						</attribute>
 						<attribute id="start_date">
@@ -1842,7 +1824,6 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 							{
 									if ((MetaModel::IsValidAttCode('WBS','delay')) && ($sAttCode == 'delay'))
@@ -1851,7 +1832,6 @@
 			            }
 							    $aLimitedAttributes = array('start_date','end_date','wbs_cost','wbss_child_list');
 							    if (in_array($sAttCode, $aLimitedAttributes))
-
 			            {
 			                return(OPT_ATT_READONLY | parent::GetAttributeFlags($sAttCode, $aReasons));
 			            }
@@ -1910,7 +1890,6 @@
 					<static>false</static>
 					<access>public</access>
 					<code><![CDATA[
-
 							public function OnUpdate()
 							{
 				         parent::OnUpdate();
@@ -2117,7 +2096,7 @@
 							   //if re_estimated_start_date is set on ticket, it will be considered instead of start_date
 				         if ($this->Get('re_estimated_start_date') == NULL )
 	               {
-	                     $sStartDate = $this->Get('start_date');
+	                   $sStartDate = $this->Get('start_date');
 	               }
 				         else
 	               {
