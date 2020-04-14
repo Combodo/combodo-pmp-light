@@ -30,16 +30,12 @@ SetupWebPage::AddModule(
 			'src/Attribute/AttributePercentageCompletion.php',
 			'model.combodo-pmp-light.php',
 		),
-		'webservice' => array(
-			
+		'webservice' => array(),
+		'data.struct' => array(// add your 'structure' definition XML files here,
 		),
-		'data.struct' => array(
-			// add your 'structure' definition XML files here,
+		'data.sample' => array(// add your sample data XML files here,
 		),
-		'data.sample' => array(
-			// add your sample data XML files here,
-		),
-		
+
 		// Documentation
 		//
 		'doc.manual_setup' => '', // hyperlink to manual setup documentation, if any
@@ -47,8 +43,7 @@ SetupWebPage::AddModule(
 
 		// Default settings
 		//
-		'settings' => array(
-			// Module specific settings go here, if any
+		'settings' => array(// Module specific settings go here, if any
 		),
 	)
 );
@@ -70,27 +65,26 @@ if (!class_exists('PMPLightInstaller'))
 				'allowed_profiles' => 'Project Manager,Administrator',
 				'menu_label' => Dict::s('Class:Project/CreateDeliverable'),
 				'form_label' => Dict::s('Class:Project/CreateDeliverableForm'),
-				'report_label' =>  Dict::s('Class:Project/ReportLabel'),
+				'report_label' => Dict::s('Class:Project/ReportLabel'),
 				'dest_class' => 'WBS',
 				'preset' =>
-					array (
+					array(
 						0 => 'copy(id,project_id)',
 						1 => 'set(start_date,$current_date$)',
 					),
 				'retrofit' =>
-					array (
-					),
+					array(),
 			);
 
 			// Retrieving object copier rules from conf parameters
 			// Note: We don't do anything if object copier is not installed, otherwise its configuration will be set when installed.
 			$aExistingRules = $oConfiguration->GetModuleSetting('itop-object-copier', 'rules', array());
-			if(!empty($aExistingRules))
+			if (!empty($aExistingRules))
 			{
 				$bFound = false;
-				foreach($aExistingRules as $aExistingRule)
+				foreach ($aExistingRules as $aExistingRule)
 				{
-					if(isset($aExistingRule['menu_label']) && ($aExistingRule['menu_label'] === $aNewRule['menu_label']) )
+					if (isset($aExistingRule['menu_label']) && ($aExistingRule['menu_label'] === $aNewRule['menu_label']))
 					{
 						$bFound = true;
 						break;
@@ -98,14 +92,31 @@ if (!class_exists('PMPLightInstaller'))
 				}
 
 				// Add rule only if not already existing
-				if($bFound === false)
+				if ($bFound === false)
 				{
 					$aExistingRules[] = $aNewRule;
 					$oConfiguration->SetModuleSetting('itop-object-copier', 'rules', $aExistingRules);
 				}
 			}
+			// Rule to add to the object gantt configuration
+			$aRuleForGantt = array(
+				'WBS' => array(
+					'default_colors' => array('backgroundcolor' => '#e6e6e6', 'color' => '#fff',),
+					'colored_field' => 'status',
+					'values' => array(
+						'running' => array('backgroundcolor' => '#ffcc33', 'color' => '#fff'),
+						'cancel' => array('backgroundcolor' => '#ff0066', 'color' => '#fff'),
+						'pending_parent' => array('backgroundcolor' => '#4499F9', 'color' => '#fff'),
+						'closed' => array('backgroundcolor' => '#009900', 'color' => '#fff'),
+					),
+				),
+			);
+			$aExistingRulesForGantt = $oConfiguration->GetModuleSetting('combodo-gantt-view', 'classes', array());
+			$oConfiguration->SetModuleSetting('combodo-gantt-view', 'classes',
+				array_merge($aExistingRulesForGantt, $aRuleForGantt));
 
 			return $oConfiguration;
 		}
 	}
+
 }
