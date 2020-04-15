@@ -102,6 +102,11 @@ if (!class_exists('PMPLightInstaller'))
 			$aRuleForGantt = array(
 				'WBS' => array(
 					'default_colors' => array('backgroundcolor' => '#e6e6e6', 'color' => '#fff',),
+					'name' => 'name',
+					'start_date' => 're_estimated_start_date',
+					'end_date' => 're_estimated_end_date',
+					'completion' => 'completion',
+					'depends_on' => 'wbss_parent_list',
 					'colored_field' => 'status',
 					'values' => array(
 						'running' => array('backgroundcolor' => '#ffcc33', 'color' => '#fff'),
