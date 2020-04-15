@@ -404,7 +404,6 @@
 		            {
 		                $iWBSCosts += $oWBS->Get('wbs_cost');
 		            }
-								$oPage->add_linked_stylesheet('../css/font-awesome/css/all.min.css');
 
 		            $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
 		            $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
