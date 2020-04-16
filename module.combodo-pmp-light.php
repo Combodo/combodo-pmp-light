@@ -98,28 +98,7 @@ if (!class_exists('PMPLightInstaller'))
 					$oConfiguration->SetModuleSetting('itop-object-copier', 'rules', $aExistingRules);
 				}
 			}
-			// Rule to add to the object gantt configuration
-			$aRuleForGantt = array(
-				'WBS' => array(
-					'default_colors' => array('backgroundcolor' => '#e6e6e6', 'color' => '#fff',),
-					'name' => 'name',
-					'start_date' => 're_estimated_start_date',
-					'end_date' => 're_estimated_end_date',
-					'completion' => 'completion',
-					'depends_on' => 'wbss_parent_list',
-					'colored_field' => 'status',
-					'values' => array(
-						'running' => array('backgroundcolor' => '#ffcc33', 'color' => '#fff'),
-						'cancel' => array('backgroundcolor' => '#ff0066', 'color' => '#fff'),
-						'pending_parent' => array('backgroundcolor' => '#4499F9', 'color' => '#fff'),
-						'closed' => array('backgroundcolor' => '#009900', 'color' => '#fff'),
-					),
-				),
-			);
-			$aExistingRulesForGantt = $oConfiguration->GetModuleSetting('combodo-gantt-view', 'classes', array());
-			$oConfiguration->SetModuleSetting('combodo-gantt-view', 'classes',
-				array_merge($aExistingRulesForGantt, $aRuleForGantt));
-
+			
 			return $oConfiguration;
 		}
 	}

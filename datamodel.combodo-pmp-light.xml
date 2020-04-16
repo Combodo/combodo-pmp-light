@@ -510,6 +510,7 @@
 													'label' => 'title',
 													'start_date' => 'start_date',
 													'end_date' =>'end_date',
+													'status' => 'status',
 													'additional_info1' => 'agent_id_friendlyname',
 													'additional_info2' => '',
 													'percentage' => '',
@@ -3014,4 +3015,80 @@
 			</group>
 		</groups>
 	</user_rights>
+	<module_parameters>
+		<parameters id="combodo-gantt-view" _delta="must_exist">
+			<classes>
+				<WBS _delta="define">
+					<default_colors>
+						<backgroundcolor>#e6e6e6</backgroundcolor>
+						<color>#fff</color>
+					</default_colors>
+					<name>name</name>
+					<start_date>re_estimated_start_date</start_date>
+					<end_date>re_estimated_end_date</end_date>
+					<completion>completion</completion>
+					<depends_on>wbss_parent_list</depends_on>
+					<group_by>project_id</group_by>
+					<colored_field>status</colored_field>
+					<values type="hash">
+						<running>
+							<backgroundcolor>#ffcc33</backgroundcolor>
+							<color>#fff</color>
+						</running>
+						<cancel>
+							<backgroundcolor>#ff0066</backgroundcolor>
+							<color>#fff</color>
+						</cancel>
+						<pending_parent>
+							<backgroundcolor>#4499F9</backgroundcolor>
+							<color>#fff</color>
+						</pending_parent>
+						<closed>
+							<backgroundcolor>#009900</backgroundcolor>
+							<color>#fff</color>
+						</closed>
+					</values>
+				</WBS>
+				<Project _delta="define">
+					<default_colors>
+						<backgroundcolor>#e6e6e6</backgroundcolor>
+						<color>#fff</color>
+					</default_colors>
+					<name>title</name>
+					<start_date>start_date</start_date>
+					<end_date>end_date</end_date>
+					<completion></completion>
+					<depends_on></depends_on>
+					<group_by></group_by>
+					<colored_field>status</colored_field>
+					<values type="hash">
+						<executed>
+							<backgroundcolor>#734d26</backgroundcolor>
+							<color>#fff</color>
+						</executed>
+						<cancelled>
+							<backgroundcolor>#990000</backgroundcolor>
+							<color>#fff</color>
+						</cancelled>
+						<planned>
+							<backgroundcolor>#043c7c</backgroundcolor>
+							<color>#fff</color>
+						</planned>
+						<closed>
+							<backgroundcolor>#006600</backgroundcolor>
+							<color>#fff</color>
+						</closed>
+						<initiated>
+							<backgroundcolor>#008080</backgroundcolor>
+							<color>#fff</color>
+						</initiated>
+						<monitored>
+							<backgroundcolor>#800080</backgroundcolor>
+							<color>#fff</color>
+						</monitored>
+					</values>
+				</Project>
+			</classes>
+		</parameters>
+	</module_parameters>
 </itop_design>
