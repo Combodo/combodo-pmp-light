@@ -315,13 +315,6 @@
 					<digits>8</digits>
 					<decimals>2</decimals>
 				</field>
-				<field id="costs_spent" xsi:type="AttributeDecimal">
-					<sql>costs_spent</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>10</digits>
-					<decimals>2</decimals>
-				</field>
 				<field id="calculated_end_date" xsi:type="AttributeDateTime">
 					<sql>calculated_end_date</sql>
 					<default_value/>
@@ -334,6 +327,60 @@
 					<is_null_allowed>true</is_null_allowed>
 					<digits>8</digits>
 					<decimals>2</decimals>
+				</field>
+				<field id="dashboard" xsi:type="AttributeDashboard" _delta="define">
+					<is_user_editable>true</is_user_editable>
+					<!-- Use this default definition for creating a new dashboard -->
+					<definition>
+						<!-- Later replace the whole definition with the XML export -->
+						<layout>DashboardLayoutOneCol</layout>
+						<title/>
+						<auto_reload>
+							<enabled>false</enabled>
+							<interval>300</interval>
+						</auto_reload>
+						<cells>
+							<cell id="0">
+								<rank>0</rank>
+								<dashlets>
+									<dashlet id="Project_dashboard_ID_row1_col0" xsi:type="GanttDashlet">
+										<rank>0</rank>
+										<title>Tickets</title>
+										<oql>SELECT WBS WHERE project_id=:this-&gt;id</oql>
+										<class_0>WBS</class_0>
+										<depends_on>wbss_parent_list</depends_on>
+										<target_depends_on>parent_wbs_id</target_depends_on>
+										<label_0>name</label_0>
+										<start_date_0>re_estimated_start_date</start_date_0>
+										<end_date_0>re_estimated_end_date</end_date_0>
+										<additional_info1_0>wbs_owner_id_friendlyname</additional_info1_0>
+										<additional_info2_0></additional_info2_0>
+										<percentage_0>completion</percentage_0>
+										<status_0>status</status_0>
+										<parent_0>project_id</parent_0>
+										<class_1>Project</class_1>
+										<label_1>title</label_1>
+										<start_date_1>start_date</start_date_1>
+										<end_date_1>end_date</end_date_1>
+										<status_1>status</status_1>
+										<additional_info1_1>agent_id_friendlyname</additional_info1_1>
+										<additional_info2_1></additional_info2_1>
+										<percentage_1></percentage_1>
+										<parent_1></parent_1>
+										<class_2></class_2>
+										<label_2></label_2>
+										<start_date_2></start_date_2>
+										<end_date_2></end_date_2>
+										<additional_info1_2></additional_info1_2>
+										<additional_info2_2></additional_info2_2>
+										<percentage_2></percentage_2>
+										<parent_2></parent_2>
+										<save_allowed>0</save_allowed>
+									</dashlet>
+								</dashlets>
+							</cell>
+						</cells>
+					</definition>
 				</field>
 			</fields>
 			<methods>
@@ -445,10 +492,6 @@
 								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
 								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
 								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="costs_spent">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'costs_spent').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('costs_spent').'</div></div>');
-								$oPage->add('</div>');
 								$oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
 								$oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
 								$oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
@@ -523,14 +566,8 @@
 										$oView->Display($oPage);
 										if($oPage->isPrintableVersion())
 										{
-										     $oPage->add_ready_script('fGtInitCallback();');
 										     $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
 										     $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
-										}
-										else
-							      {
-									      $oPage->add_ready_script('setTimeout( function(){ if($("#ui-id-2").closest("li").hasClass( "ui-tabs-active" )){ fGtInitCallback(); }}, 500);');
-												$oPage->add_ready_script('$("#ui-id-2").click( function() { setTimeout( function(){ if (ge!=null) { ge.resize(); } else { fGtInitCallback(); }}, 500); });');
 										}
 										$oPage->add('</fieldset>');
 		            }
@@ -640,17 +677,26 @@
 						<item id="title">
 							<rank>20</rank>
 						</item>
-						<item id="org_id">
+						<item id="caller_id">
 							<rank>30</rank>
 						</item>
-						<item id="start_date">
+						<item id="org_id">
 							<rank>40</rank>
 						</item>
-						<item id="end_date">
+						<item id="agent_id">
 							<rank>50</rank>
 						</item>
-						<item id="revised_end_date">
+						<item id="status">
 							<rank>60</rank>
+						</item>
+						<item id="start_date">
+							<rank>70</rank>
+						</item>
+						<item id="end_date">
+							<rank>80</rank>
+						</item>
+						<item id="revised_end_date">
+							<rank>90</rank>
 						</item>
 					</items>
 				</list>
@@ -823,6 +869,9 @@
 						<item id="functionalcis_list">
 							<rank>80</rank>
 						</item>
+						<item id="dashboard">
+							<rank>90</rank>
+						</item>
 					</items>
 				</details>
 				<default_search>
@@ -830,8 +879,23 @@
 						<item id="ref">
 							<rank>10</rank>
 						</item>
-						<item id="org_id">
+						<item id="title">
 							<rank>20</rank>
+						</item>
+						<item id="caller_id">
+							<rank>30</rank>
+						</item>
+						<item id="status">
+							<rank>40</rank>
+						</item>
+						<item id="start_date">
+							<rank>50</rank>
+						</item>
+						<item id="agent_id">
+							<rank>60</rank>
+						</item>
+						<item id="org_id">
+							<rank>70</rank>
 						</item>
 					</items>
 				</default_search>
@@ -854,9 +918,6 @@
 							<hidden/>
 						</attribute>
 						<attribute id="last_update">
-							<hidden/>
-						</attribute>
-						<attribute id="costs_spent">
 							<hidden/>
 						</attribute>
 						<attribute id="wbs_cost">
@@ -908,9 +969,6 @@
 						<attribute id="last_update">
 							<read_only/>
 						</attribute>
-						<attribute id="costs_spent">
-							<hidden/>
-						</attribute>
 						<attribute id="wbs_cost">
 							<read_only/>
 						</attribute>
@@ -960,11 +1018,7 @@
 					<inherit_flags_from>initiated</inherit_flags_from>
 				</state>
 				<state id="executed">
-					<flags>
-						<attribute id="costs_spent">
-							<read_only/>
-						</attribute>
-					</flags>
+					<flags/>
 					<transitions>
 						<transition id="ev_monitor">
 							<stimulus>ev_monitor</stimulus>
@@ -1047,9 +1101,6 @@
 							<read_only/>
 						</attribute>
 						<attribute id="contacts_list">
-							<read_only/>
-						</attribute>
-						<attribute id="costs_spent">
 							<read_only/>
 						</attribute>
 						<attribute id="creation_date">
@@ -2337,32 +2388,35 @@
 			<presentation>
 				<list>
 					<items>
-						<item id="project_id">
+						<item id="ref">
 							<rank>10</rank>
 						</item>
-						<item id="start_date">
+						<item id="project_id">
 							<rank>20</rank>
 						</item>
-						<item id="end_date">
+						<item id="start_date">
 							<rank>30</rank>
 						</item>
-						<item id="re_estimated_start_date">
+						<item id="end_date">
 							<rank>40</rank>
 						</item>
-						<item id="re_estimated_end_date">
+						<item id="re_estimated_start_date">
 							<rank>50</rank>
 						</item>
-						<item id="freetime">
+						<item id="re_estimated_end_date">
 							<rank>60</rank>
 						</item>
-						<item id="completion">
+						<item id="freetime">
 							<rank>70</rank>
 						</item>
-						<item id="wbs_owner_id">
+						<item id="completion">
 							<rank>80</rank>
 						</item>
-						<item id="status">
+						<item id="wbs_owner_id">
 							<rank>90</rank>
+						</item>
+						<item id="status">
+							<rank>100</rank>
 						</item>
 					</items>
 				</list>
@@ -2543,11 +2597,17 @@
 						<item id="project_id">
 							<rank>20</rank>
 						</item>
-						<item id="start_date">
+						<item id="ref">
 							<rank>30</rank>
 						</item>
-						<item id="ref">
+						<item id="re_estimated_start_date">
 							<rank>40</rank>
+						</item>
+						<item id="status">
+							<rank>50</rank>
+						</item>
+						<item id="wbs_owner_id">
+							<rank>60</rank>
 						</item>
 					</items>
 				</default_search>
@@ -2981,17 +3041,12 @@
 							<action id="action:write">allow</action>
 							<action id="action:bulk write">allow</action>
 							<action id="action:delete">allow</action>
-							<action id="stimulus:ev_analyse">allow</action>
-							<action id="stimulus:ev_cancel">allow</action>
-							<action id="stimulus:ev_close">allow</action>
-							<action id="stimulus:ev_progress">allow</action>
-							<action id="stimulus:ev_reopen">allow</action>
-							<action id="stimulus:ev_closed">allow</action>
-							<action id="stimulus:ev_pending_parent">allow</action>
-							<action id="stimulus:ev_running">allow</action>
-							<action id="stimulus:ev_assign">allow</action>
-							<action id="stimulus:ev_finish">allow</action>
 							<action id="stimulus:ev_plan">allow</action>
+							<action id="stimulus:ev_execute">allow</action>
+							<action id="stimulus:ev_reexecute">allow</action>
+							<action id="stimulus:ev_close">allow</action>
+							<action id="stimulus:ev_monitor">allow</action>
+							<action id="stimulus:ev_cancel">allow</action>
 						</actions>
 					</group>
 					<group id="*">
