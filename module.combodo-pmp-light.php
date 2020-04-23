@@ -70,7 +70,8 @@ if (!class_exists('PMPLightInstaller'))
 				'preset' =>
 					array(
 						0 => 'copy(id,project_id)',
-						1 => 'set(start_date,$current_date$)',
+						1 => 'set(start_date,$current_date$ $current_time$)',
+						2 => 'copy(agent_id,wbs_owner_id)',
 					),
 				'retrofit' =>
 					array(),
