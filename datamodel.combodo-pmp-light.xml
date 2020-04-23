@@ -2903,10 +2903,10 @@
 		</class>
 	</classes>
 	<menus>
-		<menu xsi:type="MenuGroup" id="ProjectManagement" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="MenuGroup" id="ProjectManagement" _delta="define">
 			<rank>50</rank>
 		</menu>
-		<menu xsi:type="DashboardMenuNode" id="Project:Overview" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="DashboardMenuNode" id="Project:Overview" _delta="define">
 			<parent>ProjectManagement</parent>
 			<rank>10</rank>
 			<definition>
@@ -2987,41 +2987,41 @@
 				</cells>
 			</definition>
 		</menu>
-		<menu xsi:type="TemplateMenuNode" id="ProjectMenu" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="TemplateMenuNode" id="ProjectMenu" _delta="define">
 			<parent>ProjectManagement</parent>
 			<rank>20</rank>
 		</menu>
-		<menu xsi:type="NewObjectMenuNode" id="NewProject" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="NewObjectMenuNode" id="NewProject" _delta="define">
 			<parent>ProjectMenu</parent>
 			<rank>0</rank>
 			<class>Project</class>
 		</menu>
-		<menu xsi:type="SearchMenuNode" id="SearchProject" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="SearchMenuNode" id="SearchProject" _delta="define">
 			<parent>ProjectMenu</parent>
 			<rank>10</rank>
 			<class>Project</class>
 		</menu>
-		<menu xsi:type="OQLMenuNode" id="MyProject" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="OQLMenuNode" id="MyProject" _delta="define">
 			<parent>ProjectMenu</parent>
 			<rank>20</rank>
 			<oql>SELECT Project WHERE agent_id = :current_contact_id AND status != "closed"</oql>
 			<do_search>1</do_search>
 		</menu>
-		<menu xsi:type="TemplateMenuNode" id="WBSMenu" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="TemplateMenuNode" id="WBSMenu" _delta="define">
 			<parent>ProjectManagement</parent>
 			<rank>80</rank>
 		</menu>
-		<menu xsi:type="NewObjectMenuNode" id="NewWBS" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="NewObjectMenuNode" id="NewWBS" _delta="define">
 			<parent>WBSMenu</parent>
 			<rank>0</rank>
 			<class>WBS</class>
 		</menu>
-		<menu xsi:type="SearchMenuNode" id="SearchWBS" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="SearchMenuNode" id="SearchWBS" _delta="define">
 			<parent>WBSMenu</parent>
 			<rank>10</rank>
 			<class>WBS</class>
 		</menu>
-		<menu xsi:type="OQLMenuNode" id="MyWBS" _created_in="itop-welcome-itil" _delta="define">
+		<menu xsi:type="OQLMenuNode" id="MyWBS" _delta="define">
 			<parent>WBSMenu</parent>
 			<rank>11</rank>
 			<oql>SELECT WBS WHERE wbs_owner_id= :current_contact_id AND status != "closed"</oql>
