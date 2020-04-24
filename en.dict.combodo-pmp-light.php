@@ -84,6 +84,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/Attribute:wbss_list' => 'Deliverables',
 	'Class:Project/Attribute:wbss_list_displaybare' => 'Deliverables not closed',
 	'Class:Project/Attribute:requirement' => 'Requirements',
+	'Class:Project/Attribute:org_id' => 'Customer',
 	'Class:Project/Name' => '%1$s-%2$s',
 	'Class:Project/Stimulus:ev_cancel' => 'Cancel project',
 	'Class:Project/Stimulus:ev_close' => 'Close',
