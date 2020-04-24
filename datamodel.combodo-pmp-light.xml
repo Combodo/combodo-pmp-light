@@ -328,7 +328,7 @@
 					<digits>8</digits>
 					<decimals>2</decimals>
 				</field>
-				<field id="dashboard" xsi:type="AttributeDashboard" _delta="define">
+				<field id="gant_wbs" xsi:type="AttributeDashboard" _delta="define">
 					<is_user_editable>true</is_user_editable>
 					<!-- Use this default definition for creating a new dashboard -->
 					<definition>
@@ -869,7 +869,7 @@
 						<item id="functionalcis_list">
 							<rank>80</rank>
 						</item>
-						<item id="dashboard">
+						<item id="gant_wbs">
 							<rank>90</rank>
 						</item>
 					</items>
@@ -882,20 +882,17 @@
 						<item id="title">
 							<rank>20</rank>
 						</item>
-						<item id="caller_id">
+						<item id="status">
 							<rank>30</rank>
 						</item>
-						<item id="status">
+						<item id="start_date">
 							<rank>40</rank>
 						</item>
-						<item id="start_date">
+						<item id="agent_id">
 							<rank>50</rank>
 						</item>
-						<item id="agent_id">
-							<rank>60</rank>
-						</item>
 						<item id="org_id">
-							<rank>70</rank>
+							<rank>60</rank>
 						</item>
 					</items>
 				</default_search>
@@ -3041,12 +3038,10 @@
 							<action id="action:write">allow</action>
 							<action id="action:bulk write">allow</action>
 							<action id="action:delete">allow</action>
-							<action id="stimulus:ev_plan">allow</action>
 							<action id="stimulus:ev_execute">allow</action>
 							<action id="stimulus:ev_reexecute">allow</action>
-							<action id="stimulus:ev_close">allow</action>
 							<action id="stimulus:ev_monitor">allow</action>
-							<action id="stimulus:ev_cancel">allow</action>
+							<action id="stimulus:ev_reject">allow</action>
 						</actions>
 					</group>
 					<group id="*">
