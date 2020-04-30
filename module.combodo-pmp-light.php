@@ -61,7 +61,7 @@ if (!class_exists('PMPLightInstaller'))
 		{
 			// Rule to add to the object copier configuration
 			$aNewRule = array(
-				'source_scope' => 'SELECT Project WHERE status NOT IN (\'close\',\'monitor\',\'cancel\'))',
+				'source_scope' => 'SELECT Project WHERE status NOT IN (\'close\',\'monitor\',\'cancel\')',
 				'allowed_profiles' => 'Project Manager,Administrator',
 				'menu_label' => Dict::s('Class:Project/CreateDeliverable'),
 				'form_label' => Dict::s('Class:Project/CreateDeliverableForm'),
