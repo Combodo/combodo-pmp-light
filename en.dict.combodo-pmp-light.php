@@ -182,6 +182,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'WBS:Error:ParentCantBeChildren' => 'You cannot be your own parent deliverable',
 	'WBS:Execution' => 'Execution',
 	'WBS:Info' => 'Information',
+	'Class:WBS/Error:Contactnotfound' => 'This owner is not defined as stakeholder of project linked? You should add him.',
 
 	'Class:lnkWBSToWBS' => 'Link Child WBS To Parent WBS',
 	'Class:lnkWBSToWBS/Attribute:child_wbs_id' => 'Child deliverable',
