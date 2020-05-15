@@ -179,6 +179,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'WBS:Error:ParentCantBeChildren' => 'Vous ne pouvez pas être livrable parent de vous-mêmes',
 	'WBS:Execution' => 'Exécution',
 	'WBS:Info' => 'Information',
+	'Class:WBS/Error:Contactnotfound' => 'Le responsable du livrable n\'est pas référencé comme partie prenante du projet attaché. Vous devriez le rajouter',
 
 	'Class:lnkWBSToWBS' => 'Lien Livrable enfant / Livrable parent',
 	'Class:lnkWBSToWBS/Attribute:child_wbs_id' => 'Livrable enfant ',
