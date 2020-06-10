@@ -82,6 +82,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/Attribute:wbs_cost' => 'Deliverables costs',
 	'Class:Project/Attribute:wbs_costs' => 'Deliverables costs',
 	'Class:Project/Attribute:wbss_list' => 'Deliverables',
+	'Class:Project/Attribute:tickets_list' => 'Related Tickets',
 	'Class:Project/Attribute:wbss_list_displaybare' => 'Deliverables not closed',
 	'Class:Project/Attribute:requirement' => 'Requirements',
 	'Class:Project/Attribute:org_id' => 'Customer',
@@ -131,6 +132,9 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/CreateDeliverable' => 'Create deliverable',
 	'Class:Project/CreateDeliverableForm' => 'Create a deliverable from %1$s',
 	'Class:Project/ReportLabel' => 'Created from %1$s',
+	'Class:Ticket/Attribute:related_project' => 'Related project',
+	'Class:Ticket/Attribute:related_project_id' => 'Related project',
+
 ));
 
 
@@ -182,7 +186,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'WBS:Error:ParentCantBeChildren' => 'You cannot be your own parent deliverable',
 	'WBS:Execution' => 'Execution',
 	'WBS:Info' => 'Information',
-	'Class:WBS/Error:Contactnotfound' => 'This owner is not defined as stakeholder of project linked? You should add him.',
+	'Class:WBS/Error:Contactnotfound' => '%1$s is not defined as stakeholder of project linked? You should add him.',
 
 	'Class:lnkWBSToWBS' => 'Link Child WBS To Parent WBS',
 	'Class:lnkWBSToWBS/Attribute:child_wbs_id' => 'Child deliverable',

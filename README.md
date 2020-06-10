@@ -1,2 +1,2 @@
 # combodo-pmp-light
-PMP for small enterprises
+PMP light - Project and delivable management

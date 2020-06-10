@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
 	<classes>
+		<class id="Ticket" _created_in="itop-tickets" _delta="must_exist">
+			<fields>
+				<field id="related_project_id" xsi:type="AttributeExternalKey" _delta="define">
+					<sql>related_project_id</sql>
+					<filter><![CDATA[SELECT Project WHERE id != :this->id AND status NOT IN ('rejected','resolved','closed')]]></filter>
+					<dependencies>
+					</dependencies>
+					<target_class>Project</target_class>
+					<is_null_allowed>true</is_null_allowed>
+					<on_target_delete>DEL_MANUAL</on_target_delete>
+				</field>
+				<field id="related_project_ref" xsi:type="AttributeExternalField" _delta="define">
+					<extkey_attcode>related_project_id</extkey_attcode>
+					<target_attcode>ref</target_attcode>
+				</field>
+			</fields>
+		</class>
 		<class id="Contact" _created_in="itop-config-mgmt" _delta="must_exist">
 			<fields>
 				<field id="wbss_list" xsi:type="AttributeLinkedSetIndirect" _delta="define">
@@ -381,6 +398,12 @@
 							</cell>
 						</cells>
 					</definition>
+				</field>
+				<field id="tickets_list" xsi:type="AttributeLinkedSet" _delta="define">
+					<linked_class>Ticket</linked_class>
+					<ext_key_to_me>related_project_id</ext_key_to_me>
+					<tracking_level>list</tracking_level>
+					<edit_mode/>
 				</field>
 			</fields>
 			<methods>
@@ -871,6 +894,9 @@
 						</item>
 						<item id="gant_wbs">
 							<rank>90</rank>
+						</item>
+						<item id="tickets_list">
+							<rank>100</rank>
 						</item>
 					</items>
 				</details>
@@ -2258,14 +2284,14 @@
 							           }
 						          }
 						      }
-					              $sOQLStakeholders = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.id= :project_id AND l1.contact_id= :owner_id";
-     						      $oOQLStakeholdersSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLStakeholders), array(), array('owner_id' => $this->Get('wbs_owner_id'), 'project_id' => $this->Get('project_id'))); 
-      						      $iContactFound = $oOQLStakeholdersSet->Count();
-							if ( $iContactFound == 0)
-							{
-							$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound');
-							}
-						     }
+					        $sOQLStakeholders = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.id= :project_id AND l1.contact_id= :owner_id";
+     						  $oOQLStakeholdersSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLStakeholders), array(), array('owner_id' => $this->Get('wbs_owner_id'), 'project_id' => $this->Get('project_id')));
+      					  $iContactFound = $oOQLStakeholdersSet->Count();
+									if ($iContactFound == 0)
+									{
+											$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound',$this->Get('start_date'));
+									}
+						  }
 						]]></code>
 				</method>
 				<method id="SetProjectCalculatedEndDate">
@@ -2909,6 +2935,9 @@
 	<menus>
 		<menu xsi:type="MenuGroup" id="ProjectManagement" _delta="define">
 			<rank>50</rank>
+			<enable_class _delta="define">Project</enable_class>
+			<enable_admin_only _delta="define">0</enable_admin_only>
+			<enable_action _delta="define">UR_ACTION_MODIFY</enable_action>
 		</menu>
 		<menu xsi:type="DashboardMenuNode" id="Project:Overview" _delta="define">
 			<parent>ProjectManagement</parent>

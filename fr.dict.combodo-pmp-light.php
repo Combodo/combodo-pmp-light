@@ -82,6 +82,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/Attribute:wbs_costs' => 'Coûts des livrables',
 	'Class:Project/Attribute:wbss_list' => 'Livrables',
 	'Class:Project/Attribute:wbss_list_displaybare' => 'Livrables non clos',
+	'Class:Project/Attribute:tickets_list' => 'Tickets associés',
 	'Class:Project/Attribute:requirement' => 'Exigences',
 	'Class:Project/Attribute:org_id' => 'Client',
 	'Class:Project/Name' => '%1$s-%2$s',
@@ -129,6 +130,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/CreateDeliverable' => 'Créer un délivrable...',
 	'Class:Project/CreateDeliverableForm' => 'Créer un délivrable pour %1$s',
 	'Class:Project/ReportLabel' => 'Créée depuis %1$s',
+	'Class:Ticket/Attribute:related_project' => 'Projet associé',
+	'Class:Ticket/Attribute:related_project_id' => 'Projet associé'
 ));
 
 // WBS class
