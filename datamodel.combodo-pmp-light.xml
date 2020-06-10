@@ -2289,7 +2289,7 @@
       					  $iContactFound = $oOQLStakeholdersSet->Count();
 									if ($iContactFound == 0)
 									{
-											$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound',$this->Get('start_date'));
+											$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound',$this->Get('wbs_owner_id_friendlyname'));
 									}
 						  }
 						]]></code>
