@@ -2278,18 +2278,21 @@
 						          while ($oLink = $oParentWBSSet->Fetch())
 						          {
 							           $iKey = $oLink->Get('parent_wbs_id');
-							           if ($this->GetKey()== $iKey)
+							           if ($this->GetKey() == $iKey)
 							           {
 							             $this->m_aCheckIssues[] = Dict::Format('WBS:Error:ParentCantBeChildren');
 							           }
 						          }
 						      }
-					        $sOQLStakeholders = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.id= :project_id AND l1.contact_id= :owner_id";
-     						  $oOQLStakeholdersSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLStakeholders), array(), array('owner_id' => $this->Get('wbs_owner_id'), 'project_id' => $this->Get('project_id')));
-      					  $iContactFound = $oOQLStakeholdersSet->Count();
-									if ($iContactFound == 0)
-									{
-											$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound',$this->Get('wbs_owner_id_friendlyname'));
+						      if ($this->Get('wbs_owner_id') != '')
+						      {
+						        $sOQLStakeholders = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.id= :project_id AND l1.contact_id= :owner_id";
+	                  $oOQLStakeholdersSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLStakeholders), array(), array('owner_id' => $this->Get('wbs_owner_id'), 'project_id' => $this->Get('project_id')));
+	                  $iContactFound = $oOQLStakeholdersSet->Count();
+										if ($iContactFound == 0)
+										{
+												$this->m_aCheckWarnings[] = Dict::Format('Class:WBS/Error:Contactnotfound',$this->Get('wbs_owner_id_friendlyname'));
+										}
 									}
 						  }
 						]]></code>
