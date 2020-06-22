@@ -96,7 +96,7 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/Stimulus:ev_reexecute' => 'Back to execute',
 	'Class:Project/Tab:Summary' => 'Summary',
 	'Class:Project/Tab:Summary+' => 'Summary of current project',
-	'Class:Project:Display:delivrables_costs' => 'Costs of deliverables',
+	'Class:Project:Display:delivrables_costs' => 'Costs of all deliverables',
 	'Class:Project/Attribute:revised_end_date' => 'Revised end date',
 	'Class:Project/Attribute:mgt_reserve_budget' => 'Management reserve budget',
 	'Class:Project/Attribute:mgt_reserve_budget+' => 'Amount of budget reserved for management and unknown/unknown events',
