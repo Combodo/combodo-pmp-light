@@ -459,18 +459,20 @@
 						{
 		            $iProjectid = $this->GetKey();
 		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
+			    $sOQLWBSCost = "SELECT WBS WHERE project_id = :project";
 		            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
 		            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
 		            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
+			    $oWBSCostSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBSCost), array(), array('project' => $iProjectid));
 		            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
 		            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
 
 		            $iWBSSet = $oWBSSet->Count();
 		            $iContactProjectSet = $oContactProjectSet->Count();
 		            $iContactWBSSet = $oContactWBSSet->Count();
-								$iWBSCosts=0;
-		            while ($oWBS = $oWBSSet->Fetch())
+			    $iWBSCosts=0;
+		            while ($oWBS = $oWBSCostSet->Fetch())
 		            {
 		                $iWBSCosts += $oWBS->Get('wbs_cost');
 		            }
