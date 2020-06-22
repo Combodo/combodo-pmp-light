@@ -95,7 +95,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/Stimulus:ev_reexecute' => 'Revenir à l\'exécution',
 	'Class:Project/Tab:Summary' => 'Vue d\'ensemble',
 	'Class:Project/Tab:Summary+' => 'Vue d\'ensemble du projet',
-	'Class:Project:Display:delivrables_costs' => 'Coûts des livrables',
+	'Class:Project:Display:delivrables_costs' => 'Coûts de tous les livrables',
 	'Class:Project/Attribute:revised_end_date' => 'Date de fin recalculée',
 	'Class:Project/Attribute:mgt_reserve_budget' => 'Budget de réserve pour imprévu',
 	'Class:Project/Attribute:mgt_reserve_budget+' => 'Montant du budget du projet réservé pour la marge de manoeuvre du management',
