@@ -202,3 +202,47 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI-WBSManagementOverview-OpenWBSByProject' => 'Open deliverables by customer project',
 ));
 
+
+//
+// Class: Ticket
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:Ticket/Attribute:related_project_ref' => 'Related project ref',
+	'Class:Ticket/Attribute:related_project_ref+' => '',
+));
+
+//
+// Class: WBS
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:WBS/Stimulus:ev_pending_parent' => 'Pending parent',
+	'Class:WBS/Stimulus:ev_pending_parent+' => '',
+	'Class:WBS/Stimulus:ev_running' => 'Running',
+	'Class:WBS/Stimulus:ev_running+' => '',
+));
+
+//
+// Class: lnkWBSToWBS
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:lnkWBSToWBS/Attribute:child_start_date' => 'Child start date',
+	'Class:lnkWBSToWBS/Attribute:child_start_date+' => '',
+	'Class:lnkWBSToWBS/Attribute:child_end_date' => 'Child end date',
+	'Class:lnkWBSToWBS/Attribute:child_end_date+' => '',
+	'Class:lnkWBSToWBS/Attribute:parent_start_date' => 'Parent start date',
+	'Class:lnkWBSToWBS/Attribute:parent_start_date+' => '',
+	'Class:lnkWBSToWBS/Attribute:parent_end_date' => 'Parent end date',
+	'Class:lnkWBSToWBS/Attribute:parent_end_date+' => '',
+));
+
+//
+// Class: lnkContactToWBS
+//
+
+Dict::Add('EN US', 'English', 'English', array(
+	'Class:lnkContactToWBS/Attribute:project_id' => 'Project id',
+	'Class:lnkContactToWBS/Attribute:project_id+' => '',
+));

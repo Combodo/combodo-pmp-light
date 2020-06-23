@@ -81,8 +81,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/Attribute:wbs_cost' => 'Coûts des livrables',
 	'Class:Project/Attribute:wbs_costs' => 'Coûts des livrables',
 	'Class:Project/Attribute:wbss_list' => 'Livrables',
-	'Class:Project/Attribute:wbss_list_displaybare' => 'Livrables non clos',
 	'Class:Project/Attribute:tickets_list' => 'Tickets associés',
+	'Class:Project/Attribute:wbss_list_displaybare' => 'Livrables non clos',
 	'Class:Project/Attribute:requirement' => 'Exigences',
 	'Class:Project/Attribute:org_id' => 'Client',
 	'Class:Project/Name' => '%1$s-%2$s',
@@ -120,6 +120,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Menu:ProjectManagement' => 'Gestion des projets',
 	'Menu:ProjectMenu' => 'Gestion des projets',
 	'Menu:SearchProject' => 'Rechercher des projets',
+
 	'UI:AddLinkedObjectsOf_Class' => 'Ajouter %1$s',
 	'UI:ProjectMgmtMenuOverview:Title' => 'Dashboard',
 	'UI-IssueManagementOverview-OpenIssueByProject' => 'Risques avérés ouverts par client',
@@ -131,8 +132,10 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/CreateDeliverableForm' => 'Créer un délivrable pour %1$s',
 	'Class:Project/ReportLabel' => 'Créée depuis %1$s',
 	'Class:Ticket/Attribute:related_project' => 'Projet associé',
-	'Class:Ticket/Attribute:related_project_id' => 'Projet associé'
+	'Class:Ticket/Attribute:related_project_id' => 'Projet associé',
+
 ));
+
 
 // WBS class
 Dict::Add('FR FR', 'French', 'Français', array(
@@ -199,16 +202,46 @@ Dict::Add('FR FR', 'French', 'Français', array(
 ));
 
 
+//
+// Class: Ticket
+//
 
+Dict::Add('FR FR', 'French', 'Français', array(
+	'Class:Ticket/Attribute:related_project_ref' => 'Related project ref~~',
+	'Class:Ticket/Attribute:related_project_ref+' => '~~',
+));
 
+//
+// Class: WBS
+//
 
+Dict::Add('FR FR', 'French', 'Français', array(
+	'Class:WBS/Stimulus:ev_pending_parent' => 'Pending parent~~',
+	'Class:WBS/Stimulus:ev_pending_parent+' => '~~',
+	'Class:WBS/Stimulus:ev_running' => 'Running~~',
+	'Class:WBS/Stimulus:ev_running+' => '~~',
+));
 
+//
+// Class: lnkWBSToWBS
+//
 
+Dict::Add('FR FR', 'French', 'Français', array(
+	'Class:lnkWBSToWBS/Attribute:child_start_date' => 'Child start date~~',
+	'Class:lnkWBSToWBS/Attribute:child_start_date+' => '~~',
+	'Class:lnkWBSToWBS/Attribute:child_end_date' => 'Child end date~~',
+	'Class:lnkWBSToWBS/Attribute:child_end_date+' => '~~',
+	'Class:lnkWBSToWBS/Attribute:parent_start_date' => 'Parent start date~~',
+	'Class:lnkWBSToWBS/Attribute:parent_start_date+' => '~~',
+	'Class:lnkWBSToWBS/Attribute:parent_end_date' => 'Parent end date~~',
+	'Class:lnkWBSToWBS/Attribute:parent_end_date+' => '~~',
+));
 
+//
+// Class: lnkContactToWBS
+//
 
-
-
-
-
-
-
+Dict::Add('FR FR', 'French', 'Français', array(
+	'Class:lnkContactToWBS/Attribute:project_id' => 'Project id~~',
+	'Class:lnkContactToWBS/Attribute:project_id+' => '~~',
+));
