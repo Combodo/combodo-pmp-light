@@ -960,6 +960,9 @@
 						<attribute id="end_date">
 							<mandatory/>
 						</attribute>
+            <attribute id="wbss_list">
+              <read_only/>
+            </attribute>
 					</flags>
 					<transitions>
 						<transition id="ev_plan">
