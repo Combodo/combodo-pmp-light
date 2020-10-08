@@ -5,7 +5,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-pmp-light/1.0.2',
+	'combodo-pmp-light/1.0.3',
 	array(
 		// Identification
 		//
@@ -17,6 +17,7 @@ SetupWebPage::AddModule(
 		'dependencies' => array(
 			'itop-tickets/2.7.0',
 			'itop-config-mgmt/2.0.0',
+			'itop-object-copier/1.3.4',
 			'combodo-gantt-view/1.0.0',
 
 		),
@@ -60,8 +61,9 @@ if (!class_exists('PMPLightInstaller'))
 		public static function BeforeWritingConfig(Config $oConfiguration)
 		{
 			// Rule to add to the object copier configuration
+			//create a delivrable from a project
 			$aNewRule = array(
-				'source_scope' => 'SELECT Project WHERE status NOT IN (\'close\',\'monitor\',\'cancel\')',
+				'source_scope' => 'SELECT Project WHERE status NOT IN (\'closed\',\'monitored\',\'cancel\')',
 				'allowed_profiles' => 'Project Manager,Administrator',
 				'menu_label' => Dict::s('Class:Project/CreateDeliverable'),
 				'form_label' => Dict::s('Class:Project/CreateDeliverableForm'),
@@ -99,7 +101,48 @@ if (!class_exists('PMPLightInstaller'))
 					$oConfiguration->SetModuleSetting('itop-object-copier', 'rules', $aExistingRules);
 				}
 			}
-			
+
+			//duplicate a project with delivrable
+			$aNewRule = array(
+				'id' => 'CopyProjectLight',
+				'source_scope' => 'SELECT Project WHERE status NOT IN (\'closed\',\'monitored\')',
+				'allowed_profiles' => 'Project Manager,Administrator',
+				'menu_label' => Dict::s('Class:Project/DuplicateProject'),
+				'form_label' => Dict::s('Class:Project/DuplicateProjectForm'),
+				'report_label' =>  Dict::s('Class:Project/ReportLabel'),
+				'dest_class' => 'Project',
+				'preset' =>
+					array (
+						0 => 'clone_scalars(*)',
+						1 => 'clone(contacts_list,functionalcis_list)',
+						2 => 'call_method(Copydeliverablestodeliverables)',
+					),
+				'retrofit' =>
+					array (),
+			);
+
+			// Retrieving object copier rules from conf parameters
+			// Note: We don't do anything if object copier is not installed, otherwise its configuration will be set when installed.
+			$aExistingRules = $oConfiguration->GetModuleSetting('itop-object-copier', 'rules', array());
+			if (!empty($aExistingRules))
+			{
+				$bFound = false;
+				foreach ($aExistingRules as $aExistingRule)
+				{
+					if (isset($aExistingRule['menu_label']) && ($aExistingRule['menu_label'] === $aNewRule['menu_label']))
+					{
+						$bFound = true;
+						break;
+					}
+				}
+
+				// Add rule only if not already existing
+				if ($bFound === false)
+				{
+					$aExistingRules[] = $aNewRule;
+					$oConfiguration->SetModuleSetting('itop-object-copier', 'rules', $aExistingRules);
+				}
+			}
 			return $oConfiguration;
 		}
 	}

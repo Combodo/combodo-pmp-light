@@ -132,6 +132,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/CreateDeliverable' => 'Create deliverable',
 	'Class:Project/CreateDeliverableForm' => 'Create a deliverable from %1$s',
 	'Class:Project/ReportLabel' => 'Created from %1$s',
+	'Class:Project/DuplicateProject' => 'Duplicate Project',
+	'Class:Project/DuplicateProjectForm' => 'Duplicate a project from %1$s',
 	'Class:Ticket/Attribute:related_project' => 'Related project',
 	'Class:Ticket/Attribute:related_project_id' => 'Related project',
 

@@ -407,6 +407,97 @@
 				</field>
 			</fields>
 			<methods>
+        <method id="Copydeliverablestodeliverables" _delta="define">
+					<comment>/**
+						*
+						* @author Axelle Bost
+						*/
+					</comment>
+					<static>false</static>
+					<access>public</access>
+					<code><![CDATA[
+            public function Copydeliverablestodeliverables($oSource)
+            {
+              // Put your code here, call parent::CopyDeliverablesFromDeliverables(...); if needed
+              // This method is supposed to be called from an object copier action triggered from a Release.
+              $sSourceClass = get_class($oSource);
+              if ($sSourceClass != 'Project')
+              {
+                  throw new Exception("Wrong source class '$sSourceClass' : CopyDeliverablesFromDeliverables method should be called by a user action associated to a Project !");
+              }
+
+	            // Problem: method is called twice, when new CreatedObject is displayed and when it is saved,
+	            // resulting in executing the code twice.
+	            // Work around: don't perform operation when CreatedObject is being saved
+	            // In the case of an PhysicalInterface, NetworkComponent or NetworkModule this is not the case!
+
+	            $sOperation = utils::ReadPostedParam('operation');
+              if ($sOperation == 'apply_new') {
+                //create only when submit form
+                     // ID of the source object that is copied
+                     $iSrcId = $oSource->GetKey();
+                     // /In order to be able to add the wbs on the object generated for the moment in memory (no real ID as long as the copied object is not inserted in the database,
+                     // one recovers the attribute physicalinterface_list as object)
+
+                     // WBS linked to the Project
+                     $sOQL1 = "SELECT WBS WHERE project_id = :id";
+                     $oDeliverableSetSrc = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQL1), array(), array('id' => $iSrcId));
+                     $aSrcToNewId = [];
+                     $aLinkParentToChildSrc = [];
+                     $aNewDeliverable = [];
+                     $oCopier = new iTopObjectCopier();
+                     while ($oDeliverableSrc = $oDeliverableSetSrc->Fetch()) {
+                       $oNewDeliverable = new WBS();
+                       $oCopier->ExecAction("clone_scalars", [], $oDeliverableSrc, $oNewDeliverable);
+                       $oNewDeliverable->Set('project_id', null);
+                       $oNewDeliverable->Set('end_date', null);
+                       $oNewDeliverable->Set('start_date', null);
+                       $oNewDeliverable->Set('completion', 0);
+                       $oNewDeliverable->Set('re_estimated_start_date', null);
+                       $oNewDeliverable->Set('re_estimated_end_date', null);
+                       $oNewDeliverable->Set('freetime', null);
+                       $oNewDeliverable->Set('status', "running");
+                       $oParentWBSSet = $oDeliverableSrc->Get('wbss_parent_list');
+                       if ($oParentWBSSet->Count() > 0) {
+                         $oParentWBSSet->Rewind();
+                         $aLink = [];
+                         while ($oLnkDst = $oParentWBSSet->Fetch()) {
+                           $aLink[] = $oLnkDst->Get('parent_wbs_id');
+                         }
+                         $aLinkParentToChildSrc[$oDeliverableSrc->GetKey()] = $aLink;
+                       }
+
+                       $iNewDeliverableKey = $oNewDeliverable->DBInsert();
+                       $aSrcToNewId[$oDeliverableSrc->GetKey()] = $iNewDeliverableKey;
+                       $aNewDeliverable[$iNewDeliverableKey] = $oNewDeliverable;
+                     }
+                     foreach ($aLinkParentToChildSrc as $iChildSrc => $iParentsSetSrc) {
+                       $iDelivable = $aSrcToNewId[$iChildSrc];
+                       $oDelivable = $aNewDeliverable[$iDelivable];
+                       $oLnk = $oDelivable->Get('wbss_parent_list');
+                       $oLnk->rewind();
+                       foreach ($iParentsSetSrc as $iOldParent) {
+                         $oLnkDst = MetaModel::NewObject('lnkWBSToWBS');
+                         $oLnkDst->Set('child_wbs_id', $iDelivable);
+                         $oLnkDst->Set('parent_wbs_id', $aSrcToNewId[$iOldParent]);
+                         $oLnk->AddItem($oLnkDst);
+                       }
+                       $oDelivable->Set('status', "pending_parent");
+                       $oDelivable->Set('wbss_parent_list', $oLnk);
+                       $oDelivable->DBUpdate();
+                     }
+
+                     $oListDelivrableSet = DBObjectSet::FromArray("WBS", $aNewDeliverable);
+                     $this->Set('wbss_list', $oListDelivrableSet);
+                }
+              else{
+	              $oCopier = new iTopObjectCopier();
+	              $oCopier->ExecAction("clone", ["wbss_list"], $oSource, $this);
+
+              }
+            }
+          ]]></code>
+				</method>
 				<method id="OnInsert">
 					<comment>/**
 						*
@@ -1354,7 +1445,7 @@
 				</field>
 				<field id="project_id" xsi:type="AttributeExternalKey">
 					<sql>project_id</sql>
-					<filter>SELECT Project WHERE status !="close"</filter>
+					<filter>SELECT Project WHERE status !="closed"</filter>
 					<dependencies>
 						<attribute id="title"/>
 					</dependencies>
@@ -2346,16 +2437,18 @@
 							{
 									// Costs of all project's WBS related are added to wbs_cost field of project associated
 			            $iProjectId = $this->Get('project_id');
-							    $sOQLWBS =  "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel')";
-							    $oWBSSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectId));
-							    $iWBSCosts = 0;
-							    while ($oWBS = $oWBSSet->Fetch())
-			            {
-		                  $iWBSCosts += $oWBS->Get('wbs_cost');
-			            }
-					        $oProject = MetaModel::GetObject('Project', $iProjectId, false);
-			            $oProject->Set('wbs_cost',$iWBSCosts);
-			            $oProject->DBUpdate();
+			            if($iProjectId>0) {//test in order to escape this step for cloning operation
+                    $sOQLWBS =  "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel')";
+                    $oWBSSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectId));
+                    $iWBSCosts = 0;
+                    while ($oWBS = $oWBSSet->Fetch())
+                    {
+                        $iWBSCosts += $oWBS->Get('wbs_cost');
+                    }
+                    $oProject = MetaModel::GetObject('Project', $iProjectId, false);
+                    $oProject->Set('wbs_cost',$iWBSCosts);
+                    $oProject->DBUpdate();
+                 }
 							}
 						]]></code>
 				</method>
