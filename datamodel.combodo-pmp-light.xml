@@ -3164,7 +3164,7 @@
 	</menus>
 	<user_rights _created_in="core">
 		<profiles>
-			<profile id="15" _delta="define">
+			<profile id="1025" _delta="define">
 				<name>Project Manager</name>
 				<description>Person dealing with projects/risks/issues/WBS</description>
 				<groups>

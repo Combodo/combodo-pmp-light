@@ -5,7 +5,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-pmp-light/1.0.3',
+	'combodo-pmp-light/1.0.4',
 	array(
 		// Identification
 		//
@@ -18,7 +18,7 @@ SetupWebPage::AddModule(
 			'itop-tickets/2.7.0',
 			'itop-config-mgmt/2.0.0',
 			'itop-object-copier/1.3.4',
-			'combodo-gantt-view/1.0.0',
+			'combodo-gantt-view/1.0.2',
 
 		),
 		'mandatory' => false,
