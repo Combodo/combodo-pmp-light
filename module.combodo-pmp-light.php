@@ -22,7 +22,7 @@ SetupWebPage::AddModule(
 
 		),
 		'mandatory' => false,
-		'visible' => true,
+		'visible' => false,
 		'installer' => 'PMPLightInstaller',
 
 		// Components
