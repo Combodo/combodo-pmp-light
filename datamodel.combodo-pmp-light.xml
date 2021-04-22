@@ -1,44 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ @copyright   Copyright (C) 2010-2021 Combodo SARL
+  ~ @license     http://opensource.org/licenses/AGPL-3.0
+  -->
+
 <itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
-	<classes>
-		<class id="Ticket" _created_in="itop-tickets" _delta="must_exist">
-			<fields>
-				<field id="related_project_id" xsi:type="AttributeExternalKey" _delta="define">
-					<sql>related_project_id</sql>
-					<filter><![CDATA[SELECT Project WHERE id != :this->id AND status NOT IN ('rejected','resolved','closed')]]></filter>
-					<dependencies>
-					</dependencies>
-					<target_class>Project</target_class>
-					<is_null_allowed>true</is_null_allowed>
-					<on_target_delete>DEL_MANUAL</on_target_delete>
-				</field>
-				<field id="related_project_ref" xsi:type="AttributeExternalField" _delta="define">
-					<extkey_attcode>related_project_id</extkey_attcode>
-					<target_attcode>ref</target_attcode>
-				</field>
-			</fields>
-		</class>
-		<class id="Contact" _created_in="itop-config-mgmt" _delta="must_exist">
-			<fields>
-				<field id="wbss_list" xsi:type="AttributeLinkedSetIndirect" _delta="define">
-					<ext_key_to_remote>wbs_id</ext_key_to_remote>
-					<ext_key_to_me>contact_id</ext_key_to_me>
-					<linked_class>lnkContactToWBS</linked_class>
-					<count_min>0</count_min>
-					<count_max>0</count_max>
-					<description>deliverables to work on</description>
-				</field>
-			</fields>
-			<methods>
-				<method id="DisplayBareRelations" _delta="define">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+  <classes>
+    <class id="Ticket" _created_in="itop-tickets" _delta="must_exist">
+      <fields>
+        <field id="related_project_id" xsi:type="AttributeExternalKey" _delta="define">
+          <sql>related_project_id</sql>
+          <filter><![CDATA[SELECT Project WHERE id != :this->id AND status NOT IN ('rejected','resolved','closed')]]></filter>
+          <dependencies></dependencies>
+          <target_class>Project</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_MANUAL</on_target_delete>
+        </field>
+        <field id="related_project_ref" xsi:type="AttributeExternalField" _delta="define">
+          <extkey_attcode>related_project_id</extkey_attcode>
+          <target_attcode>ref</target_attcode>
+        </field>
+      </fields>
+    </class>
+    <class id="Contact" _created_in="itop-config-mgmt" _delta="must_exist">
+      <fields>
+        <field id="wbss_list" xsi:type="AttributeLinkedSetIndirect" _delta="define">
+          <ext_key_to_remote>wbs_id</ext_key_to_remote>
+          <ext_key_to_me>contact_id</ext_key_to_me>
+          <linked_class>lnkContactToWBS</linked_class>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+          <description>deliverables to work on</description>
+        </field>
+      </fields>
+      <methods>
+        <method id="DisplayBareRelations" _delta="define">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
 						{
 		            $iContactid = $this->GetKey();
@@ -83,345 +86,345 @@
 
 						}
 						]]></code>
-				</method>
-			</methods>
-			<presentation>
-				<details _delta="redefine">
-					<items>
-						<item id="name">
-							<rank>10</rank>
-						</item>
-						<item id="status">
-							<rank>20</rank>
-						</item>
-						<item id="org_id">
-							<rank>30</rank>
-						</item>
-						<item id="email">
-							<rank>40</rank>
-						</item>
-						<item id="phone">
-							<rank>50</rank>
-						</item>
-						<item id="notify">
-							<rank>60</rank>
-						</item>
-						<item id="function">
-							<rank>70</rank>
-						</item>
-						<item id="wbss_list">
-							<rank>80</rank>
-						</item>
-					</items>
-				</details>
-			</presentation>
-		</class>
-		<class id="Person" _created_in="itop-config-mgmt" _delta="must_exist">
-			<presentation>
-				<details _delta="redefine">
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="fieldset:Person:info">
-									<items>
-										<item id="name">
-											<rank>10</rank>
-										</item>
-										<item id="first_name">
-											<rank>20</rank>
-										</item>
-										<item id="org_id">
-											<rank>30</rank>
-										</item>
-										<item id="status">
-											<rank>40</rank>
-										</item>
-										<item id="location_id">
-											<rank>50</rank>
-										</item>
-										<item id="function">
-											<rank>60</rank>
-										</item>
-										<item id="manager_id">
-											<rank>70</rank>
-										</item>
-										<item id="employee_number">
-											<rank>80</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-						<item id="col:col1">
-							<items>
-								<item id="fieldset:Person:personal_info">
-									<items>
-										<item id="picture">
-											<rank>10</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-								<item id="fieldset:Person:notifiy">
-									<items>
-										<item id="email">
-											<rank>10</rank>
-										</item>
-										<item id="notify">
-											<rank>20</rank>
-										</item>
-										<item id="phone">
-											<rank>30</rank>
-										</item>
-										<item id="mobile_phone">
-											<rank>40</rank>
-										</item>
-									</items>
-									<rank>20</rank>
-								</item>
-							</items>
-							<rank>20</rank>
-						</item>
-						<item id="team_list">
-							<rank>30</rank>
-						</item>
-						<item id="tickets_list">
-							<rank>40</rank>
-						</item>
-						<item id="cis_list">
-							<rank>50</rank>
-						</item>
-					</items>
-				</details>
-			</presentation>
-		</class>
-		<class id="Team" _created_in="itop-config-mgmt" _delta="must_exist">
-			<presentation>
-				<details _delta="redefine">
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="name">
-									<rank>10</rank>
-								</item>
-								<item id="status">
-									<rank>20</rank>
-								</item>
-								<item id="org_id">
-									<rank>30</rank>
-								</item>
-								<item id="email">
-									<rank>40</rank>
-								</item>
-								<item id="phone">
-									<rank>50</rank>
-								</item>
-								<item id="notify">
-									<rank>60</rank>
-								</item>
-								<item id="function">
-									<rank>70</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-						<item id="persons_list">
-							<rank>20</rank>
-						</item>
-						<item id="tickets_list">
-							<rank>30</rank>
-						</item>
-						<item id="cis_list">
-							<rank>40</rank>
-						</item>
-					</items>
-				</details>
-			</presentation>
-		</class>
-		<class id="Project" _delta="define">
-			<properties>
-				<category>bizmodel,searchable</category>
-				<abstract>false</abstract>
-				<db_table>project</db_table>
-				<naming>
-					<attributes>
-						<attribute id="ref"/>
-						<attribute id="title"/>
-					</attributes>
-				</naming>
-				<icon>../combodo-pmp-light/asset/img/project.png</icon>
-				<reconciliation>
-					<attributes>
-						<attribute id="ref"/>
-						<attribute id="finalclass"/>
-					</attributes>
-				</reconciliation>
-				<uniqueness_rules/>
-			</properties>
-			<fields>
-				<field id="estimated_budget" xsi:type="AttributeDecimal">
-					<sql>estimated_budget</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>10</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="requirement" xsi:type="AttributeHTML">
-					<sql>requirement</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="exclusions" xsi:type="AttributeHTML">
-					<sql>exclusions</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="constraints" xsi:type="AttributeHTML">
-					<sql>constraints</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="wbss_list" xsi:type="AttributeLinkedSet">
-					<linked_class>WBS</linked_class>
-					<ext_key_to_me>project_id</ext_key_to_me>
-					<tracking_level/>
-					<edit_mode/>
-					<label>Deliverables</label>
-				</field>
-				<field id="status" xsi:type="AttributeEnum">
-					<sql>status</sql>
-					<values>
-						<value id="initiated">initiated</value>
-						<value id="planned">planned</value>
-						<value id="executed">executed</value>
-						<value id="monitored">monitored</value>
-						<value id="closed">closed</value>
-						<value id="cancelled">cancelled</value>
-					</values>
-					<default_value>initiated</default_value>
-					<is_null_allowed>false</is_null_allowed>
-					<display_style/>
-					<dependencies/>
-				</field>
-				<field id="creation_date" xsi:type="AttributeDateTime">
-					<sql>creation_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="revised_end_date" xsi:type="AttributeDateTime">
-					<sql>revised_end_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="mgt_reserve_budget" xsi:type="AttributeDecimal">
-					<sql>mgt_reserve_budget</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="calculated_end_date" xsi:type="AttributeDateTime">
-					<sql>calculated_end_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="wbs_cost" xsi:type="AttributeDecimal">
-					<sql>wbs_cost</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="project_completion" xsi:type="AttributePercentageCompletion">
-					<sql>project_completion</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="gant_wbs" xsi:type="AttributeDashboard" _delta="define">
-					<is_user_editable>true</is_user_editable>
-					<!-- Use this default definition for creating a new dashboard -->
-					<definition>
-						<!-- Later replace the whole definition with the XML export -->
-						<layout>DashboardLayoutOneCol</layout>
-						<title/>
-						<auto_reload>
-							<enabled>false</enabled>
-							<interval>300</interval>
-						</auto_reload>
-						<cells>
-							<cell id="0">
-								<rank>0</rank>
-								<dashlets>
-									<dashlet id="Project_dashboard_ID_row1_col0" xsi:type="GanttDashlet">
-										<rank>0</rank>
-										<title>Tickets</title>
-										<oql>SELECT WBS WHERE project_id=:this-&gt;id</oql>
-										<class_0>WBS</class_0>
-										<depends_on>wbss_parent_list</depends_on>
-										<target_depends_on>parent_wbs_id</target_depends_on>
-										<label_0>name</label_0>
-										<start_date_0>re_estimated_start_date</start_date_0>
-										<end_date_0>re_estimated_end_date</end_date_0>
-										<additional_info1_0>wbs_owner_id_friendlyname</additional_info1_0>
-										<additional_info2_0></additional_info2_0>
-										<percentage_0>completion</percentage_0>
-										<status_0>status</status_0>
-										<parent_0>project_id</parent_0>
-										<class_1>Project</class_1>
-										<label_1>title</label_1>
-										<start_date_1>start_date</start_date_1>
-										<end_date_1>end_date</end_date_1>
-										<status_1>status</status_1>
-										<additional_info1_1>agent_id_friendlyname</additional_info1_1>
-										<additional_info2_1></additional_info2_1>
-										<percentage_1></percentage_1>
-										<parent_1></parent_1>
-										<class_2></class_2>
-										<label_2></label_2>
-										<start_date_2></start_date_2>
-										<end_date_2></end_date_2>
-										<additional_info1_2></additional_info1_2>
-										<additional_info2_2></additional_info2_2>
-										<percentage_2></percentage_2>
-										<parent_2></parent_2>
-										<save_allowed>0</save_allowed>
-									</dashlet>
-								</dashlets>
-							</cell>
-						</cells>
-					</definition>
-				</field>
-				<field id="tickets_list" xsi:type="AttributeLinkedSet" _delta="define">
-					<linked_class>Ticket</linked_class>
-					<ext_key_to_me>related_project_id</ext_key_to_me>
-					<tracking_level>list</tracking_level>
-					<edit_mode/>
-				</field>
-			</fields>
-			<methods>
+        </method>
+      </methods>
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="org_id">
+              <rank>30</rank>
+            </item>
+            <item id="email">
+              <rank>40</rank>
+            </item>
+            <item id="phone">
+              <rank>50</rank>
+            </item>
+            <item id="notify">
+              <rank>60</rank>
+            </item>
+            <item id="function">
+              <rank>70</rank>
+            </item>
+            <item id="wbss_list">
+              <rank>80</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="Person" _created_in="itop-config-mgmt" _delta="must_exist">
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="fieldset:Person:info">
+                  <items>
+                    <item id="name">
+                      <rank>10</rank>
+                    </item>
+                    <item id="first_name">
+                      <rank>20</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>50</rank>
+                    </item>
+                    <item id="function">
+                      <rank>60</rank>
+                    </item>
+                    <item id="manager_id">
+                      <rank>70</rank>
+                    </item>
+                    <item id="employee_number">
+                      <rank>80</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <items>
+                <item id="fieldset:Person:personal_info">
+                  <items>
+                    <item id="picture">
+                      <rank>10</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+                <item id="fieldset:Person:notifiy">
+                  <items>
+                    <item id="email">
+                      <rank>10</rank>
+                    </item>
+                    <item id="notify">
+                      <rank>20</rank>
+                    </item>
+                    <item id="phone">
+                      <rank>30</rank>
+                    </item>
+                    <item id="mobile_phone">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                  <rank>20</rank>
+                </item>
+              </items>
+              <rank>20</rank>
+            </item>
+            <item id="team_list">
+              <rank>30</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>40</rank>
+            </item>
+            <item id="cis_list">
+              <rank>50</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="Team" _created_in="itop-config-mgmt" _delta="must_exist">
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="name">
+                  <rank>10</rank>
+                </item>
+                <item id="status">
+                  <rank>20</rank>
+                </item>
+                <item id="org_id">
+                  <rank>30</rank>
+                </item>
+                <item id="email">
+                  <rank>40</rank>
+                </item>
+                <item id="phone">
+                  <rank>50</rank>
+                </item>
+                <item id="notify">
+                  <rank>60</rank>
+                </item>
+                <item id="function">
+                  <rank>70</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+            <item id="persons_list">
+              <rank>20</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>30</rank>
+            </item>
+            <item id="cis_list">
+              <rank>40</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+    </class>
+    <class id="Project" _delta="define">
+      <properties>
+        <category>bizmodel,searchable</category>
+        <abstract>false</abstract>
+        <db_table>project</db_table>
+        <naming>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="title"/>
+          </attributes>
+        </naming>
+        <icon>../combodo-pmp-light/asset/img/project.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="finalclass"/>
+          </attributes>
+        </reconciliation>
+        <uniqueness_rules/>
+      </properties>
+      <fields>
+        <field id="estimated_budget" xsi:type="AttributeDecimal">
+          <sql>estimated_budget</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>10</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="requirement" xsi:type="AttributeHTML">
+          <sql>requirement</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="exclusions" xsi:type="AttributeHTML">
+          <sql>exclusions</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="constraints" xsi:type="AttributeHTML">
+          <sql>constraints</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="wbss_list" xsi:type="AttributeLinkedSet">
+          <linked_class>WBS</linked_class>
+          <ext_key_to_me>project_id</ext_key_to_me>
+          <tracking_level/>
+          <edit_mode/>
+          <label>Deliverables</label>
+        </field>
+        <field id="status" xsi:type="AttributeEnum">
+          <sql>status</sql>
+          <values>
+            <value id="initiated">initiated</value>
+            <value id="planned">planned</value>
+            <value id="executed">executed</value>
+            <value id="monitored">monitored</value>
+            <value id="closed">closed</value>
+            <value id="cancelled">cancelled</value>
+          </values>
+          <default_value>initiated</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <display_style/>
+          <dependencies/>
+        </field>
+        <field id="creation_date" xsi:type="AttributeDateTime">
+          <sql>creation_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="revised_end_date" xsi:type="AttributeDateTime">
+          <sql>revised_end_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="mgt_reserve_budget" xsi:type="AttributeDecimal">
+          <sql>mgt_reserve_budget</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="calculated_end_date" xsi:type="AttributeDateTime">
+          <sql>calculated_end_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="wbs_cost" xsi:type="AttributeDecimal">
+          <sql>wbs_cost</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="project_completion" xsi:type="AttributePercentageCompletion">
+          <sql>project_completion</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="gant_wbs" xsi:type="AttributeDashboard" _delta="define">
+          <is_user_editable>true</is_user_editable>
+          <!-- Use this default definition for creating a new dashboard -->
+          <definition>
+            <!-- Later replace the whole definition with the XML export -->
+            <layout>DashboardLayoutOneCol</layout>
+            <title/>
+            <auto_reload>
+              <enabled>false</enabled>
+              <interval>300</interval>
+            </auto_reload>
+            <cells>
+              <cell id="0">
+                <rank>0</rank>
+                <dashlets>
+                  <dashlet id="Project_dashboard_ID_row1_col0" xsi:type="GanttDashlet">
+                    <rank>0</rank>
+                    <title>Tickets</title>
+                    <oql>SELECT WBS WHERE project_id=:this-&gt;id</oql>
+                    <class_0>WBS</class_0>
+                    <depends_on>wbss_parent_list</depends_on>
+                    <target_depends_on>parent_wbs_id</target_depends_on>
+                    <label_0>name</label_0>
+                    <start_date_0>re_estimated_start_date</start_date_0>
+                    <end_date_0>re_estimated_end_date</end_date_0>
+                    <additional_info1_0>wbs_owner_id_friendlyname</additional_info1_0>
+                    <additional_info2_0></additional_info2_0>
+                    <percentage_0>completion</percentage_0>
+                    <status_0>status</status_0>
+                    <parent_0>project_id</parent_0>
+                    <class_1>Project</class_1>
+                    <label_1>title</label_1>
+                    <start_date_1>start_date</start_date_1>
+                    <end_date_1>end_date</end_date_1>
+                    <status_1>status</status_1>
+                    <additional_info1_1>agent_id_friendlyname</additional_info1_1>
+                    <additional_info2_1></additional_info2_1>
+                    <percentage_1></percentage_1>
+                    <parent_1></parent_1>
+                    <class_2></class_2>
+                    <label_2></label_2>
+                    <start_date_2></start_date_2>
+                    <end_date_2></end_date_2>
+                    <additional_info1_2></additional_info1_2>
+                    <additional_info2_2></additional_info2_2>
+                    <percentage_2></percentage_2>
+                    <parent_2></parent_2>
+                    <save_allowed>0</save_allowed>
+                  </dashlet>
+                </dashlets>
+              </cell>
+            </cells>
+          </definition>
+        </field>
+        <field id="tickets_list" xsi:type="AttributeLinkedSet" _delta="define">
+          <linked_class>Ticket</linked_class>
+          <ext_key_to_me>related_project_id</ext_key_to_me>
+          <tracking_level>list</tracking_level>
+          <edit_mode/>
+        </field>
+      </fields>
+      <methods>
         <method id="Copydeliverablestodeliverables" _delta="define">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
             public function Copydeliverablestodeliverables($oSource)
             {
               // Put your code here, call parent::CopyDeliverablesFromDeliverables(...); if needed
@@ -503,16 +506,16 @@
               }
             }
           ]]></code>
-				</method>
-				<method id="OnInsert">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="OnInsert">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function OnInsert()
 							{
 								  parent::OnInsert();
@@ -526,188 +529,304 @@
 		             }
 							}
 					]]></code>
-				</method>
-				<method id="OnUpdate">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="OnUpdate">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function OnUpdate()
 							{
 								parent::OnUpdate();
 								$this->Set('last_update', time());
 							}
 					]]></code>
-				</method>
-				<method id="DisplayBareRelations">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="DisplayBareRelations">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
 						{
 		            $iProjectid = $this->GetKey();
 		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
-			    $sOQLWBSCost = "SELECT WBS WHERE project_id = :project";
+			          $sOQLWBSCost = "SELECT WBS WHERE project_id = :project";
 		            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
 		            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
 		            $oWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectid));
-			    $oWBSCostSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBSCost), array(), array('project' => $iProjectid));
+			          $oWBSCostSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBSCost), array(), array('project' => $iProjectid));
 		            $oContactProjectSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactProject), array(), array('project' => $iProjectid));
 		            $oContactWBSSet =   new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLContactWBS), array(), array('project' => $iProjectid));
 
 		            $iWBSSet = $oWBSSet->Count();
 		            $iContactProjectSet = $oContactProjectSet->Count();
 		            $iContactWBSSet = $oContactWBSSet->Count();
-			    $iWBSCosts=0;
+			          $iWBSCosts=0;
 		            while ($oWBS = $oWBSCostSet->Fetch())
 		            {
 		                $iWBSCosts += $oWBS->Get('wbs_cost');
 		            }
 
 		            $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
-		            $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
 
-								$oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
-								$oPage->add('<tbody><tr>');
-								$oPage->add('<td style="vertical-align:top; width:50%" class="">');
-								$oPage->add('<fieldset>');
-								$oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
-								$oPage->add('<div class="details">');
-								$oPage->add('<div class="field_container field_small" data-attcode="title">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'title').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('title').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="status">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'status').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('status').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="agent_id">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'agent_id').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('agent_id').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="revised_end_date">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'revised_end_date').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('revised_end_date').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="calculated_end_date">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('calculated_end_date').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('</div></div>');
-								$oPage->add('</fieldset>');
-								$oPage->add('</td>');
-								$oPage->add('<td style="vertical-align:top; width:50%" class="">');
-								$oPage->add('<fieldset>');
-								$oPage->add('<legend>'.Dict::S('Class:Project:Summary_costs').'</legend>');
-								$oPage->add('<div class="details">');
-								$oPage->add('<div class="field_container field_small" data-attcode="estimated_budget">');
-								$oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
-								$oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
-								$oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
-								$oPage->add('</div>');
-								$oPage->add('</div>');
-								$oPage->add('</fieldset>');
-								$oPage->add('</td>');
-								$oPage->add('</tr></tbody></table>');
+                //method of display depends of iTop Version
+                if (version_compare(ITOP_VERSION, 3.0) >= 0) {
+                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),MetaModel::GetClassIcon('DocumentNote', false));
+                    $oPage->AddUiBlock($oTitle);
 
-								if ( $iContactProjectSet> 0)
-		            {
-		                $aExtraParam = array ('menu'=>true,
-			                'zlist' => false,
-			                'display_limit'=>false,
-			                'view_link'=>false,
-			                'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
-		                );
-		                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'));
-		                $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
-		                $oBlock->Display($oPage, 'project_contacts', $aExtraParam);
-		            }
-		            if ( $iContactWBSSet> 0)
-		            {
-		                $aExtraParam = array ('menu'=>true,
-			                'zlist' => false,
-			                'display_limit'=>false,
-			                'view_link'=>false,
-			                'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
-		                );
-		                $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'));
-		                $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
-		                $oBlock->Display($oPage, 'WBS_contacts', $aExtraParam);
-		            }
-		            if ($iWBSSet > 0)
-		            {
-			              $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-			              $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list_displaybare'));
-			              $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
-			              $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
+                    $oMulticolumn = Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumnUIBlockFactory::MakeStandard();
+                    $oPage->AddSubBlock($oMulticolumn);
 
-		                $aScope = array(
-											'title' => Dict::S('GanttDashlet/Label'),
-											'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
-											'extra_params'=>'',
-											'depends_on' => 'wbss_parent_list',
-											'target_depends_on' =>'parent_wbs_id',
-											'label' => 'name',
-											'start_date' => 're_estimated_start_date',
-											'end_date' =>'re_estimated_end_date',
-											'additional_info1' => 'wbs_owner_id_friendlyname',
-											'additional_info2' => '',
-											'percentage' => 'completion',
-											'parent' => 'project_id',
-											'class' => 'WBS',
-											'status' => 'status',
-											'save_allowed' => false,
-											'parent_fields'=>array(
-													'class' => 'Project',
-													'label' => 'title',
-													'start_date' => 'start_date',
-													'end_date' =>'end_date',
-													'status' => 'status',
-													'additional_info1' => 'agent_id_friendlyname',
-													'additional_info2' => '',
-													'percentage' => '',
-													'parent' => '',
-											)
-										);
-										$oPage->add('<fieldset>');
-										$oPage->add('<legend>'.Dict::S('GanttDashlet/Label').'</legend>');
-										$oView = new Gantt($aScope);
-										$oView->Display($oPage);
-										if($oPage->isPrintableVersion())
-										{
-										     $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
-										     $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
-										}
-										$oPage->add('</fieldset>');
-		            }
+                    $oFieldSetCol1 = Combodo\iTop\Application\UI\Base\Component\FieldSet\FieldSetUIBlockFactory::MakeStandard(Dict::S('Class:Project:Summary_general'));
+                    $oMulticolumn->AddColumn(Combodo\iTop\Application\UI\Base\Layout\MultiColumn\Column\ColumnUIBlockFactory::MakeForBlock($oFieldSetCol1));
 
+                    $FieldLayout = Combodo\iTop\Application\UI\Base\Component\Field\Field::ENUM_FIELD_LAYOUT_SMALL;
+                    $oFieldTitle = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'title'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('title')),$FieldLayout);
+                    $oFieldTitle->SetInputId( 'title');
+                    $oFieldSetCol1->AddSubBlock($oFieldTitle);
+
+                    $oFieldStatus = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'status'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('status')),$FieldLayout);
+                    $oFieldStatus->SetInputId( 'status');
+                    $oFieldSetCol1->AddSubBlock($oFieldStatus);
+
+                    $oFieldAgent = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'agent_id'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('agent_id')),$FieldLayout);
+                    $oFieldAgent->SetInputId( 'agent_id');
+                    $oFieldSetCol1->AddSubBlock($oFieldAgent);
+
+                    $oFieldEndDate = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'revised_end_date'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('revised_end_date')),$FieldLayout);
+                    $oFieldEndDate->SetInputId( 'revised_end_date');
+                    $oFieldSetCol1->AddSubBlock($oFieldEndDate);
+
+                    $oFieldEndDateCalcul = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'calculated_end_date'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('calculated_end_date')),$FieldLayout);
+                    $oFieldEndDateCalcul->SetInputId( 'calculated_end_date');
+                    $oFieldSetCol1->AddSubBlock($oFieldEndDateCalcul);
+
+                     $oFieldSetCol2 = Combodo\iTop\Application\UI\Base\Component\FieldSet\FieldSetUIBlockFactory::MakeStandard(Dict::S('Class:Project:Summary_costs'));
+                    $oMulticolumn->AddColumn(Combodo\iTop\Application\UI\Base\Layout\MultiColumn\Column\ColumnUIBlockFactory::MakeForBlock($oFieldSetCol2));
+
+                    $oFieldEstimated = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject(MetaModel::GetLabel('Project', 'estimated_budget'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($this->GetAsHTML('estimated_budget')),$FieldLayout);
+                    $oFieldEstimated->SetInputId( 'estimated_budget');
+                    $oFieldSetCol2->AddSubBlock($oFieldEstimated);
+
+                    $oFieldDelivrable = Combodo\iTop\Application\UI\Base\Component\Field\FieldUIBlockFactory::MakeFromObject( Dict::S('Class:Project:Display:delivrables_costs'), new Combodo\iTop\Application\UI\Base\Component\Html\Html($iWBSCosts),$FieldLayout);
+                    $oFieldDelivrable->SetInputId( 'delivrables_costs');
+                    $oFieldSetCol2->AddSubBlock($oFieldDelivrable);
+
+                  if ( $iContactProjectSet> 0)
+                  {
+                      $aExtraParam = array ('menu'=>true,
+                        'zlist' => false,
+                        'display_limit'=>false,
+                        'view_link'=>false,
+                        'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
+                      );
+                      $oPanelContactProject = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'),MetaModel::GetClassIcon('Contact',false));
+                      $oPage->AddUiBlock($oPanelContactProject);
+
+                      $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
+                      $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'project_contacts', $aExtraParam));
+                  }
+                  if ( $iContactWBSSet> 0)
+                  {
+                      $aExtraParam = array ('menu'=>true,
+                        'zlist' => false,
+                        'display_limit'=>false,
+                        'view_link'=>false,
+                        'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
+                      );
+                      $oPanelContactWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon('WBS',Dict::S('Class:WBS/Attribute:wbss_list_displaybare'));
+                      $oPage->AddUiBlock($oPanelContactWBS);
+                      $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
+                      $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'WBS_contacts', $aExtraParam));
+                  }
+                  if ($iWBSSet > 0)
+                  {
+                      $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+                      $oTitleWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Attribute:wbss_list_displaybare'),MetaModel::GetClassIcon('WBS',false));
+                      $oPage->AddUiBlock($oTitleWBS);
+                      $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
+                      $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'project_open_deliverables', $aExtraParam));
+
+                      $aScope = array(
+                        'title' => Dict::S('GanttDashlet/Label'),
+                        'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
+                        'extra_params'=>'',
+                        'depends_on' => 'wbss_parent_list',
+                        'target_depends_on' =>'parent_wbs_id',
+                        'label' => 'name',
+                        'start_date' => 're_estimated_start_date',
+                        'end_date' =>'re_estimated_end_date',
+                        'additional_info1' => 'wbs_owner_id_friendlyname',
+                        'additional_info2' => '',
+                        'percentage' => 'completion',
+                        'parent' => 'project_id',
+                        'class' => 'WBS',
+                        'status' => 'status',
+                        'save_allowed' => false,
+                        'parent_fields'=>array(
+                            'class' => 'Project',
+                            'label' => 'title',
+                            'start_date' => 'start_date',
+                            'end_date' =>'end_date',
+                            'status' => 'status',
+                            'additional_info1' => 'agent_id_friendlyname',
+                            'additional_info2' => '',
+                            'percentage' => '',
+                            'parent' => '',
+                        )
+                      );
+                      $oView = new Gantt($aScope);
+                      $oPage->AddSubBlock($oView->Display($oPage));
+                      if($oPage->isPrintableVersion())
+                      {
+                           $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
+                           $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
+                      }
+                  }
+
+                    } else {
+                      $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
+                      $oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
+                    $oPage->add('<tbody><tr>');
+                    $oPage->add('<td style="vertical-align:top; width:50%" class="">');
+                    $oPage->add('<fieldset>');
+                    $oPage->add('<legend>'.Dict::S('Class:Project:Summary_general').'</legend>');
+                    $oPage->add('<div class="details">');
+                    $oPage->add('<div class="field_container field_small" data-attcode="title">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'title').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('title').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('<div class="field_container field_small" data-attcode="status">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'status').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('status').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('<div class="field_container field_small" data-attcode="agent_id">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'agent_id').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('agent_id').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('<div class="field_container field_small" data-attcode="revised_end_date">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'revised_end_date').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('revised_end_date').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('<div class="field_container field_small" data-attcode="calculated_end_date">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'calculated_end_date').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('calculated_end_date').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('</div></div>');
+                    $oPage->add('</fieldset>');
+                    $oPage->add('</td>');
+                    $oPage->add('<td style="vertical-align:top; width:50%" class="">');
+                    $oPage->add('<fieldset>');
+                    $oPage->add('<legend>'.Dict::S('Class:Project:Summary_costs').'</legend>');
+                    $oPage->add('<div class="details">');
+                    $oPage->add('<div class="field_container field_small" data-attcode="estimated_budget">');
+                    $oPage->add('<div class="field_label label"><span title="">'.MetaModel::GetLabel('Project', 'estimated_budget').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$this->GetAsHTML('estimated_budget').'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('<div class="field_container field_small" data-attcode="delivrables_costs">');
+                    $oPage->add('<div class="field_label label"><span title="">'. Dict::S('Class:Project:Display:delivrables_costs').'</span></div>');
+                    $oPage->add('<div class="field_data"><div class="field_value">'.$iWBSCosts.'</div></div>');
+                    $oPage->add('</div>');
+                    $oPage->add('</div>');
+                    $oPage->add('</fieldset>');
+                    $oPage->add('</td>');
+                    $oPage->add('</tr></tbody></table>');
+
+                  if ( $iContactProjectSet> 0)
+                  {
+                      $aExtraParam = array ('menu'=>true,
+                        'zlist' => false,
+                        'display_limit'=>false,
+                        'view_link'=>false,
+                        'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
+                      );
+                      $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'));
+                      $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
+                      $oBlock->Display($oPage, 'project_contacts', $aExtraParam);
+                  }
+                  if ( $iContactWBSSet> 0)
+                  {
+                      $aExtraParam = array ('menu'=>true,
+                        'zlist' => false,
+                        'display_limit'=>false,
+                        'view_link'=>false,
+                        'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
+                      );
+                      $oPage->p(MetaModel::GetClassIcon('Contact').'&nbsp;'.Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'));
+                      $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
+                      $oBlock->Display($oPage, 'WBS_contacts', $aExtraParam);
+                  }
+                  if ($iWBSSet > 0)
+                  {
+                      $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+                      $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Project/Attribute:wbss_list_displaybare'));
+                      $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
+                      $oBlock->Display($oPage, 'project_open_deliverables', $aExtraParam);
+
+                      $aScope = array(
+                        'title' => Dict::S('GanttDashlet/Label'),
+                        'oql' =>  'SELECT WBS WHERE project_id = '.$iProjectid.' AND status !=\'cancel\'',
+                        'extra_params'=>'',
+                        'depends_on' => 'wbss_parent_list',
+                        'target_depends_on' =>'parent_wbs_id',
+                        'label' => 'name',
+                        'start_date' => 're_estimated_start_date',
+                        'end_date' =>'re_estimated_end_date',
+                        'additional_info1' => 'wbs_owner_id_friendlyname',
+                        'additional_info2' => '',
+                        'percentage' => 'completion',
+                        'parent' => 'project_id',
+                        'class' => 'WBS',
+                        'status' => 'status',
+                        'save_allowed' => false,
+                        'parent_fields'=>array(
+                            'class' => 'Project',
+                            'label' => 'title',
+                            'start_date' => 'start_date',
+                            'end_date' =>'end_date',
+                            'status' => 'status',
+                            'additional_info1' => 'agent_id_friendlyname',
+                            'additional_info2' => '',
+                            'percentage' => '',
+                            'parent' => '',
+                        )
+                      );
+                      $oPage->add('<fieldset>');
+                      $oPage->add('<legend>'.Dict::S('GanttDashlet/Label').'</legend>');
+                      $oView = new Gantt($aScope);
+                      $oView->Display($oPage);
+                      if($oPage->isPrintableVersion())
+                      {
+                           $oPage->add_ready_script('$(".gant-container").css("max-width",$(".printable-content").width()-24);');
+                           $oPage->add_ready_script('$("[name=text]").on("click", function() {  $(".gant-container").css("max-width",$(".printable-content").width()-24);});');
+                      }
+                      $oPage->add('</fieldset>');
+                  }
+                }
 						    parent::DisplayBareRelations($oPage, $bEditMode);
 						    $oPage->RemoveTab('Ticket:ImpactAnalysis');
 					  }
 				]]></code>
-				</method>
-				<method id="GetProjectEndDates">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="GetProjectEndDates">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function GetProjectEndDates()
 						{
 				       if ( $this->Get('revised_end_date') != NULL  )
@@ -725,16 +844,16 @@
 	             }
 						}
 					]]></code>
-				</method>
-				<method id="DoCheckToWrite">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="DoCheckToWrite">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function DoCheckToWrite()
 							{
 								  parent::DoCheckToWrite();
@@ -748,17 +867,17 @@
 						      }
 							}
 					]]></code>
-				</method>
-				<method id="PrefillCreationForm">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						* @return bool Return true on success or false to prevent the transition to happen
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="PrefillCreationForm">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            * @return bool Return true on success or false to prevent the transition to happen
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function PrefillCreationForm(&$aContextParam)
 							{
 							    if (empty($this->Get('start_date')))
@@ -767,1214 +886,1212 @@
 							    }
 							}
 						]]></code>
-					<arguments>
-						<argument id="1">
-							<mandatory>false</mandatory>
-							<type>attcode</type>
-						</argument>
-					</arguments>
-				</method>
-				<method id="GetTicketRefFormat">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>true</static>
-					<access>public</access>
-					<code><![CDATA[
+          <arguments>
+            <argument id="1">
+              <mandatory>false</mandatory>
+              <type>attcode</type>
+            </argument>
+          </arguments>
+        </method>
+        <method id="GetTicketRefFormat">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>true</static>
+          <access>public</access>
+          <code><![CDATA[
 							public static function GetTicketRefFormat()
 							{
 								return 'Proj-%06d';
 							}
 						]]></code>
-				</method>
-			</methods>
-			<presentation>
-				<list>
-					<items>
-						<item id="ref">
-							<rank>10</rank>
-						</item>
-						<item id="title">
-							<rank>20</rank>
-						</item>
-						<item id="caller_id">
-							<rank>30</rank>
-						</item>
-						<item id="org_id">
-							<rank>40</rank>
-						</item>
-						<item id="agent_id">
-							<rank>50</rank>
-						</item>
-						<item id="status">
-							<rank>60</rank>
-						</item>
-						<item id="start_date">
-							<rank>70</rank>
-						</item>
-						<item id="end_date">
-							<rank>80</rank>
-						</item>
-						<item id="revised_end_date">
-							<rank>90</rank>
-						</item>
-					</items>
-				</list>
-				<search>
-					<items>
-						<item id="org_id">
-							<rank>10</rank>
-						</item>
-						<item id="agent_id">
-							<rank>20</rank>
-						</item>
-						<item id="description">
-							<rank>30</rank>
-						</item>
-						<item id="start_date">
-							<rank>40</rank>
-						</item>
-						<item id="end_date">
-							<rank>50</rank>
-						</item>
-						<item id="last_update">
-							<rank>60</rank>
-						</item>
-						<item id="estimated_budget">
-							<rank>70</rank>
-						</item>
-						<item id="caller_id">
-							<rank>80</rank>
-						</item>
-						<item id="requirement">
-							<rank>90</rank>
-						</item>
-						<item id="exclusions">
-							<rank>100</rank>
-						</item>
-						<item id="constraints">
-							<rank>110</rank>
-						</item>
-						<item id="status">
-							<rank>120</rank>
-						</item>
-						<item id="creation_date">
-							<rank>130</rank>
-						</item>
-						<item id="title">
-							<rank>140</rank>
-						</item>
-						<item id="revised_end_date">
-							<rank>150</rank>
-						</item>
-						<item id="mgt_reserve_budget">
-							<rank>160</rank>
-						</item>
-						<item id="calculated_end_date">
-							<rank>200</rank>
-						</item>
-						<item id="ref">
-							<rank>210</rank>
-						</item>
-					</items>
-				</search>
-				<details>
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="fieldset:Project:GeneralInfo">
-									<items>
-										<item id="title">
-											<rank>10</rank>
-										</item>
-										<item id="org_id">
-											<rank>20</rank>
-										</item>
-										<item id="status">
-											<rank>30</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-								<item id="fieldset:Project:Contacts">
-									<items>
-										<item id="caller_id">
-											<rank>10</rank>
-										</item>
-										<item id="team_id">
-											<rank>20</rank>
-										</item>
-										<item id="agent_id">
-											<rank>30</rank>
-										</item>
-									</items>
-									<rank>20</rank>
-								</item>
-								<item id="fieldset:Project:Budget">
-									<items>
-										<item id="estimated_budget">
-											<rank>10</rank>
-										</item>
-										<item id="mgt_reserve_budget">
-											<rank>20</rank>
-										</item>
-										<item id="wbs_cost">
-											<rank>50</rank>
-										</item>
-									</items>
-									<rank>30</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-						<item id="col:col1">
-							<items>
-								<item id="fieldset:Project:Details">
-									<items>
-										<item id="description">
-											<rank>10</rank>
-										</item>
-										<item id="requirement">
-											<rank>20</rank>
-										</item>
-										<item id="constraints">
-											<rank>30</rank>
-										</item>
-										<item id="exclusions">
-											<rank>40</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-							</items>
-							<rank>20</rank>
-						</item>
-						<item id="col:col2">
-							<items>
-								<item id="fieldset:Project:Dates">
-									<items>
-										<item id="start_date">
-											<rank>10</rank>
-										</item>
-										<item id="end_date">
-											<rank>20</rank>
-										</item>
-										<item id="revised_end_date">
-											<rank>30</rank>
-										</item>
-										<item id="calculated_end_date">
-											<rank>40</rank>
-										</item>
-										<item id="creation_date">
-											<rank>50</rank>
-										</item>
-										<item id="last_update">
-											<rank>60</rank>
-										</item>
-										<item id="close_date">
-											<rank>70</rank>
-										</item>
-										<item id="project_completion">
-											<rank>70</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-							</items>
-							<rank>30</rank>
-						</item>
-						<item id="wbss_list">
-							<rank>40</rank>
-						</item>
-						<item id="contacts_list">
-							<rank>50</rank>
-						</item>
-						<item id="functionalcis_list">
-							<rank>80</rank>
-						</item>
-						<item id="gant_wbs">
-							<rank>90</rank>
-						</item>
-						<item id="tickets_list">
-							<rank>100</rank>
-						</item>
-					</items>
-				</details>
-				<default_search>
-					<items>
-						<item id="ref">
-							<rank>10</rank>
-						</item>
-						<item id="title">
-							<rank>20</rank>
-						</item>
-						<item id="status">
-							<rank>30</rank>
-						</item>
-						<item id="start_date">
-							<rank>40</rank>
-						</item>
-						<item id="agent_id">
-							<rank>50</rank>
-						</item>
-						<item id="org_id">
-							<rank>60</rank>
-						</item>
-					</items>
-				</default_search>
-			</presentation>
-			<parent>Ticket</parent>
-			<lifecycle>
-			<attribute>status</attribute>
-			<stimuli>
-				<stimulus id="ev_plan" xsi:type="StimulusUserAction"/>
-				<stimulus id="ev_execute" xsi:type="StimulusUserAction"/>
-				<stimulus id="ev_reexecute" xsi:type="StimulusUserAction"/>
-				<stimulus id="ev_close" xsi:type="StimulusUserAction"/>
-				<stimulus id="ev_monitor" xsi:type="StimulusUserAction"/>
-				<stimulus id="ev_cancel" xsi:type="StimulusUserAction"/>
-			</stimuli>
-			<states>
-				<state id="initiated">
-					<flags>
-						<attribute id="creation_date">
-							<hidden/>
-						</attribute>
-						<attribute id="last_update">
-							<hidden/>
-						</attribute>
-						<attribute id="wbs_cost">
-							<hidden/>
-						</attribute>
-						<attribute id="close_date">
-							<hidden/>
-						</attribute>
-						<attribute id="calculated_end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="revised_end_date">
-							<hidden/>
-						</attribute>
-						<attribute id="end_date">
-							<mandatory/>
-						</attribute>
-            <attribute id="wbss_list">
+        </method>
+      </methods>
+      <presentation>
+        <list>
+          <items>
+            <item id="ref">
+              <rank>10</rank>
+            </item>
+            <item id="title">
+              <rank>20</rank>
+            </item>
+            <item id="caller_id">
+              <rank>30</rank>
+            </item>
+            <item id="org_id">
+              <rank>40</rank>
+            </item>
+            <item id="agent_id">
+              <rank>50</rank>
+            </item>
+            <item id="status">
+              <rank>60</rank>
+            </item>
+            <item id="start_date">
+              <rank>70</rank>
+            </item>
+            <item id="end_date">
+              <rank>80</rank>
+            </item>
+            <item id="revised_end_date">
+              <rank>90</rank>
+            </item>
+          </items>
+        </list>
+        <search>
+          <items>
+            <item id="org_id">
+              <rank>10</rank>
+            </item>
+            <item id="agent_id">
+              <rank>20</rank>
+            </item>
+            <item id="description">
+              <rank>30</rank>
+            </item>
+            <item id="start_date">
+              <rank>40</rank>
+            </item>
+            <item id="end_date">
+              <rank>50</rank>
+            </item>
+            <item id="last_update">
+              <rank>60</rank>
+            </item>
+            <item id="estimated_budget">
+              <rank>70</rank>
+            </item>
+            <item id="caller_id">
+              <rank>80</rank>
+            </item>
+            <item id="requirement">
+              <rank>90</rank>
+            </item>
+            <item id="exclusions">
+              <rank>100</rank>
+            </item>
+            <item id="constraints">
+              <rank>110</rank>
+            </item>
+            <item id="status">
+              <rank>120</rank>
+            </item>
+            <item id="creation_date">
+              <rank>130</rank>
+            </item>
+            <item id="title">
+              <rank>140</rank>
+            </item>
+            <item id="revised_end_date">
+              <rank>150</rank>
+            </item>
+            <item id="mgt_reserve_budget">
+              <rank>160</rank>
+            </item>
+            <item id="calculated_end_date">
+              <rank>200</rank>
+            </item>
+            <item id="ref">
+              <rank>210</rank>
+            </item>
+          </items>
+        </search>
+        <details>
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="fieldset:Project:GeneralInfo">
+                  <items>
+                    <item id="title">
+                      <rank>10</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="status">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+                <item id="fieldset:Project:Contacts">
+                  <items>
+                    <item id="caller_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="team_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="agent_id">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                  <rank>20</rank>
+                </item>
+                <item id="fieldset:Project:Budget">
+                  <items>
+                    <item id="estimated_budget">
+                      <rank>10</rank>
+                    </item>
+                    <item id="mgt_reserve_budget">
+                      <rank>20</rank>
+                    </item>
+                    <item id="wbs_cost">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                  <rank>30</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <items>
+                <item id="fieldset:Project:Details">
+                  <items>
+                    <item id="description">
+                      <rank>10</rank>
+                    </item>
+                    <item id="requirement">
+                      <rank>20</rank>
+                    </item>
+                    <item id="constraints">
+                      <rank>30</rank>
+                    </item>
+                    <item id="exclusions">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+              </items>
+              <rank>20</rank>
+            </item>
+            <item id="col:col2">
+              <items>
+                <item id="fieldset:Project:Dates">
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="end_date">
+                      <rank>20</rank>
+                    </item>
+                    <item id="revised_end_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="calculated_end_date">
+                      <rank>40</rank>
+                    </item>
+                    <item id="creation_date">
+                      <rank>50</rank>
+                    </item>
+                    <item id="last_update">
+                      <rank>60</rank>
+                    </item>
+                    <item id="close_date">
+                      <rank>70</rank>
+                    </item>
+                    <item id="project_completion">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+              </items>
+              <rank>30</rank>
+            </item>
+            <item id="wbss_list">
+              <rank>40</rank>
+            </item>
+            <item id="contacts_list">
+              <rank>50</rank>
+            </item>
+            <item id="functionalcis_list">
+              <rank>80</rank>
+            </item>
+            <item id="gant_wbs">
+              <rank>90</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>100</rank>
+            </item>
+          </items>
+        </details>
+        <default_search>
+          <items>
+            <item id="ref">
+              <rank>10</rank>
+            </item>
+            <item id="title">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="start_date">
+              <rank>40</rank>
+            </item>
+            <item id="agent_id">
+              <rank>50</rank>
+            </item>
+            <item id="org_id">
+              <rank>60</rank>
+            </item>
+          </items>
+        </default_search>
+      </presentation>
+      <parent>Ticket</parent>
+      <lifecycle>
+        <attribute>status</attribute>
+        <stimuli>
+          <stimulus id="ev_plan" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_execute" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reexecute" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_close" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_monitor" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_cancel" xsi:type="StimulusUserAction"/>
+        </stimuli>
+        <states>
+          <state id="initiated">
+            <flags>
+              <attribute id="creation_date">
+                <hidden/>
+              </attribute>
+              <attribute id="last_update">
+                <hidden/>
+              </attribute>
+              <attribute id="wbs_cost">
+                <hidden/>
+              </attribute>
+              <attribute id="close_date">
+                <hidden/>
+              </attribute>
+              <attribute id="calculated_end_date">
+                <read_only/>
+              </attribute>
+              <attribute id="revised_end_date">
+                <hidden/>
+              </attribute>
+              <attribute id="end_date">
+                <mandatory/>
+              </attribute>
+              <attribute id="wbss_list">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition id="ev_plan">
+                <stimulus>ev_plan</stimulus>
+                <target>planned</target>
+                <actions/>
+              </transition>
+              <transition id="ev_cancel">
+                <stimulus>ev_cancel</stimulus>
+                <target>cancelled</target>
+                <actions>
+                  <action>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
+                  </action>
+                </actions>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+            </transitions>
+          </state>
+          <state id="planned">
+            <flags>
+              <attribute id="creation_date">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_cost">
+                <read_only/>
+              </attribute>
+              <attribute id="agent_id">
+                <must_prompt/>
+              </attribute>
+              <attribute id="revised_end_date"/>
+              <attribute id="constraints">
+                <must_prompt/>
+              </attribute>
+              <attribute id="exclusions">
+                <must_prompt/>
+              </attribute>
+              <attribute id="requirement">
+                <must_prompt/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition id="ev_execute">
+                <stimulus>ev_execute</stimulus>
+                <target>executed</target>
+                <actions/>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+              <transition id="ev_cancel">
+                <stimulus>ev_cancel</stimulus>
+                <target>cancelled</target>
+                <actions>
+                  <action>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
+                  </action>
+                </actions>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+            </transitions>
+            <inherit_flags_from>initiated</inherit_flags_from>
+          </state>
+          <state id="executed">
+            <flags/>
+            <transitions>
+              <transition id="ev_monitor">
+                <stimulus>ev_monitor</stimulus>
+                <target>monitored</target>
+                <actions/>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+              <transition id="ev_cancel">
+                <stimulus>ev_cancel</stimulus>
+                <target>cancelled</target>
+                <actions>
+                  <action>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
+                  </action>
+                </actions>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+            </transitions>
+            <inherit_flags_from>planned</inherit_flags_from>
+          </state>
+          <state id="monitored">
+            <flags/>
+            <transitions>
+              <transition id="ev_close">
+                <stimulus>ev_close</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>SetCurrentDate</verb>
+                    <params>
+                      <param xsi:type="attcode">close_date</param>
+                    </params>
+                  </action>
+                </actions>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+              <transition id="ev_reexecute">
+                <stimulus>ev_reexecute</stimulus>
+                <target>executed</target>
+                <actions/>
+                <flags>
+                  <attribute id="private_log">
+                    <must_prompt/>
+                  </attribute>
+                </flags>
+              </transition>
+            </transitions>
+            <inherit_flags_from>executed</inherit_flags_from>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="calculated_end_date">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="constraints">
+                <read_only/>
+              </attribute>
+              <attribute id="contacts_list">
+                <read_only/>
+              </attribute>
+              <attribute id="creation_date">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="end_date">
+                <read_only/>
+              </attribute>
+              <attribute id="estimated_budget">
+                <read_only/>
+              </attribute>
+              <attribute id="exclusions">
+                <read_only/>
+              </attribute>
+              <attribute id="functionalcis_list">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+              <attribute id="mgt_reserve_budget">
+                <read_only/>
+              </attribute>
+              <attribute id="org_id">
+                <read_only/>
+              </attribute>
+              <attribute id="private_log">
+                <read_only/>
+              </attribute>
+              <attribute id="requirement">
+                <read_only/>
+              </attribute>
+              <attribute id="revised_end_date">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="team_id">
+                <read_only/>
+              </attribute>
+              <attribute id="title">
+                <read_only/>
+              </attribute>
+              <attribute id="wbss_list">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_cost">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+          </state>
+          <state id="cancelled">
+            <flags>
+              <attribute id="agent_id">
+                <read_only/>
+              </attribute>
+              <attribute id="caller_id">
+                <read_only/>
+              </attribute>
+              <attribute id="close_date">
+                <read_only/>
+              </attribute>
+              <attribute id="last_update">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions/>
+            <inherit_flags_from>closed</inherit_flags_from>
+          </state>
+        </states>
+      </lifecycle>
+    </class>
+    <class id="lnkContactToTicket" _created_in="itop-tickets" _delta="must_exist">
+      <fields>
+        <field id="influence" xsi:type="AttributeEnum" _delta="define">
+          <sql>influence</sql>
+          <values>
+            <value id="objector">objector</value>
+            <value id="partner">partner</value>
+          </values>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <display_style/>
+          <dependencies>
+            <attribute id="contact_id"/>
+          </dependencies>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="power" xsi:type="AttributeEnum" _delta="define">
+          <sql>power</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label/>
+          <values>
+            <value id="low">low</value>
+            <value id="strong">strong</value>
+          </values>
+          <description/>
+          <display_style/>
+          <dependencies>
+            <attribute id="contact_id"/>
+          </dependencies>
+        </field>
+        <field id="allocated_percent" xsi:type="AttributePercentage" _delta="define">
+          <sql>allocated_percent</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label/>
+          <description/>
+        </field>
+        <field id="allocated_days" xsi:type="AttributeInteger" _delta="define">
+          <sql>allocated_days</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label/>
+          <description/>
+        </field>
+        <field id="category" xsi:type="AttributeEnum" _delta="define">
+          <sql>category</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label/>
+          <values>
+            <value id="1">1</value>
+            <value id="2">2</value>
+          </values>
+          <description/>
+          <display_style/>
+          <dependencies>
+            <attribute id="contact_id"/>
+            <attribute id="ticket_id"/>
+          </dependencies>
+        </field>
+      </fields>
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="ticket_id">
+                  <rank>10</rank>
+                </item>
+                <item id="contact_id">
+                  <rank>20</rank>
+                </item>
+                <item id="role_code">
+                  <rank>30</rank>
+                </item>
+                <item id="influence">
+                  <rank>40</rank>
+                </item>
+                <item id="power">
+                  <rank>50</rank>
+                </item>
+                <item id="allocated_percent">
+                  <rank>60</rank>
+                </item>
+                <item id="allocated_days">
+                  <rank>70</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+          </items>
+        </details>
+        <list _delta="redefine">
+          <items>
+            <item id="category">
+              <rank>10</rank>
+            </item>
+            <item id="ticket_id">
+              <rank>20</rank>
+            </item>
+            <item id="contact_id">
+              <rank>30</rank>
+            </item>
+            <item id="influence">
+              <rank>40</rank>
+            </item>
+            <item id="power">
+              <rank>50</rank>
+            </item>
+            <item id="allocated_percent">
+              <rank>60</rank>
+            </item>
+            <item id="allocated_days">
+              <rank>70</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="WBS" _delta="define">
+      <properties>
+        <category>bizmodel,searchable</category>
+        <abstract>false</abstract>
+        <db_table>wbs</db_table>
+        <naming>
+          <attributes>
+            <attribute id="ref"/>
+            <attribute id="name"/>
+          </attributes>
+        </naming>
+        <reconciliation>
+          <attributes>
+            <attribute id="ref"/>
+          </attributes>
+        </reconciliation>
+        <icon>../combodo-pmp-light/asset/img/WBS.png</icon>
+        <uniqueness_rules/>
+      </properties>
+      <fields>
+        <field id="name" xsi:type="AttributeString">
+          <sql>name</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+        </field>
+        <field id="project_id" xsi:type="AttributeExternalKey">
+          <sql>project_id</sql>
+          <filter>SELECT Project WHERE status !="closed"</filter>
+          <dependencies>
+            <attribute id="title"/>
+          </dependencies>
+          <is_null_allowed>true</is_null_allowed>
+          <target_class>Project</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <label>project name</label>
+        </field>
+        <field id="start_date" xsi:type="AttributeDateTime">
+          <sql>start_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="description" xsi:type="AttributeHTML">
+          <sql>description</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="end_date" xsi:type="AttributeDateTime">
+          <sql>end_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="wbs_owner_id" xsi:type="AttributeExternalKey">
+          <sql>wbs_owner_id</sql>
+          <filter/>
+          <dependencies>
+            <attribute id="name"/>
+          </dependencies>
+          <is_null_allowed>true</is_null_allowed>
+          <target_class>Person</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <label>owner</label>
+        </field>
+        <field id="wbs_budget" xsi:type="AttributeDecimal">
+          <sql>wbs_budget</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="acceptance" xsi:type="AttributeHTML">
+          <sql>acceptance</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="technical_info" xsi:type="AttributeTemplateText">
+          <sql>technical_info</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <width/>
+          <height/>
+        </field>
+        <field id="wbs_cost" xsi:type="AttributeDecimal">
+          <sql>wbs_cost</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+          <digits>9</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="labor_cost" xsi:type="AttributeDecimal">
+          <sql>labor_cost</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="material_cost" xsi:type="AttributeDecimal">
+          <sql>material_cost</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="re_estimated_end_date" xsi:type="AttributeDateTime">
+          <sql>re_estimated_end_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="status" xsi:type="AttributeEnum">
+          <sql>status</sql>
+          <values>
+            <value id="running">running</value>
+            <value id="closed">closed</value>
+            <value id="pending_parent">pending_parent</value>
+            <value id="cancel">cancel</value>
+          </values>
+          <default_value>running</default_value>
+          <is_null_allowed>true</is_null_allowed>
+          <display_style>list</display_style>
+          <dependencies>
+            <attribute id="name"/>
+            <attribute id="project_id"/>
+          </dependencies>
+        </field>
+        <field id="completion" xsi:type="AttributePercentageCompletion">
+          <sql>completion</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="freetime" xsi:type="AttributeDuration">
+          <sql>freetime</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="re_estimated_start_date" xsi:type="AttributeDateTime">
+          <sql>re_estimated_start_date</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <tracking_level>all</tracking_level>
+        </field>
+        <field id="available_budget" xsi:type="AttributeDecimal">
+          <sql>available_budget</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <digits>8</digits>
+          <decimals>2</decimals>
+        </field>
+        <field id="wbss_child_list" xsi:type="AttributeLinkedSetIndirect">
+          <ext_key_to_remote>child_wbs_id</ext_key_to_remote>
+          <ext_key_to_me>parent_wbs_id</ext_key_to_me>
+          <linked_class>lnkWBSToWBS</linked_class>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+          <label>Child Deliverable</label>
+        </field>
+        <field id="wbss_parent_list" xsi:type="AttributeLinkedSetIndirect">
+          <ext_key_to_remote>parent_wbs_id</ext_key_to_remote>
+          <ext_key_to_me>child_wbs_id</ext_key_to_me>
+          <linked_class>lnkWBSToWBS</linked_class>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+          <label>Parent Deliverable</label>
+        </field>
+        <field id="time_planned" xsi:type="AttributeDuration">
+          <sql>time_planned</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="delay" xsi:type="AttributeDuration">
+          <sql>delay</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="ref" xsi:type="AttributeString">
+          <sql>ref</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <validation_pattern/>
+        </field>
+        <field id="wbs_log" xsi:type="AttributeCaseLog">
+          <sql>wbs_log</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="contacts_list" xsi:type="AttributeLinkedSetIndirect">
+          <ext_key_to_me>wbs_id</ext_key_to_me>
+          <ext_key_to_remote>contact_id</ext_key_to_remote>
+          <linked_class>lnkContactToWBS</linked_class>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+        </field>
+      </fields>
+      <lifecycle>
+        <attribute>status</attribute>
+        <highlight_scale></highlight_scale>
+        <states>
+          <state id="running">
+            <flags>
+              <attribute id="end_date">
+                <mandatory/>
+              </attribute>
+              <attribute id="freetime">
+                <read_only/>
+              </attribute>
+              <attribute id="project_id">
+                <mandatory/>
+              </attribute>
+              <attribute id="start_date">
+                <mandatory/>
+              </attribute>
+              <attribute id="available_budget">
+                <read_only/>
+              </attribute>
+              <attribute id="name">
+                <mandatory/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition id="ev_pending_parent">
+                <stimulus>ev_pending_parent</stimulus>
+                <target>pending_parent</target>
+                <actions/>
+              </transition>
+              <transition id="ev_cancel">
+                <stimulus>ev_cancel</stimulus>
+                <target>cancel</target>
+                <actions/>
+              </transition>
+              <transition id="ev_closed">
+                <stimulus>ev_closed</stimulus>
+                <target>closed</target>
+                <actions>
+                  <action>
+                    <verb>StartChildWBS</verb>
+                  </action>
+                  <action>
+                    <verb>Set</verb>
+                    <params>
+                      <param xsi:type="attcode">completion</param>
+                      <param xsi:type="string">100</param>
+                    </params>
+                  </action>
+                </actions>
+              </transition>
+            </transitions>
+          </state>
+          <state id="closed">
+            <flags>
+              <attribute id="delay">
+                <hidden/>
+              </attribute>
+              <attribute id="acceptance">
+                <read_only/>
+              </attribute>
+              <attribute id="completion">
+                <read_only/>
+              </attribute>
+              <attribute id="description">
+                <read_only/>
+              </attribute>
+              <attribute id="end_date">
+                <read_only/>
+                <mandatory/>
+              </attribute>
+              <attribute id="freetime">
+                <read_only/>
+              </attribute>
+              <attribute id="labor_cost">
+                <read_only/>
+              </attribute>
+              <attribute id="material_cost">
+                <read_only/>
+              </attribute>
+              <attribute id="name">
+                <read_only/>
+                <mandatory/>
+              </attribute>
+              <attribute id="project_id">
+                <read_only/>
+                <mandatory/>
+              </attribute>
+              <attribute id="re_estimated_end_date">
+                <read_only/>
+              </attribute>
+              <attribute id="re_estimated_start_date">
+                <read_only/>
+              </attribute>
+              <attribute id="start_date">
+                <read_only/>
+                <mandatory/>
+              </attribute>
+              <attribute id="technical_info">
+                <read_only/>
+              </attribute>
+              <attribute id="time_planned">
+                <read_only/>
+              </attribute>
+              <attribute id="wbss_child_list">
+                <read_only/>
+              </attribute>
+              <attribute id="wbss_parent_list">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_budget">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_cost">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_log">
+                <read_only/>
+              </attribute>
+              <attribute id="wbs_owner_id">
+                <read_only/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition id="ev_reopen">
+                <stimulus>ev_reopen</stimulus>
+                <target>running</target>
+                <actions>
+                  <action>
+                    <verb>SuspendChildWBS</verb>
+                  </action>
+                </actions>
+                <actions/>
+              </transition>
+            </transitions>
+            <inherit_flags_from>running</inherit_flags_from>
+          </state>
+          <state id="pending_parent">
+            <flags>
+              <attribute id="available_budget"/>
+              <attribute id="delay">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions>
+              <transition id="ev_running">
+                <stimulus>ev_running</stimulus>
+                <target>running</target>
+                <actions/>
+              </transition>
+              <transition id="ev_running_admin">
+                <stimulus>ev_running_admin</stimulus>
+                <target>running</target>
+                <actions/>
+              </transition>
+            </transitions>
+            <inherit_flags_from>running</inherit_flags_from>
+          </state>
+          <state id="cancel">
+            <flags>
+              <attribute id="delay">
+                <hidden/>
+              </attribute>
+            </flags>
+            <transitions/>
+            <inherit_flags_from>closed</inherit_flags_from>
+          </state>
+        </states>
+        <stimuli>
+          <stimulus id="ev_cancel" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_closed" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_pending_parent" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_running" xsi:type="StimulusInternal"/>
+          <stimulus id="ev_running_admin" xsi:type="StimulusUserAction"/>
+          <stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
+        </stimuli>
+      </lifecycle>
+      <attribute>status</attribute>
+      <highlight_scale></highlight_scale>
+      <states>
+        <state id="running">
+          <flags>
+            <attribute id="end_date">
+              <mandatory/>
+            </attribute>
+            <attribute id="freetime">
               <read_only/>
             </attribute>
-					</flags>
-					<transitions>
-						<transition id="ev_plan">
-							<stimulus>ev_plan</stimulus>
-							<target>planned</target>
-							<actions/>
-						</transition>
-						<transition id="ev_cancel">
-							<stimulus>ev_cancel</stimulus>
-							<target>cancelled</target>
-							<actions>
-								<action>
-									<verb>SetCurrentDate</verb>
-									<params>
-										<param xsi:type="attcode">close_date</param>
-									</params>
-								</action>
-							</actions>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-					</transitions>
-				</state>
-				<state id="planned">
-					<flags>
-						<attribute id="creation_date">
-							<read_only/>
-						</attribute>
-						<attribute id="last_update">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_cost">
-							<read_only/>
-						</attribute>
-						<attribute id="agent_id">
-							<must_prompt/>
-						</attribute>
-						<attribute id="revised_end_date"/>
-						<attribute id="constraints">
-							<must_prompt/>
-						</attribute>
-						<attribute id="exclusions">
-							<must_prompt/>
-						</attribute>
-						<attribute id="requirement">
-							<must_prompt/>
-						</attribute>
-					</flags>
-					<transitions>
-						<transition id="ev_execute">
-							<stimulus>ev_execute</stimulus>
-							<target>executed</target>
-							<actions/>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-						<transition id="ev_cancel">
-							<stimulus>ev_cancel</stimulus>
-							<target>cancelled</target>
-							<actions>
-								<action>
-									<verb>SetCurrentDate</verb>
-									<params>
-										<param xsi:type="attcode">close_date</param>
-									</params>
-								</action>
-							</actions>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-					</transitions>
-					<inherit_flags_from>initiated</inherit_flags_from>
-				</state>
-				<state id="executed">
-					<flags/>
-					<transitions>
-						<transition id="ev_monitor">
-							<stimulus>ev_monitor</stimulus>
-							<target>monitored</target>
-							<actions/>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-						<transition id="ev_cancel">
-							<stimulus>ev_cancel</stimulus>
-							<target>cancelled</target>
-							<actions>
-								<action>
-									<verb>SetCurrentDate</verb>
-									<params>
-										<param xsi:type="attcode">close_date</param>
-									</params>
-								</action>
-							</actions>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-					</transitions>
-					<inherit_flags_from>planned</inherit_flags_from>
-				</state>
-				<state id="monitored">
-					<flags/>
-					<transitions>
-						<transition id="ev_close">
-							<stimulus>ev_close</stimulus>
-							<target>closed</target>
-							<actions>
-								<action>
-									<verb>SetCurrentDate</verb>
-									<params>
-										<param xsi:type="attcode">close_date</param>
-									</params>
-								</action>
-							</actions>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-						<transition id="ev_reexecute">
-							<stimulus>ev_reexecute</stimulus>
-							<target>executed</target>
-							<actions/>
-							<flags>
-								<attribute id="private_log">
-									<must_prompt/>
-								</attribute>
-							</flags>
-						</transition>
-					</transitions>
-					<inherit_flags_from>executed</inherit_flags_from>
-				</state>
-				<state id="closed">
-					<flags>
-						<attribute id="agent_id">
-							<read_only/>
-						</attribute>
-						<attribute id="calculated_end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="caller_id">
-							<read_only/>
-						</attribute>
-						<attribute id="close_date">
-							<read_only/>
-						</attribute>
-						<attribute id="constraints">
-							<read_only/>
-						</attribute>
-						<attribute id="contacts_list">
-							<read_only/>
-						</attribute>
-						<attribute id="creation_date">
-							<read_only/>
-						</attribute>
-						<attribute id="description">
-							<read_only/>
-						</attribute>
-						<attribute id="end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="estimated_budget">
-							<read_only/>
-						</attribute>
-						<attribute id="exclusions">
-							<read_only/>
-						</attribute>
-						<attribute id="functionalcis_list">
-							<read_only/>
-						</attribute>
-						<attribute id="last_update">
-							<read_only/>
-						</attribute>
-						<attribute id="mgt_reserve_budget">
-							<read_only/>
-						</attribute>
-						<attribute id="org_id">
-							<read_only/>
-						</attribute>
-						<attribute id="private_log">
-							<read_only/>
-						</attribute>
-						<attribute id="requirement">
-							<read_only/>
-						</attribute>
-						<attribute id="revised_end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="start_date">
-							<read_only/>
-						</attribute>
-						<attribute id="team_id">
-							<read_only/>
-						</attribute>
-						<attribute id="title">
-							<read_only/>
-						</attribute>
-						<attribute id="wbss_list">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_cost">
-							<read_only/>
-						</attribute>
-					</flags>
-					<transitions/>
-				</state>
-				<state id="cancelled">
-					<flags>
-						<attribute id="agent_id">
-							<read_only/>
-						</attribute>
-						<attribute id="caller_id">
-							<read_only/>
-						</attribute>
-						<attribute id="close_date">
-							<read_only/>
-						</attribute>
-						<attribute id="last_update">
-							<read_only/>
-						</attribute>
-					</flags>
-					<transitions/>
-					<inherit_flags_from>closed</inherit_flags_from>
-				</state>
-			</states>
-		</lifecycle>
-		</class>
-		<class id="lnkContactToTicket" _created_in="itop-tickets" _delta="must_exist">
-			<fields>
-				<field id="influence" xsi:type="AttributeEnum" _delta="define">
-					<sql>influence</sql>
-					<values>
-						<value id="objector">objector</value>
-						<value id="partner">partner</value>
-					</values>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<display_style/>
-					<dependencies>
-						<attribute id="contact_id"/>
-					</dependencies>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="power" xsi:type="AttributeEnum" _delta="define">
-					<sql>power</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label/>
-					<values>
-						<value id="low">low</value>
-						<value id="strong">strong</value>
-					</values>
-					<description/>
-					<display_style/>
-					<dependencies>
-						<attribute id="contact_id"/>
-					</dependencies>
-				</field>
-				<field id="allocated_percent" xsi:type="AttributePercentage" _delta="define">
-					<sql>allocated_percent</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label/>
-					<description/>
-				</field>
-				<field id="allocated_days" xsi:type="AttributeInteger" _delta="define">
-					<sql>allocated_days</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label/>
-					<description/>
-				</field>
-				<field id="category" xsi:type="AttributeEnum" _delta="define">
-					<sql>category</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label/>
-					<values>
-						<value id="1">1</value>
-						<value id="2">2</value>
-					</values>
-					<description/>
-					<display_style/>
-					<dependencies>
-						<attribute id="contact_id"/>
-						<attribute id="ticket_id"/>
-					</dependencies>
-				</field>
-			</fields>
-			<presentation>
-				<details _delta="redefine">
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="ticket_id">
-									<rank>10</rank>
-								</item>
-								<item id="contact_id">
-									<rank>20</rank>
-								</item>
-								<item id="role_code">
-									<rank>30</rank>
-								</item>
-								<item id="influence">
-									<rank>40</rank>
-								</item>
-								<item id="power">
-									<rank>50</rank>
-								</item>
-								<item id="allocated_percent">
-									<rank>60</rank>
-								</item>
-								<item id="allocated_days">
-									<rank>70</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-					</items>
-				</details>
-				<list _delta="redefine">
-					<items>
-						<item id="category">
-							<rank>10</rank>
-						</item>
-						<item id="ticket_id">
-							<rank>20</rank>
-						</item>
-						<item id="contact_id">
-							<rank>30</rank>
-						</item>
-						<item id="influence">
-							<rank>40</rank>
-						</item>
-						<item id="power">
-							<rank>50</rank>
-						</item>
-						<item id="allocated_percent">
-							<rank>60</rank>
-						</item>
-						<item id="allocated_days">
-							<rank>70</rank>
-						</item>
-					</items>
-				</list>
-			</presentation>
-		</class>
-		<class id="WBS" _delta="define">
-			<properties>
-				<category>bizmodel,searchable</category>
-				<abstract>false</abstract>
-				<db_table>wbs</db_table>
-				<naming>
-					<attributes>
-						<attribute id="ref"/>
-						<attribute id="name"/>
-					</attributes>
-				</naming>
-				<reconciliation>
-					<attributes>
-						<attribute id="ref"/>
-					</attributes>
-				</reconciliation>
-				<icon>../combodo-pmp-light/asset/img/WBS.png</icon>
-				<uniqueness_rules/>
-			</properties>
-			<fields>
-				<field id="name" xsi:type="AttributeString">
-					<sql>name</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-				</field>
-				<field id="project_id" xsi:type="AttributeExternalKey">
-					<sql>project_id</sql>
-					<filter>SELECT Project WHERE status !="closed"</filter>
-					<dependencies>
-						<attribute id="title"/>
-					</dependencies>
-					<is_null_allowed>true</is_null_allowed>
-					<target_class>Project</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-					<label>project name</label>
-				</field>
-				<field id="start_date" xsi:type="AttributeDateTime">
-					<sql>start_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="description" xsi:type="AttributeHTML">
-					<sql>description</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="end_date" xsi:type="AttributeDateTime">
-					<sql>end_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="wbs_owner_id" xsi:type="AttributeExternalKey">
-					<sql>wbs_owner_id</sql>
-					<filter/>
-					<dependencies>
-						<attribute id="name"/>
-					</dependencies>
-					<is_null_allowed>true</is_null_allowed>
-					<target_class>Person</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-					<label>owner</label>
-				</field>
-				<field id="wbs_budget" xsi:type="AttributeDecimal">
-					<sql>wbs_budget</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="acceptance" xsi:type="AttributeHTML">
-					<sql>acceptance</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="technical_info" xsi:type="AttributeTemplateText">
-					<sql>technical_info</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<width/>
-					<height/>
-				</field>
-				<field id="wbs_cost" xsi:type="AttributeDecimal">
-					<sql>wbs_cost</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-					<digits>9</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="labor_cost" xsi:type="AttributeDecimal">
-					<sql>labor_cost</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="material_cost" xsi:type="AttributeDecimal">
-					<sql>material_cost</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="re_estimated_end_date" xsi:type="AttributeDateTime">
-					<sql>re_estimated_end_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="status" xsi:type="AttributeEnum">
-					<sql>status</sql>
-					<values>
-						<value id="running">running</value>
-						<value id="closed">closed</value>
-						<value id="pending_parent">pending_parent</value>
-						<value id="cancel">cancel</value>
-					</values>
-					<default_value>running</default_value>
-					<is_null_allowed>true</is_null_allowed>
-					<display_style>list</display_style>
-					<dependencies>
-						<attribute id="name"/>
-						<attribute id="project_id"/>
-					</dependencies>
-				</field>
-				<field id="completion" xsi:type="AttributePercentageCompletion">
-					<sql>completion</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="freetime" xsi:type="AttributeDuration">
-					<sql>freetime</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="re_estimated_start_date" xsi:type="AttributeDateTime">
-					<sql>re_estimated_start_date</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<tracking_level>all</tracking_level>
-				</field>
-				<field id="available_budget" xsi:type="AttributeDecimal">
-					<sql>available_budget</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<digits>8</digits>
-					<decimals>2</decimals>
-				</field>
-				<field id="wbss_child_list" xsi:type="AttributeLinkedSetIndirect">
-					<ext_key_to_remote>child_wbs_id</ext_key_to_remote>
-					<ext_key_to_me>parent_wbs_id</ext_key_to_me>
-					<linked_class>lnkWBSToWBS</linked_class>
-					<count_min>0</count_min>
-					<count_max>0</count_max>
-					<label>Child Deliverable</label>
-				</field>
-				<field id="wbss_parent_list" xsi:type="AttributeLinkedSetIndirect">
-					<ext_key_to_remote>parent_wbs_id</ext_key_to_remote>
-					<ext_key_to_me>child_wbs_id</ext_key_to_me>
-					<linked_class>lnkWBSToWBS</linked_class>
-					<count_min>0</count_min>
-					<count_max>0</count_max>
-					<label>Parent Deliverable</label>
-				</field>
-				<field id="time_planned" xsi:type="AttributeDuration">
-					<sql>time_planned</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="delay" xsi:type="AttributeDuration">
-					<sql>delay</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="ref" xsi:type="AttributeString">
-					<sql>ref</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<validation_pattern/>
-				</field>
-				<field id="wbs_log" xsi:type="AttributeCaseLog">
-					<sql>wbs_log</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-				</field>
-				<field id="contacts_list" xsi:type="AttributeLinkedSetIndirect">
-					<ext_key_to_me>wbs_id</ext_key_to_me>
-					<ext_key_to_remote>contact_id</ext_key_to_remote>
-					<linked_class>lnkContactToWBS</linked_class>
-					<count_min>0</count_min>
-					<count_max>0</count_max>
-				</field>
-			</fields>
-			<lifecycle>
-				<attribute>status</attribute>
-				<highlight_scale>
-				</highlight_scale>
-				<states>
-					<state id="running">
-						<flags>
-							<attribute id="end_date">
-								<mandatory/>
-							</attribute>
-							<attribute id="freetime">
-								<read_only/>
-							</attribute>
-							<attribute id="project_id">
-								<mandatory/>
-							</attribute>
-							<attribute id="start_date">
-								<mandatory/>
-							</attribute>
-							<attribute id="available_budget">
-								<read_only/>
-							</attribute>
-							<attribute id="name">
-								<mandatory/>
-							</attribute>
-						</flags>
-						<transitions>
-							<transition id="ev_pending_parent">
-								<stimulus>ev_pending_parent</stimulus>
-								<target>pending_parent</target>
-								<actions/>
-							</transition>
-							<transition id="ev_cancel">
-								<stimulus>ev_cancel</stimulus>
-								<target>cancel</target>
-								<actions/>
-							</transition>
-							<transition id="ev_closed">
-								<stimulus>ev_closed</stimulus>
-								<target>closed</target>
-								<actions>
-									<action>
-										<verb>StartChildWBS</verb>
-									</action>
-									<action>
-										<verb>Set</verb>
-										<params>
-											<param xsi:type="attcode">completion</param>
-											<param xsi:type="string">100</param>
-										</params>
-									</action>
-								</actions>
-							</transition>
-						</transitions>
-					</state>
-					<state id="closed">
-						<flags>
-							<attribute id="delay">
-								<hidden/>
-							</attribute>
-							<attribute id="acceptance">
-								<read_only/>
-							</attribute>
-							<attribute id="completion">
-								<read_only/>
-							</attribute>
-							<attribute id="description">
-								<read_only/>
-							</attribute>
-							<attribute id="end_date">
-								<read_only/>
-								<mandatory/>
-							</attribute>
-							<attribute id="freetime">
-								<read_only/>
-							</attribute>
-							<attribute id="labor_cost">
-								<read_only/>
-							</attribute>
-							<attribute id="material_cost">
-								<read_only/>
-							</attribute>
-							<attribute id="name">
-								<read_only/>
-								<mandatory/>
-							</attribute>
-							<attribute id="project_id">
-								<read_only/>
-								<mandatory/>
-							</attribute>
-							<attribute id="re_estimated_end_date">
-								<read_only/>
-							</attribute>
-							<attribute id="re_estimated_start_date">
-								<read_only/>
-							</attribute>
-							<attribute id="start_date">
-								<read_only/>
-								<mandatory/>
-							</attribute>
-							<attribute id="technical_info">
-								<read_only/>
-							</attribute>
-							<attribute id="time_planned">
-								<read_only/>
-							</attribute>
-							<attribute id="wbss_child_list">
-								<read_only/>
-							</attribute>
-							<attribute id="wbss_parent_list">
-								<read_only/>
-							</attribute>
-							<attribute id="wbs_budget">
-								<read_only/>
-							</attribute>
-							<attribute id="wbs_cost">
-								<read_only/>
-							</attribute>
-							<attribute id="wbs_log">
-								<read_only/>
-							</attribute>
-							<attribute id="wbs_owner_id">
-								<read_only/>
-							</attribute>
-						</flags>
-						<transitions>
-							<transition id="ev_reopen">
-								<stimulus>ev_reopen</stimulus>
-								<target>running</target>
-								<actions>
-									<action>
-										<verb>SuspendChildWBS</verb>
-									</action>
-								</actions>
-								<actions/>
-							</transition>
-						</transitions>
-						<inherit_flags_from>running</inherit_flags_from>
-					</state>
-					<state id="pending_parent">
-						<flags>
-							<attribute id="available_budget"/>
-							<attribute id="delay">
-								<hidden/>
-							</attribute>
-						</flags>
-						<transitions>
-							<transition id="ev_running">
-								<stimulus>ev_running</stimulus>
-								<target>running</target>
-								<actions/>
-							</transition>
-							<transition id="ev_running_admin">
-								<stimulus>ev_running_admin</stimulus>
-								<target>running</target>
-								<actions/>
-							</transition>
-						</transitions>
-						<inherit_flags_from>running</inherit_flags_from>
-					</state>
-					<state id="cancel">
-						<flags>
-							<attribute id="delay">
-								<hidden/>
-							</attribute>
-						</flags>
-						<transitions/>
-						<inherit_flags_from>closed</inherit_flags_from>
-					</state>
-				</states>
-				<stimuli>
-					<stimulus id="ev_cancel" xsi:type="StimulusUserAction"/>
-					<stimulus id="ev_closed" xsi:type="StimulusUserAction"/>
-					<stimulus id="ev_pending_parent" xsi:type="StimulusInternal"/>
-					<stimulus id="ev_running" xsi:type="StimulusInternal"/>
-					<stimulus id="ev_running_admin" xsi:type="StimulusUserAction"/>
-					<stimulus id="ev_reopen" xsi:type="StimulusUserAction"/>
-				</stimuli>
-			</lifecycle>
-			<attribute>status</attribute>
-			<highlight_scale>
-			</highlight_scale>
-			<states>
-				<state id="running">
-					<flags>
-						<attribute id="end_date">
-							<mandatory/>
-						</attribute>
-						<attribute id="freetime">
-							<read_only/>
-						</attribute>
-						<attribute id="project_id">
-							<mandatory/>
-						</attribute>
-						<attribute id="start_date">
-							<mandatory/>
-						</attribute>
-						<attribute id="available_budget">
-							<read_only/>
-						</attribute>
-						<attribute id="name">
-							<mandatory/>
-						</attribute>
-					</flags>
-					<transitions>
-						<transition id="ev_pending_parent">
-							<stimulus>ev_pending_parent</stimulus>
-							<target>pending_parent</target>
-							<actions/>
-						</transition>
-						<transition id="ev_cancel">
-							<stimulus>ev_cancel</stimulus>
-							<target>cancel</target>
-							<actions/>
-						</transition>
-						<transition id="ev_closed">
-							<stimulus>ev_closed</stimulus>
-							<target>closed</target>
-							<actions>
-								<action>
-									<verb>StartChildWBS</verb>
-								</action>
-							</actions>
-						</transition>
-					</transitions>
-				</state>
-				<state id="closed">
-					<flags>
-						<attribute id="delay">
-							<hidden/>
-						</attribute>
-						<attribute id="acceptance">
-							<read_only/>
-						</attribute>
-						<attribute id="completion">
-							<read_only/>
-						</attribute>
-						<attribute id="description">
-							<read_only/>
-						</attribute>
-						<attribute id="end_date">
-							<read_only/>
-							<mandatory/>
-						</attribute>
-						<attribute id="freetime">
-							<read_only/>
-						</attribute>
-						<attribute id="labor_cost">
-							<read_only/>
-						</attribute>
-						<attribute id="material_cost">
-							<read_only/>
-						</attribute>
-						<attribute id="name">
-							<read_only/>
-							<mandatory/>
-						</attribute>
-						<attribute id="project_id">
-							<read_only/>
-							<mandatory/>
-						</attribute>
-						<attribute id="re_estimated_end_date">
-							<read_only/>
-						</attribute>
-						<attribute id="re_estimated_start_date">
-							<read_only/>
-						</attribute>
-						<attribute id="start_date">
-							<read_only/>
-							<mandatory/>
-						</attribute>
-						<attribute id="technical_info">
-							<read_only/>
-						</attribute>
-						<attribute id="time_planned">
-							<read_only/>
-						</attribute>
-						<attribute id="wbss_child_list">
-							<read_only/>
-						</attribute>
-						<attribute id="wbss_parent_list">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_budget">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_cost">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_log">
-							<read_only/>
-						</attribute>
-						<attribute id="wbs_owner_id">
-							<read_only/>
-						</attribute>
-					</flags>
-					<transitions>
-						<transition id="ev_reopen">
-							<stimulus>ev_reopen</stimulus>
-							<target>running</target>
-							<actions/>
-						</transition>
-					</transitions>
-					<inherit_flags_from>running</inherit_flags_from>
-				</state>
-				<state id="pending_parent">
-					<flags>
-						<attribute id="available_budget"/>
-						<attribute id="delay">
-							<hidden/>
-						</attribute>
-					</flags>
-					<transitions>
-						<transition id="ev_running">
-							<stimulus>ev_running</stimulus>
-							<target>running</target>
-							<actions/>
-						</transition>
-						<transition id="ev_running_admin">
-							<stimulus>ev_running_admin</stimulus>
-							<target>running</target>
-							<actions/>
-						</transition>
-					</transitions>
-					<inherit_flags_from>running</inherit_flags_from>
-				</state>
-				<state id="cancel">
-					<flags>
-						<attribute id="delay">
-							<hidden/>
-						</attribute>
-					</flags>
-					<transitions/>
-					<inherit_flags_from>closed</inherit_flags_from>
-				</state>
-			</states>
-			<methods>
-				<method id="GetInitialStateAttributeFlags">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+            <attribute id="project_id">
+              <mandatory/>
+            </attribute>
+            <attribute id="start_date">
+              <mandatory/>
+            </attribute>
+            <attribute id="available_budget">
+              <read_only/>
+            </attribute>
+            <attribute id="name">
+              <mandatory/>
+            </attribute>
+          </flags>
+          <transitions>
+            <transition id="ev_pending_parent">
+              <stimulus>ev_pending_parent</stimulus>
+              <target>pending_parent</target>
+              <actions/>
+            </transition>
+            <transition id="ev_cancel">
+              <stimulus>ev_cancel</stimulus>
+              <target>cancel</target>
+              <actions/>
+            </transition>
+            <transition id="ev_closed">
+              <stimulus>ev_closed</stimulus>
+              <target>closed</target>
+              <actions>
+                <action>
+                  <verb>StartChildWBS</verb>
+                </action>
+              </actions>
+            </transition>
+          </transitions>
+        </state>
+        <state id="closed">
+          <flags>
+            <attribute id="delay">
+              <hidden/>
+            </attribute>
+            <attribute id="acceptance">
+              <read_only/>
+            </attribute>
+            <attribute id="completion">
+              <read_only/>
+            </attribute>
+            <attribute id="description">
+              <read_only/>
+            </attribute>
+            <attribute id="end_date">
+              <read_only/>
+              <mandatory/>
+            </attribute>
+            <attribute id="freetime">
+              <read_only/>
+            </attribute>
+            <attribute id="labor_cost">
+              <read_only/>
+            </attribute>
+            <attribute id="material_cost">
+              <read_only/>
+            </attribute>
+            <attribute id="name">
+              <read_only/>
+              <mandatory/>
+            </attribute>
+            <attribute id="project_id">
+              <read_only/>
+              <mandatory/>
+            </attribute>
+            <attribute id="re_estimated_end_date">
+              <read_only/>
+            </attribute>
+            <attribute id="re_estimated_start_date">
+              <read_only/>
+            </attribute>
+            <attribute id="start_date">
+              <read_only/>
+              <mandatory/>
+            </attribute>
+            <attribute id="technical_info">
+              <read_only/>
+            </attribute>
+            <attribute id="time_planned">
+              <read_only/>
+            </attribute>
+            <attribute id="wbss_child_list">
+              <read_only/>
+            </attribute>
+            <attribute id="wbss_parent_list">
+              <read_only/>
+            </attribute>
+            <attribute id="wbs_budget">
+              <read_only/>
+            </attribute>
+            <attribute id="wbs_cost">
+              <read_only/>
+            </attribute>
+            <attribute id="wbs_log">
+              <read_only/>
+            </attribute>
+            <attribute id="wbs_owner_id">
+              <read_only/>
+            </attribute>
+          </flags>
+          <transitions>
+            <transition id="ev_reopen">
+              <stimulus>ev_reopen</stimulus>
+              <target>running</target>
+              <actions/>
+            </transition>
+          </transitions>
+          <inherit_flags_from>running</inherit_flags_from>
+        </state>
+        <state id="pending_parent">
+          <flags>
+            <attribute id="available_budget"/>
+            <attribute id="delay">
+              <hidden/>
+            </attribute>
+          </flags>
+          <transitions>
+            <transition id="ev_running">
+              <stimulus>ev_running</stimulus>
+              <target>running</target>
+              <actions/>
+            </transition>
+            <transition id="ev_running_admin">
+              <stimulus>ev_running_admin</stimulus>
+              <target>running</target>
+              <actions/>
+            </transition>
+          </transitions>
+          <inherit_flags_from>running</inherit_flags_from>
+        </state>
+        <state id="cancel">
+          <flags>
+            <attribute id="delay">
+              <hidden/>
+            </attribute>
+          </flags>
+          <transitions/>
+          <inherit_flags_from>closed</inherit_flags_from>
+        </state>
+      </states>
+      <methods>
+        <method id="GetInitialStateAttributeFlags">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function GetInitialStateAttributeFlags($sAttCode, &$aReasons = array())
 							{
 						        if ((MetaModel::IsValidAttCode('WBS','wbs_cost')) && ($sAttCode == 'wbs_cost'))
@@ -1993,16 +2110,16 @@
 						        }
 							}
 						]]></code>
-				</method>
-				<method id="GetAttributeFlags">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="GetAttributeFlags">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 							{
 									if ((MetaModel::IsValidAttCode('WBS','delay')) && ($sAttCode == 'delay'))
@@ -2020,16 +2137,16 @@
 			            }
 							}
 						]]></code>
-				</method>
-				<method id="OnInsert">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="OnInsert">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function OnInsert()
 							{
 										 parent::OnInsert();
@@ -2059,16 +2176,16 @@
 						         $this->Set('delay',$aInitialDates['delay']);
 							}
 						]]></code>
-				</method>
-				<method id="OnUpdate">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="OnUpdate">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function OnUpdate()
 							{
 				         parent::OnUpdate();
@@ -2130,20 +2247,20 @@
 				           {
 				               $this->SetProjectCompletion();
 				           }
-						}
+							}
 
 						]]></code>
-				</method>
-				<method id="StartChildWBS">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						* @return bool Return true on success or false to prevent the transition to happen
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="StartChildWBS">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            * @return bool Return true on success or false to prevent the transition to happen
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function StartChildWBS()
 							{
 						      // check my dependant deliverable
@@ -2165,17 +2282,17 @@
 						      return true;
 							}
 						]]></code>
-					<arguments/>
-				</method>
-				<method id="AfterInsert">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+          <arguments/>
+        </method>
+        <method id="AfterInsert">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 
 							public function AfterInsert()
 							{
@@ -2203,16 +2320,16 @@
 							}
 
 						]]></code>
-				</method>
-				<method id="AfterUpdate">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="AfterUpdate">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 
 							public function AfterUpdate()
 							{
@@ -2239,16 +2356,16 @@
 						      }
 							}
 						]]></code>
-				</method>
-				<method id="WBS_costs_budget">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="WBS_costs_budget">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 
 							public function WBS_costs_budget()
 							{
@@ -2265,16 +2382,16 @@
 							}
 
 						]]></code>
-				</method>
-				<method id="SetWBSStartEndDates">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="SetWBSStartEndDates">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function SetWBSStartEndDates()
 							{
 							   //if re_estimated_start_date is set on ticket, it will be considered instead of start_date
@@ -2304,32 +2421,32 @@
 				         return array('start_date_integer'=> $iStartDate, 'end_date_integer'=> $iEndDate, 'delay'=> $idelay, 'start_date_string'=> $sStartDate, 'end_date_string'=> $sEndDate, 'freetime_integer' => $ifreeTime );
 							}
 						]]></code>
-				</method>
-				<method id="MakeTicketRef">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="MakeTicketRef">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function MakeTicketRef($iNextId)
 						{
 								$sFormat = 'Del-%06d';
 					      return sprintf($sFormat, $iNextId);
 						}
 						]]></code>
-				</method>
-				<method id="DBInsertNoReload">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="DBInsertNoReload">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function DBInsertNoReload()
 						{
 							    $iNextId = ItopCounter::incClass(get_class($this));
@@ -2339,17 +2456,17 @@
 					        return $iKey;
 						}
 						]]></code>
-				</method>
-				<method id="PrefillCreationForm">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						* @return bool Return true on success or false to prevent the transition to happen
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="PrefillCreationForm">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            * @return bool Return true on success or false to prevent the transition to happen
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function PrefillCreationForm(&$aContextParam)
 							{
 							    if (empty($this->Get('start_date')))
@@ -2358,22 +2475,22 @@
 							    }
 							}
 						]]></code>
-					<arguments>
-						<argument id="1">
-							<mandatory>false</mandatory>
-							<type>attcode</type>
-						</argument>
-					</arguments>
-				</method>
-				<method id="DoCheckToWrite">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+          <arguments>
+            <argument id="1">
+              <mandatory>false</mandatory>
+              <type>attcode</type>
+            </argument>
+          </arguments>
+        </method>
+        <method id="DoCheckToWrite">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function DoCheckToWrite()
 							{
 								  parent::DoCheckToWrite();
@@ -2406,16 +2523,16 @@
 									}
 						  }
 						]]></code>
-				</method>
-				<method id="SetProjectCalculatedEndDate">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="SetProjectCalculatedEndDate">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function SetProjectCalculatedEndDate()
 							{
 						      //deliverable is attached to a project
@@ -2437,16 +2554,16 @@
 		              }
 							}
 						]]></code>
-				</method>
-				<method id="SetProjectWBScalculated">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="SetProjectWBScalculated">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function SetProjectWBScalculated()
 							{
 									// Costs of all project's WBS related are added to wbs_cost field of project associated
@@ -2465,17 +2582,17 @@
                  }
 							}
 						]]></code>
-				</method>
-				<method id="PrefillSearchForm">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						* @return bool Return true on success or false to prevent the transition to happen
-						*/
-					</comment>
-					<static>false</static>
-					<access>public</access>
-					<code><![CDATA[
+        </method>
+        <method id="PrefillSearchForm">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            * @return bool Return true on success or false to prevent the transition to happen
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 						public function PrefillSearchForm(&$aContextParam)
 						{
 						    // If we want to search for objects of class 'WBS' or a sub-class of 'WBS'
@@ -2493,22 +2610,23 @@
 						    return true;
 						}
 						]]></code>
-					<arguments>
-						<argument id="1">
-							<mandatory>false</mandatory>
-							<type>reference</type>
-						</argument>
-					</arguments>
-				</method>
-				<method id="SuspendChildWBS">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						* @return bool Return true on success or false to prevent the transition to happen
-						*/</comment>
-					<static>false</static>
-					<access>public </access>
-					<code><![CDATA[
+          <arguments>
+            <argument id="1">
+              <mandatory>false</mandatory>
+              <type>reference</type>
+            </argument>
+          </arguments>
+        </method>
+        <method id="SuspendChildWBS">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            * @return bool Return true on success or false to prevent the transition to happen
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
 							public function SuspendChildWBS()
 							{
 					      	// check my dependant deliverable
@@ -2527,8 +2645,8 @@
 									return true;
 							}
 					]]></code>
-					<arguments/>
-				</method>
+          <arguments/>
+        </method>
 				<method id="SetProjectCompletion" _delta="define">
 					<comment>/**
 						*
@@ -2559,773 +2677,776 @@
                     $oProject->DBUpdate();
                   }
 	}]]></code>
-				</method>
-			</methods>
-			<presentation>
-				<list>
-					<items>
-						<item id="ref">
-							<rank>10</rank>
-						</item>
-						<item id="project_id">
-							<rank>20</rank>
-						</item>
-						<item id="start_date">
-							<rank>30</rank>
-						</item>
-						<item id="end_date">
-							<rank>40</rank>
-						</item>
-						<item id="re_estimated_start_date">
-							<rank>50</rank>
-						</item>
-						<item id="re_estimated_end_date">
-							<rank>60</rank>
-						</item>
-						<item id="freetime">
-							<rank>70</rank>
-						</item>
-						<item id="completion">
-							<rank>80</rank>
-						</item>
-						<item id="wbs_owner_id">
-							<rank>90</rank>
-						</item>
-						<item id="status">
-							<rank>100</rank>
-						</item>
-					</items>
-				</list>
-				<search>
-					<items>
-						<item id="name">
-							<rank>10</rank>
-						</item>
-						<item id="project_id">
-							<rank>20</rank>
-						</item>
-						<item id="start_date">
-							<rank>30</rank>
-						</item>
-						<item id="description">
-							<rank>40</rank>
-						</item>
-						<item id="end_date">
-							<rank>50</rank>
-						</item>
-						<item id="wbs_owner_id">
-							<rank>60</rank>
-						</item>
-						<item id="wbs_budget">
-							<rank>70</rank>
-						</item>
-						<item id="acceptance">
-							<rank>80</rank>
-						</item>
-						<item id="technical_info">
-							<rank>90</rank>
-						</item>
-						<item id="wbs_cost">
-							<rank>100</rank>
-						</item>
-						<item id="labor_cost">
-							<rank>110</rank>
-						</item>
-						<item id="material_cost">
-							<rank>120</rank>
-						</item>
-						<item id="re_estimated_end_date">
-							<rank>130</rank>
-						</item>
-						<item id="status">
-							<rank>140</rank>
-						</item>
-						<item id="completion">
-							<rank>150</rank>
-						</item>
-						<item id="freetime">
-							<rank>160</rank>
-						</item>
-						<item id="re_estimated_start_date">
-							<rank>170</rank>
-						</item>
-						<item id="available_budget">
-							<rank>180</rank>
-						</item>
-						<item id="time_planned">
-							<rank>190</rank>
-						</item>
-						<item id="delay">
-							<rank>200</rank>
-						</item>
-					</items>
-				</search>
-				<details>
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="fieldset:WBS:Info">
-									<items>
-										<item id="name">
-											<rank>10</rank>
-										</item>
-										<item id="project_id">
-											<rank>20</rank>
-										</item>
-										<item id="wbs_owner_id">
-											<rank>30</rank>
-										</item>
-										<item id="status">
-											<rank>40</rank>
-										</item>
-										<item id="description">
-											<rank>50</rank>
-										</item>
-										<item id="acceptance">
-											<rank>60</rank>
-										</item>
-										<item id="technical_info">
-											<rank>70</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-						<item id="col:col1">
-							<items>
-								<item id="fieldset:WBS:Cost">
-									<items>
-										<item id="wbs_budget">
-											<rank>10</rank>
-										</item>
-										<item id="labor_cost">
-											<rank>20</rank>
-										</item>
-										<item id="material_cost">
-											<rank>30</rank>
-										</item>
-										<item id="wbs_cost">
-											<rank>40</rank>
-										</item>
-										<item id="available_budget">
-											<rank>50</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-								<item id="fieldset:WBS:Execution">
-									<items>
-										<item id="time_planned">
-											<rank>10</rank>
-										</item>
-										<item id="completion">
-											<rank>20</rank>
-										</item>
-									</items>
-									<rank>20</rank>
-								</item>
-							</items>
-							<rank>20</rank>
-						</item>
-						<item id="col:col2">
-							<items>
-								<item id="fieldset:WBS:Dates">
-									<items>
-										<item id="start_date">
-											<rank>10</rank>
-										</item>
-										<item id="end_date">
-											<rank>20</rank>
-										</item>
-										<item id="re_estimated_start_date">
-											<rank>30</rank>
-										</item>
-										<item id="re_estimated_end_date">
-											<rank>40</rank>
-										</item>
-										<item id="freetime">
-											<rank>50</rank>
-										</item>
-									</items>
-									<rank>10</rank>
-								</item>
-							</items>
-							<rank>30</rank>
-						</item>
-						<item id="wbss_child_list">
-							<rank>40</rank>
-						</item>
-						<item id="wbss_parent_list">
-							<rank>50</rank>
-						</item>
-						<item id="contacts_list">
-							<rank>80</rank>
-						</item>
-					</items>
-				</details>
-				<default_search>
-					<items>
-						<item id="name">
-							<rank>10</rank>
-						</item>
-						<item id="project_id">
-							<rank>20</rank>
-						</item>
-						<item id="ref">
-							<rank>30</rank>
-						</item>
-						<item id="re_estimated_start_date">
-							<rank>40</rank>
-						</item>
-						<item id="status">
-							<rank>50</rank>
-						</item>
-						<item id="wbs_owner_id">
-							<rank>60</rank>
-						</item>
-					</items>
-				</default_search>
-			</presentation>
-			<parent>cmdbAbstractObject</parent>
-		</class>
-		<class id="lnkWBSToWBS" _delta="define">
-			<properties>
-				<category>bizmodel</category>
-				<abstract>false</abstract>
-				<db_table>lnkwbstowbs</db_table>
-				<is_link>1</is_link>
-				<naming>
-					<attributes>
-						<attribute id="child_wbs_id"/>
-						<attribute id="parent_wbs_id"/>
-					</attributes>
-				</naming>
-				<reconciliation>
-					<attributes>
-						<attribute id="child_wbs_id"/>
-						<attribute id="parent_wbs_id"/>
-					</attributes>
-				</reconciliation>
-			</properties>
-			<fields>
-				<field id="child_wbs_id" xsi:type="AttributeExternalKey">
-					<sql>child_wbs_id</sql>
-					<filter/>
-					<dependencies/>
-					<is_null_allowed>false</is_null_allowed>
-					<target_class>WBS</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-				</field>
-				<field id="child_start_date" xsi:type="AttributeExternalField">
-					<extkey_attcode>child_wbs_id</extkey_attcode>
-					<target_attcode>re_estimated_start_date</target_attcode>
-				</field>
-				<field id="child_end_date" xsi:type="AttributeExternalField">
-					<extkey_attcode>child_wbs_id</extkey_attcode>
-					<target_attcode>re_estimated_end_date</target_attcode>
-				</field>
-				<field id="parent_wbs_id" xsi:type="AttributeExternalKey">
-					<sql>parent_wbs_id</sql>
-					<filter/>
-					<dependencies/>
-					<is_null_allowed>false</is_null_allowed>
-					<target_class>WBS</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-				</field>
-				<field id="parent_start_date" xsi:type="AttributeExternalField">
-					<extkey_attcode>parent_wbs_id</extkey_attcode>
-					<target_attcode>re_estimated_start_date</target_attcode>
-				</field>
-				<field id="parent_end_date" xsi:type="AttributeExternalField">
-					<extkey_attcode>parent_wbs_id</extkey_attcode>
-					<target_attcode>re_estimated_end_date</target_attcode>
-				</field>
-			</fields>
-			<methods/>
-			<presentation>
-				<list>
-					<items>
-						<item id="child_wbs_id">
-							<rank>10</rank>
-						</item>
-						<item id="parent_wbs_id">
-							<rank>20</rank>
-						</item>
-						<item id="child_start_date">
-							<rank>30</rank>
-						</item>
-						<item id="child_end_date">
-							<rank>40</rank>
-						</item>
-						<item id="parent_start_date">
-							<rank>50</rank>
-						</item>
-						<item id="parent_end_date">
-							<rank>60</rank>
-						</item>
-					</items>
-				</list>
-				<search>
-					<items>
-						<item id="child_wbs_id">
-							<rank>10</rank>
-						</item>
-						<item id="parent_wbs_id">
-							<rank>20</rank>
-						</item>
-					</items>
-				</search>
-				<details>
-					<items>
-						<item id="child_wbs_id">
-							<rank>10</rank>
-						</item>
-						<item id="parent_wbs_id">
-							<rank>20</rank>
-						</item>
-						<item id="child_start_date">
-							<rank>30</rank>
-						</item>
-						<item id="child_end_date">
-							<rank>40</rank>
-						</item>
-						<item id="parent_start_date">
-							<rank>50</rank>
-						</item>
-						<item id="parent_end_date">
-							<rank>60</rank>
-						</item>
-					</items>
-				</details>
-			</presentation>
-			<parent>cmdbAbstractObject</parent>
-		</class>
-		<class id="lnkContactToWBS" _delta="define">
-			<properties>
-				<category>bizmodel</category>
-				<abstract>false</abstract>
-				<db_table>lnkcontacttowbs</db_table>
-				<is_link>1</is_link>
-				<naming>
-					<attributes>
-						<attribute id="contact_id"/>
-						<attribute id="wbs_id"/>
-					</attributes>
-				</naming>
-				<reconciliation>
-					<attributes>
-						<attribute id="contact_id"/>
-						<attribute id="wbs_id"/>
-					</attributes>
-				</reconciliation>
-			</properties>
-			<fields>
-				<field id="contact_id" xsi:type="AttributeExternalKey">
-					<sql>contact_id</sql>
-					<filter/>
-					<dependencies/>
-					<is_null_allowed>false</is_null_allowed>
-					<target_class>Contact</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-				</field>
-				<field id="wbs_id" xsi:type="AttributeExternalKey">
-					<sql>wbs_id</sql>
-					<filter/>
-					<dependencies/>
-					<is_null_allowed>false</is_null_allowed>
-					<target_class>WBS</target_class>
-					<on_target_delete>DEL_AUTO</on_target_delete>
-				</field>
-				<field id="influence" xsi:type="AttributeEnum">
-					<sql>influence</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label>Influence</label>
-					<description/>
-					<validation_pattern/>
-					<values>
-						<value id="objector">objector</value>
-						<value id="partner">partner</value>
-					</values>
-					<display_style>list</display_style>
-					<dependencies>
-						<attribute id="contact_id"/>
-					</dependencies>
-				</field>
-				<field id="power" xsi:type="AttributeEnum">
-					<sql>power</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label>Influence power</label>
-					<values>
-						<value id="strong">strong</value>
-						<value id="low">low</value>
-					</values>
-					<description/>
-					<display_style>list</display_style>
-					<dependencies>
-						<attribute id="contact_id"/>
-					</dependencies>
-				</field>
-				<field id="allocated_percent" xsi:type="AttributePercentage">
-					<sql>allocated_percent</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label>Allocated percent</label>
-					<description>% allocation of resource on project</description>
-				</field>
-				<field id="allocated_days" xsi:type="AttributeInteger">
-					<sql>allocated_days</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label>Allocated days</label>
-					<description>days allocated of resource on project</description>
-				</field>
-				<field id="category" xsi:type="AttributeEnum">
-					<sql>category</sql>
-					<default_value/>
-					<is_null_allowed>true</is_null_allowed>
-					<label>Category</label>
-					<values>
-						<value id="1">1</value>
-						<value id="2">2</value>
-					</values>
-					<description/>
-					<display_style>list</display_style>
-					<dependencies>
-						<attribute id="contact_id"/>
-						<attribute id="wbs_id"/>
-					</dependencies>
-				</field>
-				<field id="project_id" xsi:type="AttributeExternalField">
-					<extkey_attcode>wbs_id</extkey_attcode>
-					<target_attcode>project_id</target_attcode>
-				</field>
-			</fields>
-			<methods/>
-			<presentation>
-				<list>
-					<items>
-						<item id="category">
-							<rank>10</rank>
-						</item>
-						<item id="wbs_id">
-							<rank>20</rank>
-						</item>
-						<item id="contact_id">
-							<rank>30</rank>
-						</item>
-						<item id="project_id">
-							<rank>40</rank>
-						</item>
-						<item id="influence">
-							<rank>50</rank>
-						</item>
-						<item id="power">
-							<rank>60</rank>
-						</item>
-						<item id="allocated_percent">
-							<rank>70</rank>
-						</item>
-						<item id="allocated_days">
-							<rank>80</rank>
-						</item>
-					</items>
-				</list>
-				<search>
-					<items>
-						<item id="contact_id">
-							<rank>10</rank>
-						</item>
-						<item id="wbs_id">
-							<rank>20</rank>
-						</item>
-					</items>
-				</search>
-				<details>
-					<items>
-						<item id="col:col0">
-							<items>
-								<item id="contact_id">
-									<rank>10</rank>
-								</item>
-								<item id="wbs_id">
-									<rank>20</rank>
-								</item>
-								<item id="category">
-									<rank>30</rank>
-								</item>
-								<item id="allocated_days">
-									<rank>40</rank>
-								</item>
-								<item id="influence">
-									<rank>50</rank>
-								</item>
-								<item id="power">
-									<rank>60</rank>
-								</item>
-								<item id="allocated_percent">
-									<rank>70</rank>
-								</item>
-							</items>
-							<rank>10</rank>
-						</item>
-					</items>
-				</details>
-			</presentation>
-			<parent>cmdbAbstractObject</parent>
-		</class>
-	</classes>
-	<menus>
-		<menu xsi:type="MenuGroup" id="ProjectManagement" _delta="define">
-			<rank>50</rank>
-			<enable_class _delta="define">Project</enable_class>
-			<enable_admin_only _delta="define">0</enable_admin_only>
-			<enable_action _delta="define">UR_ACTION_MODIFY</enable_action>
-		</menu>
-		<menu xsi:type="DashboardMenuNode" id="Project:Overview" _delta="define">
-			<parent>ProjectManagement</parent>
-			<rank>10</rank>
-			<definition>
-				<layout>DashboardLayoutTwoCols</layout>
-				<title>UI:ProjectMgmtMenuOverview:Title</title>
-				<auto_reload>
-					<enabled>false</enabled>
-					<interval>300</interval>
-				</auto_reload>
-				<cells>
-					<cell id="1">
-						<rank>10</rank>
-						<dashlets>
-							<dashlet id="1" xsi:type="DashletGroupByBars">
-								<rank>10</rank>
-								<title>UI-ProjectManagementOverview-Last-12Months</title>
-								<query>SELECT Project WHERE start_date &gt;= DATE(DATE_SUB(NOW(), INTERVAL 12 MONTH)) AND start_date &lt;=
-									DATE(DATE_ADD(NOW(), INTERVAL 1 MONTH))
-								</query>
-								<group_by>start_date:month</group_by>
-								<style>bars</style>
-								<aggregation_function>count</aggregation_function>
-								<aggregation_attribute/>
-								<limit/>
-								<order_by/>
-								<order_direction/>
-							</dashlet>
-						</dashlets>
-					</cell>
-					<cell id="2">
-						<rank>20</rank>
-						<dashlets>
-							<dashlet id="2" xsi:type="DashletGroupByPie">
-								<rank>10</rank>
-								<title>UI-ProjectManagementOverview-Last-3Months</title>
-								<query>SELECT Project WHERE start_date &gt;= DATE(DATE_SUB(NOW(), INTERVAL 3 MONTH)) AND start_date &lt;=
-									DATE(DATE_ADD(NOW(), INTERVAL 1 MONTH))
-								</query>
-								<group_by>org_id</group_by>
-								<style>pie</style>
-								<aggregation_function>count</aggregation_function>
-								<aggregation_attribute/>
-								<limit/>
-								<order_by/>
-								<order_direction/>
-							</dashlet>
-						</dashlets>
-					</cell>
-					<cell id="3">
-						<rank>30</rank>
-						<dashlets>
-							<dashlet id="3" xsi:type="DashletGroupByTable">
-								<rank>10</rank>
-								<title>UI-ProjectManagementOverview-OpenProjectByStatus</title>
-								<query>SELECT Project WHERE status NOT IN ('closed','resolved')</query>
-								<group_by>status</group_by>
-								<style>table</style>
-							</dashlet>
-						</dashlets>
-					</cell>
-					<cell id="4">
-						<rank>40</rank>
-						<dashlets>
-							<dashlet id="8" xsi:type="DashletGroupByTable">
-								<rank>10</rank>
-								<title>UI-WBSManagementOverview-OpenWBSByProject</title>
-								<query>SELECT WBS WHERE status NOT IN ('cancel','closed')</query>
-								<group_by>project_id</group_by>
-								<style>table</style>
-								<aggregation_function>count</aggregation_function>
-								<aggregation_attribute/>
-								<limit/>
-								<order_by/>
-								<order_direction/>
-							</dashlet>
-						</dashlets>
-					</cell>
-				</cells>
-			</definition>
-		</menu>
-		<menu xsi:type="TemplateMenuNode" id="ProjectMenu" _delta="define">
-			<parent>ProjectManagement</parent>
-			<rank>20</rank>
-		</menu>
-		<menu xsi:type="NewObjectMenuNode" id="NewProject" _delta="define">
-			<parent>ProjectMenu</parent>
-			<rank>0</rank>
-			<class>Project</class>
-		</menu>
-		<menu xsi:type="SearchMenuNode" id="SearchProject" _delta="define">
-			<parent>ProjectMenu</parent>
-			<rank>10</rank>
-			<class>Project</class>
-		</menu>
-		<menu xsi:type="OQLMenuNode" id="MyProject" _delta="define">
-			<parent>ProjectMenu</parent>
-			<rank>20</rank>
-			<oql>SELECT Project WHERE agent_id = :current_contact_id AND status != "closed"</oql>
-			<do_search>1</do_search>
-		</menu>
-		<menu xsi:type="TemplateMenuNode" id="WBSMenu" _delta="define">
-			<parent>ProjectManagement</parent>
-			<rank>80</rank>
-		</menu>
-		<menu xsi:type="NewObjectMenuNode" id="NewWBS" _delta="define">
-			<parent>WBSMenu</parent>
-			<rank>0</rank>
-			<class>WBS</class>
-		</menu>
-		<menu xsi:type="SearchMenuNode" id="SearchWBS" _delta="define">
-			<parent>WBSMenu</parent>
-			<rank>10</rank>
-			<class>WBS</class>
-		</menu>
-		<menu xsi:type="OQLMenuNode" id="MyWBS" _delta="define">
-			<parent>WBSMenu</parent>
-			<rank>11</rank>
-			<oql>SELECT WBS WHERE wbs_owner_id= :current_contact_id AND status != "closed"</oql>
-			<do_search>1</do_search>
-		</menu>
-	</menus>
-	<user_rights _created_in="core">
-		<profiles>
-			<profile id="1025" _delta="define">
-				<name>Project Manager</name>
-				<description>Person dealing with projects/risks/issues/WBS</description>
-				<groups>
-					<group id="Project">
-						<actions>
+        </method>
+      </methods>
+      <presentation>
+        <list>
+          <items>
+            <item id="ref">
+              <rank>10</rank>
+            </item>
+            <item id="project_id">
+              <rank>20</rank>
+            </item>
+            <item id="start_date">
+              <rank>30</rank>
+            </item>
+            <item id="end_date">
+              <rank>40</rank>
+            </item>
+            <item id="re_estimated_start_date">
+              <rank>50</rank>
+            </item>
+            <item id="re_estimated_end_date">
+              <rank>60</rank>
+            </item>
+            <item id="freetime">
+              <rank>70</rank>
+            </item>
+            <item id="completion">
+              <rank>80</rank>
+            </item>
+            <item id="wbs_owner_id">
+              <rank>90</rank>
+            </item>
+            <item id="status">
+              <rank>100</rank>
+            </item>
+          </items>
+        </list>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="project_id">
+              <rank>20</rank>
+            </item>
+            <item id="start_date">
+              <rank>30</rank>
+            </item>
+            <item id="description">
+              <rank>40</rank>
+            </item>
+            <item id="end_date">
+              <rank>50</rank>
+            </item>
+            <item id="wbs_owner_id">
+              <rank>60</rank>
+            </item>
+            <item id="wbs_budget">
+              <rank>70</rank>
+            </item>
+            <item id="acceptance">
+              <rank>80</rank>
+            </item>
+            <item id="technical_info">
+              <rank>90</rank>
+            </item>
+            <item id="wbs_cost">
+              <rank>100</rank>
+            </item>
+            <item id="labor_cost">
+              <rank>110</rank>
+            </item>
+            <item id="material_cost">
+              <rank>120</rank>
+            </item>
+            <item id="re_estimated_end_date">
+              <rank>130</rank>
+            </item>
+            <item id="status">
+              <rank>140</rank>
+            </item>
+            <item id="completion">
+              <rank>150</rank>
+            </item>
+            <item id="freetime">
+              <rank>160</rank>
+            </item>
+            <item id="re_estimated_start_date">
+              <rank>170</rank>
+            </item>
+            <item id="available_budget">
+              <rank>180</rank>
+            </item>
+            <item id="time_planned">
+              <rank>190</rank>
+            </item>
+            <item id="delay">
+              <rank>200</rank>
+            </item>
+          </items>
+        </search>
+        <details>
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="fieldset:WBS:Info">
+                  <items>
+                    <item id="name">
+                      <rank>10</rank>
+                    </item>
+                    <item id="project_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="wbs_owner_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="status">
+                      <rank>40</rank>
+                    </item>
+                    <item id="description">
+                      <rank>50</rank>
+                    </item>
+                    <item id="acceptance">
+                      <rank>60</rank>
+                    </item>
+                    <item id="technical_info">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+            <item id="col:col1">
+              <items>
+                <item id="fieldset:WBS:Cost">
+                  <items>
+                    <item id="wbs_budget">
+                      <rank>10</rank>
+                    </item>
+                    <item id="labor_cost">
+                      <rank>20</rank>
+                    </item>
+                    <item id="material_cost">
+                      <rank>30</rank>
+                    </item>
+                    <item id="wbs_cost">
+                      <rank>40</rank>
+                    </item>
+                    <item id="available_budget">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+                <item id="fieldset:WBS:Execution">
+                  <items>
+                    <item id="time_planned">
+                      <rank>10</rank>
+                    </item>
+                    <item id="completion">
+                      <rank>20</rank>
+                    </item>
+                  </items>
+                  <rank>20</rank>
+                </item>
+              </items>
+              <rank>20</rank>
+            </item>
+            <item id="col:col2">
+              <items>
+                <item id="fieldset:WBS:Dates">
+                  <items>
+                    <item id="start_date">
+                      <rank>10</rank>
+                    </item>
+                    <item id="end_date">
+                      <rank>20</rank>
+                    </item>
+                    <item id="re_estimated_start_date">
+                      <rank>30</rank>
+                    </item>
+                    <item id="re_estimated_end_date">
+                      <rank>40</rank>
+                    </item>
+                    <item id="freetime">
+                      <rank>50</rank>
+                    </item>
+                  </items>
+                  <rank>10</rank>
+                </item>
+              </items>
+              <rank>30</rank>
+            </item>
+            <item id="wbss_child_list">
+              <rank>40</rank>
+            </item>
+            <item id="wbss_parent_list">
+              <rank>50</rank>
+            </item>
+            <item id="contacts_list">
+              <rank>80</rank>
+            </item>
+          </items>
+        </details>
+        <default_search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="project_id">
+              <rank>20</rank>
+            </item>
+            <item id="ref">
+              <rank>30</rank>
+            </item>
+            <item id="re_estimated_start_date">
+              <rank>40</rank>
+            </item>
+            <item id="status">
+              <rank>50</rank>
+            </item>
+            <item id="wbs_owner_id">
+              <rank>60</rank>
+            </item>
+          </items>
+        </default_search>
+      </presentation>
+      <parent>cmdbAbstractObject</parent>
+    </class>
+    <class id="lnkWBSToWBS" _delta="define">
+      <properties>
+        <category>bizmodel</category>
+        <abstract>false</abstract>
+        <db_table>lnkwbstowbs</db_table>
+        <is_link>1</is_link>
+        <naming>
+          <attributes>
+            <attribute id="child_wbs_id"/>
+            <attribute id="parent_wbs_id"/>
+          </attributes>
+        </naming>
+        <reconciliation>
+          <attributes>
+            <attribute id="child_wbs_id"/>
+            <attribute id="parent_wbs_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="child_wbs_id" xsi:type="AttributeExternalKey">
+          <sql>child_wbs_id</sql>
+          <filter/>
+          <dependencies/>
+          <is_null_allowed>false</is_null_allowed>
+          <target_class>WBS</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+        </field>
+        <field id="child_start_date" xsi:type="AttributeExternalField">
+          <extkey_attcode>child_wbs_id</extkey_attcode>
+          <target_attcode>re_estimated_start_date</target_attcode>
+        </field>
+        <field id="child_end_date" xsi:type="AttributeExternalField">
+          <extkey_attcode>child_wbs_id</extkey_attcode>
+          <target_attcode>re_estimated_end_date</target_attcode>
+        </field>
+        <field id="parent_wbs_id" xsi:type="AttributeExternalKey">
+          <sql>parent_wbs_id</sql>
+          <filter/>
+          <dependencies/>
+          <is_null_allowed>false</is_null_allowed>
+          <target_class>WBS</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+        </field>
+        <field id="parent_start_date" xsi:type="AttributeExternalField">
+          <extkey_attcode>parent_wbs_id</extkey_attcode>
+          <target_attcode>re_estimated_start_date</target_attcode>
+        </field>
+        <field id="parent_end_date" xsi:type="AttributeExternalField">
+          <extkey_attcode>parent_wbs_id</extkey_attcode>
+          <target_attcode>re_estimated_end_date</target_attcode>
+        </field>
+      </fields>
+      <methods/>
+      <presentation>
+        <list>
+          <items>
+            <item id="child_wbs_id">
+              <rank>10</rank>
+            </item>
+            <item id="parent_wbs_id">
+              <rank>20</rank>
+            </item>
+            <item id="child_start_date">
+              <rank>30</rank>
+            </item>
+            <item id="child_end_date">
+              <rank>40</rank>
+            </item>
+            <item id="parent_start_date">
+              <rank>50</rank>
+            </item>
+            <item id="parent_end_date">
+              <rank>60</rank>
+            </item>
+          </items>
+        </list>
+        <search>
+          <items>
+            <item id="child_wbs_id">
+              <rank>10</rank>
+            </item>
+            <item id="parent_wbs_id">
+              <rank>20</rank>
+            </item>
+          </items>
+        </search>
+        <details>
+          <items>
+            <item id="child_wbs_id">
+              <rank>10</rank>
+            </item>
+            <item id="parent_wbs_id">
+              <rank>20</rank>
+            </item>
+            <item id="child_start_date">
+              <rank>30</rank>
+            </item>
+            <item id="child_end_date">
+              <rank>40</rank>
+            </item>
+            <item id="parent_start_date">
+              <rank>50</rank>
+            </item>
+            <item id="parent_end_date">
+              <rank>60</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+      <parent>cmdbAbstractObject</parent>
+    </class>
+    <class id="lnkContactToWBS" _delta="define">
+      <properties>
+        <category>bizmodel</category>
+        <abstract>false</abstract>
+        <db_table>lnkcontacttowbs</db_table>
+        <is_link>1</is_link>
+        <naming>
+          <attributes>
+            <attribute id="contact_id"/>
+            <attribute id="wbs_id"/>
+          </attributes>
+        </naming>
+        <reconciliation>
+          <attributes>
+            <attribute id="contact_id"/>
+            <attribute id="wbs_id"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="contact_id" xsi:type="AttributeExternalKey">
+          <sql>contact_id</sql>
+          <filter/>
+          <dependencies/>
+          <is_null_allowed>false</is_null_allowed>
+          <target_class>Contact</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+        </field>
+        <field id="wbs_id" xsi:type="AttributeExternalKey">
+          <sql>wbs_id</sql>
+          <filter/>
+          <dependencies/>
+          <is_null_allowed>false</is_null_allowed>
+          <target_class>WBS</target_class>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+        </field>
+        <field id="influence" xsi:type="AttributeEnum">
+          <sql>influence</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label>Influence</label>
+          <description/>
+          <validation_pattern/>
+          <values>
+            <value id="objector">objector</value>
+            <value id="partner">partner</value>
+          </values>
+          <display_style>list</display_style>
+          <dependencies>
+            <attribute id="contact_id"/>
+          </dependencies>
+        </field>
+        <field id="power" xsi:type="AttributeEnum">
+          <sql>power</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label>Influence power</label>
+          <values>
+            <value id="strong">strong</value>
+            <value id="low">low</value>
+          </values>
+          <description/>
+          <display_style>list</display_style>
+          <dependencies>
+            <attribute id="contact_id"/>
+          </dependencies>
+        </field>
+        <field id="allocated_percent" xsi:type="AttributePercentage">
+          <sql>allocated_percent</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label>Allocated percent</label>
+          <description>% allocation of resource on project</description>
+        </field>
+        <field id="allocated_days" xsi:type="AttributeInteger">
+          <sql>allocated_days</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label>Allocated days</label>
+          <description>days allocated of resource on project</description>
+        </field>
+        <field id="category" xsi:type="AttributeEnum">
+          <sql>category</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <label>Category</label>
+          <values>
+            <value id="1">1</value>
+            <value id="2">2</value>
+          </values>
+          <description/>
+          <display_style>list</display_style>
+          <dependencies>
+            <attribute id="contact_id"/>
+            <attribute id="wbs_id"/>
+          </dependencies>
+        </field>
+        <field id="project_id" xsi:type="AttributeExternalField">
+          <extkey_attcode>wbs_id</extkey_attcode>
+          <target_attcode>project_id</target_attcode>
+        </field>
+      </fields>
+      <methods/>
+      <presentation>
+        <list>
+          <items>
+            <item id="category">
+              <rank>10</rank>
+            </item>
+            <item id="wbs_id">
+              <rank>20</rank>
+            </item>
+            <item id="contact_id">
+              <rank>30</rank>
+            </item>
+            <item id="project_id">
+              <rank>40</rank>
+            </item>
+            <item id="influence">
+              <rank>50</rank>
+            </item>
+            <item id="power">
+              <rank>60</rank>
+            </item>
+            <item id="allocated_percent">
+              <rank>70</rank>
+            </item>
+            <item id="allocated_days">
+              <rank>80</rank>
+            </item>
+          </items>
+        </list>
+        <search>
+          <items>
+            <item id="contact_id">
+              <rank>10</rank>
+            </item>
+            <item id="wbs_id">
+              <rank>20</rank>
+            </item>
+          </items>
+        </search>
+        <details>
+          <items>
+            <item id="col:col0">
+              <items>
+                <item id="contact_id">
+                  <rank>10</rank>
+                </item>
+                <item id="wbs_id">
+                  <rank>20</rank>
+                </item>
+                <item id="category">
+                  <rank>30</rank>
+                </item>
+                <item id="allocated_days">
+                  <rank>40</rank>
+                </item>
+                <item id="influence">
+                  <rank>50</rank>
+                </item>
+                <item id="power">
+                  <rank>60</rank>
+                </item>
+                <item id="allocated_percent">
+                  <rank>70</rank>
+                </item>
+              </items>
+              <rank>10</rank>
+            </item>
+          </items>
+        </details>
+      </presentation>
+      <parent>cmdbAbstractObject</parent>
+    </class>
+  </classes>
+  <menus>
+    <menu xsi:type="MenuGroup" id="ProjectManagement" _delta="define">
+      <rank>50</rank>
+      <enable_class _delta="define">Project</enable_class>
+      <enable_admin_only _delta="define">0</enable_admin_only>
+      <enable_action _delta="define">UR_ACTION_MODIFY</enable_action>
+      <style>
+        <decoration_classes>fas fa-chess-knight</decoration_classes>
+      </style>
+    </menu>
+    <menu xsi:type="DashboardMenuNode" id="Project:Overview" _delta="define">
+      <parent>ProjectManagement</parent>
+      <rank>10</rank>
+      <definition>
+        <layout>DashboardLayoutTwoCols</layout>
+        <title>UI:ProjectMgmtMenuOverview:Title</title>
+        <auto_reload>
+          <enabled>false</enabled>
+          <interval>300</interval>
+        </auto_reload>
+        <cells>
+          <cell id="1">
+            <rank>10</rank>
+            <dashlets>
+              <dashlet id="1" xsi:type="DashletGroupByBars">
+                <rank>10</rank>
+                <title>UI-ProjectManagementOverview-Last-12Months</title>
+                <query>SELECT Project WHERE start_date &gt;= DATE(DATE_SUB(NOW(), INTERVAL 12 MONTH)) AND start_date &lt;=
+                  DATE(DATE_ADD(NOW(), INTERVAL 1 MONTH))
+                </query>
+                <group_by>start_date:month</group_by>
+                <style>bars</style>
+                <aggregation_function>count</aggregation_function>
+                <aggregation_attribute/>
+                <limit/>
+                <order_by/>
+                <order_direction/>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="2">
+            <rank>20</rank>
+            <dashlets>
+              <dashlet id="2" xsi:type="DashletGroupByPie">
+                <rank>10</rank>
+                <title>UI-ProjectManagementOverview-Last-3Months</title>
+                <query>SELECT Project WHERE start_date &gt;= DATE(DATE_SUB(NOW(), INTERVAL 3 MONTH)) AND start_date &lt;=
+                  DATE(DATE_ADD(NOW(), INTERVAL 1 MONTH))
+                </query>
+                <group_by>org_id</group_by>
+                <style>pie</style>
+                <aggregation_function>count</aggregation_function>
+                <aggregation_attribute/>
+                <limit/>
+                <order_by/>
+                <order_direction/>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="3">
+            <rank>30</rank>
+            <dashlets>
+              <dashlet id="3" xsi:type="DashletGroupByTable">
+                <rank>10</rank>
+                <title>UI-ProjectManagementOverview-OpenProjectByStatus</title>
+                <query>SELECT Project WHERE status NOT IN ('closed','resolved')</query>
+                <group_by>status</group_by>
+                <style>table</style>
+              </dashlet>
+            </dashlets>
+          </cell>
+          <cell id="4">
+            <rank>40</rank>
+            <dashlets>
+              <dashlet id="8" xsi:type="DashletGroupByTable">
+                <rank>10</rank>
+                <title>UI-WBSManagementOverview-OpenWBSByProject</title>
+                <query>SELECT WBS WHERE status NOT IN ('cancel','closed')</query>
+                <group_by>project_id</group_by>
+                <style>table</style>
+                <aggregation_function>count</aggregation_function>
+                <aggregation_attribute/>
+                <limit/>
+                <order_by/>
+                <order_direction/>
+              </dashlet>
+            </dashlets>
+          </cell>
+        </cells>
+      </definition>
+    </menu>
+    <menu xsi:type="TemplateMenuNode" id="ProjectMenu" _delta="define">
+      <parent>ProjectManagement</parent>
+      <rank>20</rank>
+    </menu>
+    <menu xsi:type="NewObjectMenuNode" id="NewProject" _delta="define">
+      <parent>ProjectMenu</parent>
+      <rank>0</rank>
+      <class>Project</class>
+    </menu>
+    <menu xsi:type="SearchMenuNode" id="SearchProject" _delta="define">
+      <parent>ProjectMenu</parent>
+      <rank>10</rank>
+      <class>Project</class>
+    </menu>
+    <menu xsi:type="OQLMenuNode" id="MyProject" _delta="define">
+      <parent>ProjectMenu</parent>
+      <rank>20</rank>
+      <oql>SELECT Project WHERE agent_id = :current_contact_id AND status != "closed"</oql>
+      <do_search>1</do_search>
+    </menu>
+    <menu xsi:type="TemplateMenuNode" id="WBSMenu" _delta="define">
+      <parent>ProjectManagement</parent>
+      <rank>80</rank>
+    </menu>
+    <menu xsi:type="NewObjectMenuNode" id="NewWBS" _delta="define">
+      <parent>WBSMenu</parent>
+      <rank>0</rank>
+      <class>WBS</class>
+    </menu>
+    <menu xsi:type="SearchMenuNode" id="SearchWBS" _delta="define">
+      <parent>WBSMenu</parent>
+      <rank>10</rank>
+      <class>WBS</class>
+    </menu>
+    <menu xsi:type="OQLMenuNode" id="MyWBS" _delta="define">
+      <parent>WBSMenu</parent>
+      <rank>11</rank>
+      <oql>SELECT WBS WHERE wbs_owner_id= :current_contact_id AND status != "closed"</oql>
+      <do_search>1</do_search>
+    </menu>
+  </menus>
+  <user_rights _created_in="core">
+    <profiles>
+      <profile id="1025" _delta="define">
+        <name>Project Manager</name>
+        <description>Person dealing with projects/risks/issues/WBS</description>
+        <groups>
+          <group id="Project">
+            <actions>
               <action id="action:read">allow</action>
               <action id="action:bulk read">allow</action>
               <action id="action:write">allow</action>
               <action id="action:bulk write">allow</action>
               <action id="action:delete">allow</action>
               <action id="stimulus:ev_cancel">allow</action>
-							<action id="stimulus:ev_close">allow</action>
-							<action id="stimulus:ev_closed">allow</action>
-							<action id="stimulus:ev_execute">allow</action>
-							<action id="stimulus:ev_monitor">allow</action>
-							<action id="stimulus:ev_pending_parent">allow</action>
-							<action id="stimulus:ev_plan">allow</action>
-							<action id="stimulus:ev_reexecute">allow</action>
-							<action id="stimulus:ev_reopen">allow</action>
-						</actions>
-					</group>
-					<group id="*">
-						<actions>
-							<action id="action:read">allow</action>
-							<action id="action:bulk read">allow</action>
-						</actions>
-					</group>
-				</groups>
-			</profile>
-		</profiles>
-		<groups>
-			<group id="Project" _delta="define">
-				<classes>
-					<class id="Project"/>
-					<class id="WBS"/>
-					<class id="lnkWBSToWBS"/>
-					<class id="lnkContactToTicket"/>
-					<class id="lnkContactToWBS"/>
-				</classes>
-			</group>
-		</groups>
-	</user_rights>
-	<module_parameters>
-		<parameters id="combodo-gantt-view" _delta="must_exist">
-			<classes>
-				<WBS _delta="define">
-					<default_colors>
-						<backgroundcolor>#e6e6e6</backgroundcolor>
-						<color>#fff</color>
-					</default_colors>
-					<name>name</name>
-					<start_date>re_estimated_start_date</start_date>
-					<end_date>re_estimated_end_date</end_date>
-					<completion>completion</completion>
-					<depends_on>wbss_parent_list</depends_on>
-					<group_by>project_id</group_by>
-					<colored_field>status</colored_field>
-					<values type="hash">
-						<running>
-							<backgroundcolor>#ffcc33</backgroundcolor>
-							<color>#fff</color>
-						</running>
-						<cancel>
-							<backgroundcolor>#ff0066</backgroundcolor>
-							<color>#fff</color>
-						</cancel>
-						<pending_parent>
-							<backgroundcolor>#4499F9</backgroundcolor>
-							<color>#fff</color>
-						</pending_parent>
-						<closed>
-							<backgroundcolor>#009900</backgroundcolor>
-							<color>#fff</color>
-						</closed>
-					</values>
-				</WBS>
-				<Project _delta="define">
-					<default_colors>
-						<backgroundcolor>#e6e6e6</backgroundcolor>
-						<color>#fff</color>
-					</default_colors>
-					<name>title</name>
-					<start_date>start_date</start_date>
-					<end_date>end_date</end_date>
-					<completion></completion>
-					<depends_on></depends_on>
-					<group_by></group_by>
-					<colored_field>status</colored_field>
-					<values type="hash">
-						<executed>
-							<backgroundcolor>#734d26</backgroundcolor>
-							<color>#fff</color>
-						</executed>
-						<cancelled>
-							<backgroundcolor>#990000</backgroundcolor>
-							<color>#fff</color>
-						</cancelled>
-						<planned>
-							<backgroundcolor>#043c7c</backgroundcolor>
-							<color>#fff</color>
-						</planned>
-						<closed>
-							<backgroundcolor>#006600</backgroundcolor>
-							<color>#fff</color>
-						</closed>
-						<initiated>
-							<backgroundcolor>#008080</backgroundcolor>
-							<color>#fff</color>
-						</initiated>
-						<monitored>
-							<backgroundcolor>#800080</backgroundcolor>
-							<color>#fff</color>
-						</monitored>
-					</values>
-				</Project>
-			</classes>
-		</parameters>
-	</module_parameters>
+              <action id="stimulus:ev_close">allow</action>
+              <action id="stimulus:ev_closed">allow</action>
+              <action id="stimulus:ev_execute">allow</action>
+              <action id="stimulus:ev_monitor">allow</action>
+              <action id="stimulus:ev_pending_parent">allow</action>
+              <action id="stimulus:ev_plan">allow</action>
+              <action id="stimulus:ev_reexecute">allow</action>
+              <action id="stimulus:ev_reopen">allow</action>
+            </actions>
+          </group>
+          <group id="*">
+            <actions>
+              <action id="action:read">allow</action>
+              <action id="action:bulk read">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+    </profiles>
+    <groups>
+      <group id="Project" _delta="define">
+        <classes>
+          <class id="Project"/>
+          <class id="WBS"/>
+          <class id="lnkWBSToWBS"/>
+          <class id="lnkContactToTicket"/>
+          <class id="lnkContactToWBS"/>
+        </classes>
+      </group>
+    </groups>
+  </user_rights>
+  <module_parameters>
+    <parameters id="combodo-gantt-view" _delta="must_exist">
+      <classes>
+        <WBS _delta="define">
+          <default_colors>
+            <backgroundcolor>#e6e6e6</backgroundcolor>
+            <color>#fff</color>
+          </default_colors>
+          <name>name</name>
+          <start_date>re_estimated_start_date</start_date>
+          <end_date>re_estimated_end_date</end_date>
+          <completion>completion</completion>
+          <depends_on>wbss_parent_list</depends_on>
+          <group_by>project_id</group_by>
+          <colored_field>status</colored_field>
+          <values type="hash">
+            <running>
+              <backgroundcolor>#ffcc33</backgroundcolor>
+              <color>#fff</color>
+            </running>
+            <cancel>
+              <backgroundcolor>#ff0066</backgroundcolor>
+              <color>#fff</color>
+            </cancel>
+            <pending_parent>
+              <backgroundcolor>#4499F9</backgroundcolor>
+              <color>#fff</color>
+            </pending_parent>
+            <closed>
+              <backgroundcolor>#009900</backgroundcolor>
+              <color>#fff</color>
+            </closed>
+          </values>
+        </WBS>
+        <Project _delta="define">
+          <default_colors>
+            <backgroundcolor>#e6e6e6</backgroundcolor>
+            <color>#fff</color>
+          </default_colors>
+          <name>title</name>
+          <start_date>start_date</start_date>
+          <end_date>end_date</end_date>
+          <completion></completion>
+          <depends_on></depends_on>
+          <group_by></group_by>
+          <colored_field>status</colored_field>
+          <values type="hash">
+            <executed>
+              <backgroundcolor>#734d26</backgroundcolor>
+              <color>#fff</color>
+            </executed>
+            <cancelled>
+              <backgroundcolor>#990000</backgroundcolor>
+              <color>#fff</color>
+            </cancelled>
+            <planned>
+              <backgroundcolor>#043c7c</backgroundcolor>
+              <color>#fff</color>
+            </planned>
+            <closed>
+              <backgroundcolor>#006600</backgroundcolor>
+              <color>#fff</color>
+            </closed>
+            <initiated>
+              <backgroundcolor>#008080</backgroundcolor>
+              <color>#fff</color>
+            </initiated>
+            <monitored>
+              <backgroundcolor>#800080</backgroundcolor>
+              <color>#fff</color>
+            </monitored>
+          </values>
+        </Project>
+      </classes>
+    </parameters>
+  </module_parameters>
 </itop_design>
