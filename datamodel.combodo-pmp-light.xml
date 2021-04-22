@@ -2554,9 +2554,6 @@
                             $iWBSspentdays += ($oWBS->Get('time_planned')*$oWBS->Get('completion'));
                         }
                     $iProjectcompletion =  $iWBSspentdays/$iWBStotaldays;
-                    IssueLog::Error("valeur de iWBSspentdays ".$iWBSspentdays);
-                    IssueLog::Error("valeur de iWBStotaldays ".$iWBStotaldays);
-                    IssueLog::Error("valeur de iprojectcompletion ".$iProjectcompletion);
                     $oProject = MetaModel::GetObject('Project', $iProjectId, false);
                     $oProject->Set('project_completion',$iProjectcompletion);
                     $oProject->DBUpdate();
