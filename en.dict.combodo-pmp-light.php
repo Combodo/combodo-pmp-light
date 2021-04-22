@@ -101,6 +101,8 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:Project/Attribute:mgt_reserve_budget' => 'Management reserve budget',
 	'Class:Project/Attribute:mgt_reserve_budget+' => 'Amount of budget reserved for management and unknown/unknown events',
 	'Class:Project/Attribute:gant_wbs' => 'Gantt',
+    'Class:Project/Attribute:project_completion' => 'Project completion',
+    'Class:Project/Attribute:project_completion+' => 'Average of deliverables completion',
 	'Class:Project:Summary_costs' => 'Costs information',
 	'Class:Project:Summary_general' => 'General information',
 	'Project:Budget' => 'Costs',

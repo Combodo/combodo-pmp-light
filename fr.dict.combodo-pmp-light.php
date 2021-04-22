@@ -99,6 +99,8 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/Attribute:mgt_reserve_budget' => 'Budget de réserve pour imprévu',
 	'Class:Project/Attribute:mgt_reserve_budget+' => 'Montant du budget du projet réservé pour la marge de manoeuvre du management',
 	'Class:Project/Attribute:gant_wbs' => 'Gantt',
+    'Class:Project/Attribute:project_completion' => '% accomplissement',
+    'Class:Project/Attribute:project_completion+' => 'Moyenne de l\'accomplissement des livrables',
 	'Class:Project:Summary_costs' => 'Information sur les coûts',
 	'Class:Project:Summary_general' => 'Informations générales',
 	'Project:Budget' => 'Coûts',

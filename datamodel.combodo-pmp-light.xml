@@ -345,6 +345,12 @@
 					<digits>8</digits>
 					<decimals>2</decimals>
 				</field>
+				<field id="project_completion" xsi:type="AttributePercentageCompletion">
+					<sql>project_completion</sql>
+					<default_value/>
+					<is_null_allowed>true</is_null_allowed>
+					<tracking_level>all</tracking_level>
+				</field>
 				<field id="gant_wbs" xsi:type="AttributeDashboard" _delta="define">
 					<is_user_editable>true</is_user_editable>
 					<!-- Use this default definition for creating a new dashboard -->
@@ -968,6 +974,9 @@
 											<rank>60</rank>
 										</item>
 										<item id="close_date">
+											<rank>70</rank>
+										</item>
+										<item id="project_completion">
 											<rank>70</rank>
 										</item>
 									</items>
@@ -2117,7 +2126,11 @@
 				               // I update delay to be used in future for calculation
 				               $this->Set('delay',$idelay);
 				           }
-							}
+				           if (array_key_exists('time_planned', $aChanges) || array_key_exists('completion', $aChanges))
+				           {
+				               $this->SetProjectCompletion();
+				           }
+						}
 
 						]]></code>
 				</method>
@@ -2167,6 +2180,7 @@
 							public function AfterInsert()
 							{
 				          parent::AfterInsert();
+				          $this->SetProjectCompletion();
 				          //Im on child, I look for my parents
 				          $sOQL = "SELECT WBS AS parent JOIN lnkWBSToWBS AS ln ON ln.parent_wbs_id=parent.id WHERE ln.child_wbs_id=:child_wbs AND parent.status NOT IN ('closed','cancel')";
 				          $oParentWBSSet = new DBObjectSet(DBObjectSearch::FromOQL($sOQL), array('re_estimated_end_date' => false), array('child_wbs' => $this->GetKey()));
@@ -2514,6 +2528,40 @@
 							}
 					]]></code>
 					<arguments/>
+				</method>
+				<method id="SetProjectCompletion" _delta="define">
+					<comment>/**
+						*
+						* @author Axelle Bost
+						*/</comment>
+					<static>false</static>
+					<access>public </access>
+					<code><![CDATA[	public function SetProjectCompletion()
+	{
+	    //  current completion of all project's WBS related are consolidated to define project completion
+                $iProjectId = $this->Get('project_id');
+	            if($iProjectId>0)
+                   {
+                    //test in order to escape this step for cloning operation
+                    $sOQLWBS =  "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel','closed')";
+                    $oWBSSet =  new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('project' => $iProjectId));
+                    $iWBSspentdays = 0;
+                    $iWBStotaldays = 0;
+                    $iProjectcompletion =0;
+                    while ($oWBS = $oWBSSet->Fetch())
+                        {
+                            $iWBStotaldays += $oWBS->Get('time_planned');
+                            $iWBSspentdays += ($oWBS->Get('time_planned')*$oWBS->Get('completion'));
+                        }
+                    $iProjectcompletion =  $iWBSspentdays/$iWBStotaldays;
+                    IssueLog::Error("valeur de iWBSspentdays ".$iWBSspentdays);
+                    IssueLog::Error("valeur de iWBStotaldays ".$iWBStotaldays);
+                    IssueLog::Error("valeur de iprojectcompletion ".$iProjectcompletion);
+                    $oProject = MetaModel::GetObject('Project', $iProjectId, false);
+                    $oProject->Set('project_completion',$iProjectcompletion);
+                    $oProject->DBUpdate();
+                  }
+	}]]></code>
 				</method>
 			</methods>
 			<presentation>
