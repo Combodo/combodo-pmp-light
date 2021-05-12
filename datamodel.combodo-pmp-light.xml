@@ -577,7 +577,7 @@
 		            $oPage->SetCurrentTab(Dict::S('Class:Project/Tab:Summary'));
 
                 //method of display depends of iTop Version
-                if (version_compare(ITOP_VERSION, 3.0) >= 0) {
+                if (version_compare(ITOP_DESIGN_LATEST_VERSION , 3.0) >= 0) {
                     $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),MetaModel::GetClassIcon('DocumentNote', false));
                     $oPage->AddUiBlock($oTitle);
 
