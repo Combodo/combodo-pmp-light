@@ -86,30 +86,9 @@
         </method>
       </methods>
       <presentation>
-        <details _delta="redefine">
+        <details>
           <items>
-            <item id="name">
-              <rank>10</rank>
-            </item>
-            <item id="status">
-              <rank>20</rank>
-            </item>
-            <item id="org_id">
-              <rank>30</rank>
-            </item>
-            <item id="email">
-              <rank>40</rank>
-            </item>
-            <item id="phone">
-              <rank>50</rank>
-            </item>
-            <item id="notify">
-              <rank>60</rank>
-            </item>
-            <item id="function">
-              <rank>70</rank>
-            </item>
-            <item id="wbss_list">
+            <item id="wbss_list" _delta="define">
               <rank>80</rank>
             </item>
           </items>
@@ -118,80 +97,10 @@
     </class>
     <class id="Person" _created_in="itop-config-mgmt" _delta="must_exist">
       <presentation>
-        <details _delta="redefine">
+        <details>
           <items>
-            <item id="col:col0">
-              <items>
-                <item id="fieldset:Person:info">
-                  <items>
-                    <item id="name">
-                      <rank>10</rank>
-                    </item>
-                    <item id="first_name">
-                      <rank>20</rank>
-                    </item>
-                    <item id="org_id">
-                      <rank>30</rank>
-                    </item>
-                    <item id="status">
-                      <rank>40</rank>
-                    </item>
-                    <item id="location_id">
-                      <rank>50</rank>
-                    </item>
-                    <item id="function">
-                      <rank>60</rank>
-                    </item>
-                    <item id="manager_id">
-                      <rank>70</rank>
-                    </item>
-                    <item id="employee_number">
-                      <rank>80</rank>
-                    </item>
-                  </items>
-                  <rank>10</rank>
-                </item>
-              </items>
-              <rank>10</rank>
-            </item>
-            <item id="col:col1">
-              <items>
-                <item id="fieldset:Person:personal_info">
-                  <items>
-                    <item id="picture">
-                      <rank>10</rank>
-                    </item>
-                  </items>
-                  <rank>10</rank>
-                </item>
-                <item id="fieldset:Person:notifiy">
-                  <items>
-                    <item id="email">
-                      <rank>10</rank>
-                    </item>
-                    <item id="notify">
-                      <rank>20</rank>
-                    </item>
-                    <item id="phone">
-                      <rank>30</rank>
-                    </item>
-                    <item id="mobile_phone">
-                      <rank>40</rank>
-                    </item>
-                  </items>
-                  <rank>20</rank>
-                </item>
-              </items>
-              <rank>20</rank>
-            </item>
-            <item id="team_list">
-              <rank>30</rank>
-            </item>
-            <item id="tickets_list">
-              <rank>40</rank>
-            </item>
-            <item id="cis_list">
-              <rank>50</rank>
+            <item id="wbss_list" _delta="define">
+              <rank>80</rank>
             </item>
           </items>
         </details>
@@ -199,42 +108,10 @@
     </class>
     <class id="Team" _created_in="itop-config-mgmt" _delta="must_exist">
       <presentation>
-        <details _delta="redefine">
+        <details>
           <items>
-            <item id="col:col0">
-              <items>
-                <item id="name">
-                  <rank>10</rank>
-                </item>
-                <item id="status">
-                  <rank>20</rank>
-                </item>
-                <item id="org_id">
-                  <rank>30</rank>
-                </item>
-                <item id="email">
-                  <rank>40</rank>
-                </item>
-                <item id="phone">
-                  <rank>50</rank>
-                </item>
-                <item id="notify">
-                  <rank>60</rank>
-                </item>
-                <item id="function">
-                  <rank>70</rank>
-                </item>
-              </items>
-              <rank>10</rank>
-            </item>
-            <item id="persons_list">
-              <rank>20</rank>
-            </item>
-            <item id="tickets_list">
-              <rank>30</rank>
-            </item>
-            <item id="cis_list">
-              <rank>40</rank>
+            <item id="wbss_list" _delta="define">
+              <rank>80</rank>
             </item>
           </items>
         </details>
@@ -901,7 +778,7 @@
           <code><![CDATA[
 							public static function GetTicketRefFormat()
 							{
-								return 'Proj-%06d';
+								return 'Proj-%03d';
 							}
 						]]></code>
         </method>
@@ -3200,7 +3077,7 @@
       <enable_admin_only _delta="define">0</enable_admin_only>
       <enable_action _delta="define">UR_ACTION_MODIFY</enable_action>
       <style>
-        <decoration_classes>fas fa-chess-knight</decoration_classes>
+        <decoration_classes>fas fa-map</decoration_classes>
       </style>
     </menu>
     <menu xsi:type="DashboardMenuNode" id="Project:Overview" _delta="define">

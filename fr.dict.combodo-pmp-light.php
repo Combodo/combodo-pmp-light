@@ -85,7 +85,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Project/Attribute:wbss_list_displaybare' => 'Livrables non clos',
 	'Class:Project/Attribute:requirement' => 'Exigences',
 	'Class:Project/Attribute:org_id' => 'Client',
-	'Class:Project/Name' => '%1$s-%2$s',
+	'Class:Project/Name' => '%1$s %2$s',
 	'Class:Project/Stimulus:ev_cancel' => 'Annuler le projet',
 	'Class:Project/Stimulus:ev_close' => 'Clôturer',
 	'Class:Project/Stimulus:ev_execute' => 'Exécuter',
