@@ -10,6 +10,8 @@
 Dict::Add('EN US', 'English', 'English', array(
 	'Class:Contact/Attribute:project_list' => 'Open projects I\'m involved in',
 	'Class:Contact/Attribute:projects_list' => 'Projects',
+	'Contact:Info:ProjectManager'=> 'Projects I am project manager or sponsor',
+	'Contact:Info:WBSManager'=> 'Deliverables I am accountable on',
 	'Class:Contact/Attribute:wbs_list' => 'Open deliverables I\'m involved on',
 	'Class:Contact/Attribute:wbss_list' => 'Deliverables',
 	'Class:Contact/Attribute:wbss_list+' => 'Deliverables to work on',

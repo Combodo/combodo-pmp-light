@@ -8,6 +8,8 @@
 // Contact class
 Dict::Add('FR FR', 'French', 'Français', array(
 	'Class:Contact/Attribute:project_list' => 'Projets sur lesquels je travaille',
+	'Contact:Info:ProjectManager'=> 'Mon rôle est chef de projet ou sponsor',
+	'Contact:Info:WBSManager'=> 'Je suis responsable des livrables',
 	'Class:Contact/Attribute:projects_list' => 'Projets',
 	'Class:Contact/Attribute:wbs_list' => 'Livrables pour lesquels je suis impliqué',
 	'Class:Contact/Attribute:wbss_list' => 'Livrables',

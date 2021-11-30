@@ -45,16 +45,33 @@
 		            $sOQLProject = "SELECT lnkContactToTicket AS l1 JOIN Project AS p ON l1.ticket_id=p.id WHERE p.status != 'closed' AND l1.contact_id= :contact";
 		            $sOQLWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'closed' AND wbs.status NOT IN ('cancel','closed') AND l2.contact_id=:contact";
 
+                $sOQLProjectManager = "SELECT Project AS p WHERE p.status != 'closed' AND (p.agent_id= :contact OR p.caller_id= :contact)";
+		            $sOQLWBSManager = "SELECT WBS AS wbs JOIN Project AS p ON wbs.project_id=p.id WHERE p.status != 'closed' AND wbs.status NOT IN ('cancel','closed') AND wbs.wbs_owner_id=:contact";
+
 		            $oOQLProjectSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLProject), array(), array('contact' => $iContactid));
 		            $oOQLWBSSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBS), array(), array('contact' => $iContactid));
+		            $oOQLProjectManagerSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLProjectManager), array(), array('contact' => $iContactid));
+		            $oOQLWBSManagerSet = new CMDBObjectSet(DBObjectSearch::FromOQL($sOQLWBSManager), array(), array('contact' => $iContactid));
 
 		            $iContactProjectSet = $oOQLProjectSet->Count();
 		            $iContactWBSSet = $oOQLWBSSet->Count();
+		            $iContactProjectManagerSet = $oOQLProjectManagerSet->Count();
+		            $iContactWBSManagerSet = $oOQLWBSManagerSet->Count();
 
-		            $oPage->SetCurrentTab(Dict::S('Class:Contact/Tab:PMP'));
 
-		            if ( $iContactProjectSet> 0)
-		            {
+                if (($iContactProjectSet> 0) || ($iContactWBSSet> 0) || ($iContactProjectManagerSet> 0) || ($iContactWBSManagerSet> 0))
+                  {
+                   $oPage->SetCurrentTab(Dict::S('Class:Contact/Tab:PMP'));
+                    if ($iContactProjectManagerSet > 0)
+                      {
+                        $aDetails = array();
+                        $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+                        $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Contact:Info:ProjectManager'));
+                        $oBlock = new DisplayBlock($oOQLProjectManagerSet->GetFilter(), 'list', false);
+                        $oBlock->Display($oPage, 'project_manager', $aExtraParam);
+                      }
+                   if ( $iContactProjectSet> 0)
+                        {
 		                $aDetails = array();
 				            $aExtraParam = array ('menu'=>true,
 					            'zlist' => false,
@@ -65,57 +82,35 @@
 				            $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
 				            $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
 				            $oBlock->Display($oPage, 'project_contact', $aExtraParam);
-				        }
-				        if ( $iContactWBSSet> 0)
-				        {
-				            $aDetails = array();
-				            $aExtraParam = array ('menu'=>true,
-					            'zlist' => false,
-					            'display_limit'=>false,
-					            'view_link'=>false,
-					            'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
-				            );
-				            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
-				            $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
-				            $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
-				         }
+				             }
+				            if ( $iContactWBSManagerSet> 0)
+                    {
+                        $aDetails = array();
+                        $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
+                        $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Contact:Info:WBSManager'));
+                        $oBlock = new DisplayBlock($oOQLWBSManagerSet->GetFilter(), 'list', false);
+                        $oBlock->Display($oPage, 'WBS_manager', $aExtraParam);
+                     }
+                    if ( $iContactWBSSet> 0)
+                    {
+                        $aDetails = array();
+                        $aExtraParam = array ('menu'=>true,
+                          'zlist' => false,
+                          'display_limit'=>false,
+                          'view_link'=>false,
+                          'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
+                        );
+                        $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
+                        $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
+                        $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
+                     }
 								 parent::DisplayBareRelations($oPage, $bEditMode);
 
 						}
+					 }
 						]]></code>
         </method>
       </methods>
-      <presentation>
-        <details>
-          <items>
-            <item id="wbss_list" _delta="define">
-              <rank>80</rank>
-            </item>
-          </items>
-        </details>
-      </presentation>
-    </class>
-    <class id="Person" _created_in="itop-config-mgmt" _delta="must_exist">
-      <presentation>
-        <details>
-          <items>
-            <item id="wbss_list" _delta="define">
-              <rank>80</rank>
-            </item>
-          </items>
-        </details>
-      </presentation>
-    </class>
-    <class id="Team" _created_in="itop-config-mgmt" _delta="must_exist">
-      <presentation>
-        <details>
-          <items>
-            <item id="wbss_list" _delta="define">
-              <rank>80</rank>
-            </item>
-          </items>
-        </details>
-      </presentation>
     </class>
     <class id="Project" _delta="define">
       <properties>
@@ -420,6 +415,22 @@
 							}
 					]]></code>
         </method>
+        <method id="GetImage">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[
+							public function GetImage($sFilename)
+							{
+							$sURL=Utils::GetCurrentModuleUrl().'/asset/img/'.$sFilename;
+							return "<img src=\"$sURL\" style=\"vertical-align:middle;\">";
+							}
+					]]></code>
+        </method>
         <method id="DisplayBareRelations">
           <comment>/**
             *
@@ -455,7 +466,7 @@
 
                 //method of display depends of iTop Version
                 if (version_compare(ITOP_DESIGN_LATEST_VERSION , 3.0) >= 0) {
-                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),MetaModel::GetClassIcon('DocumentNote', false));
+                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),$this->GetImage('document.png'));
                     $oPage->AddUiBlock($oTitle);
 
                     $oMulticolumn = Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumnUIBlockFactory::MakeStandard();
@@ -569,7 +580,7 @@
                   }
 
                     } else {
-                      $oPage->p(MetaModel::GetClassIcon('DocumentNote').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
+                      $oPage->p($this->GetImage('document.png').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
                       $oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
                     $oPage->add('<tbody><tr>');
                     $oPage->add('<td style="vertical-align:top; width:50%" class="">');
@@ -1448,9 +1459,7 @@
         <field id="project_id" xsi:type="AttributeExternalKey">
           <sql>project_id</sql>
           <filter>SELECT Project WHERE status !="closed"</filter>
-          <dependencies>
-            <attribute id="title"/>
-          </dependencies>
+          <dependencies/>
           <is_null_allowed>true</is_null_allowed>
           <target_class>Project</target_class>
           <on_target_delete>DEL_AUTO</on_target_delete>
