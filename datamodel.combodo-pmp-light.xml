@@ -424,10 +424,15 @@
           <static>false</static>
           <access>public</access>
           <code><![CDATA[
-							public function GetImage($sFilename)
+							public function GetImage($sFilename, $bWithHtml = true)
 							{
-							$sURL=Utils::GetCurrentModuleUrl().'/asset/img/'.$sFilename;
-							return "<img src=\"$sURL\" style=\"vertical-align:middle;\">";
+							  $sURL = Utils::GetCurrentModuleUrl().'/asset/img/'.$sFilename;
+
+							  if ($bWithHtml === true) {
+							    return "<img src=\"$sURL\" style=\"vertical-align:middle;\">";
+                } else {
+                  return $sURL;
+                }
 							}
 					]]></code>
         </method>
@@ -466,7 +471,7 @@
 
                 //method of display depends of iTop Version
                 if (version_compare(ITOP_DESIGN_LATEST_VERSION , 3.0) >= 0) {
-                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),$this->GetImage('document.png'));
+                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),$this->GetImage('document.png',false));
                     $oPage->AddUiBlock($oTitle);
 
                     $oMulticolumn = Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumnUIBlockFactory::MakeStandard();
@@ -580,7 +585,7 @@
                   }
 
                     } else {
-                      $oPage->p($this->GetImage('document.png').'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
+                      $oPage->p($this->GetImage('document.png',true).'&nbsp;'.Dict::Format('Class:Project/Tab:Summary+'));
                       $oPage->add('<table style="vertical-align:top" class="n-cols-details 2-cols-details" data-mode="view">');
                     $oPage->add('<tbody><tr>');
                     $oPage->add('<td style="vertical-align:top; width:50%" class="">');
