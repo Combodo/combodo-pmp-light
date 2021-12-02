@@ -534,7 +534,7 @@
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
                       );
-                      $oPanelContactWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:WBS/Attribute:wbss_list_displaybare'),MetaModel::GetClassIcon('WBS', false));
+                      $oPanelContactWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'),MetaModel::GetClassIcon('Contact', false));
                       $oPage->AddUiBlock($oPanelContactWBS);
                       $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
                       $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'WBS_contacts', $aExtraParam));
