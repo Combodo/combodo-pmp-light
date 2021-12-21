@@ -426,7 +426,7 @@
           <code><![CDATA[
 							public function GetImage($sFilename, $bWithHtml = true)
 							{
-							  $sURL = Utils::GetCurrentModuleUrl().'/asset/img/'.$sFilename;
+							  $sURL = Utils::GetAbsoluteUrlModulesRoot().'/combodo-pmp-light/asset/img/'.$sFilename;
 
 							  if ($bWithHtml === true) {
 							    return "<img src=\"$sURL\" style=\"vertical-align:middle;\">";
