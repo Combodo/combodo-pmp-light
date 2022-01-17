@@ -10,12 +10,12 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-pmp-light/1.0.9',
+	'combodo-pmp-light/1.1.0',
 	array(
 		// Identification
 		//
-		'label' => 'Project Management light module',
-		'category' => 'business',
+		'label'        => 'Project Management light module',
+		'category'     => 'business',
 
 		// Setup
 		//

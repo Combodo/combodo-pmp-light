@@ -66,28 +66,48 @@
                       {
                         $aDetails = array();
                         $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-                        $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Contact:Info:ProjectManager'));
+                        if (version_compare(ITOP_DESIGN_LATEST_VERSION, 3.0) < 0) {
+                           $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Contact:Info:ProjectManager'));
+                        } else {
+                          $aExtraParam['panel_title'] = Dict::S('Contact:Info:ProjectManager');
+                          $aExtraParam["surround_with_panel"] = true;
+                          $aExtraParam["panel_class"] = 'Project';
+                          $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('Project',false);
+                        }
                         $oBlock = new DisplayBlock($oOQLProjectManagerSet->GetFilter(), 'list', false);
                         $oBlock->Display($oPage, 'project_manager', $aExtraParam);
                       }
-                   if ( $iContactProjectSet> 0)
-                        {
-		                $aDetails = array();
-				            $aExtraParam = array ('menu'=>true,
-					            'zlist' => false,
-					            'display_limit'=>false,
-					            'view_link'=>false,
-					            'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
-				            );
-				            $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
-				            $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
-				            $oBlock->Display($oPage, 'project_contact', $aExtraParam);
-				             }
+                   if ( $iContactProjectSet> 0) {
+                      $aDetails = array();
+                      $aExtraParam = array ('menu'=>true,
+                        'zlist' => false,
+                        'display_limit'=>false,
+                        'view_link'=>false,
+                        'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
+                      );
+                      if (version_compare(ITOP_DESIGN_LATEST_VERSION, 3.0) < 0) {
+                          $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
+                      } else {
+                            $aExtraParam['panel_title'] = Dict::S('Contact:Info:ProjectManager');
+                            $aExtraParam["surround_with_panel"] = true;
+                            $aExtraParam["panel_class"] = 'Project';
+                            $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('Project',false);
+                       }
+                      $oBlock = new DisplayBlock($oOQLProjectSet->GetFilter(), 'list', false);
+                      $oBlock->Display($oPage, 'project_contact', $aExtraParam);
+				            }
 				            if ( $iContactWBSManagerSet> 0)
                     {
                         $aDetails = array();
                         $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-                        $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Contact:Info:WBSManager'));
+                        if (version_compare(ITOP_DESIGN_LATEST_VERSION, 3.0) < 0) {
+                            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Contact:Info:WBSManager'));
+                        } else {
+                          $aExtraParam['panel_title'] = Dict::S('Contact:Info:WBSManager');
+                          $aExtraParam["surround_with_panel"] = true;
+                          $aExtraParam["panel_class"] = 'WBS';
+                          $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('WBS',false);
+                        }
                         $oBlock = new DisplayBlock($oOQLWBSManagerSet->GetFilter(), 'list', false);
                         $oBlock->Display($oPage, 'WBS_manager', $aExtraParam);
                      }
@@ -100,7 +120,14 @@
                           'view_link'=>false,
                           'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
                         );
-                        $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
+                        if (version_compare(ITOP_DESIGN_LATEST_VERSION, 3.0) < 0) {
+                            $oPage->p(MetaModel::GetClassIcon('WBS').'&nbsp;'.Dict::S('Class:Contact/Attribute:wbs_list'));
+                        } else {
+                          $aExtraParam['panel_title'] = Dict::S('Class:Contact/Attribute:wbs_list');
+                          $aExtraParam["surround_with_panel"] = true;
+                          $aExtraParam["panel_class"] = 'WBS';
+                          $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('WBS',false);
+                        }
                         $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
                         $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
                      }
@@ -471,7 +498,11 @@
 
                 //method of display depends of iTop Version
                 if (version_compare(ITOP_DESIGN_LATEST_VERSION , 3.0) >= 0) {
-                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Tab:Summary+'),$this->GetImage('document.png',false));
+                    $oTitle = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeNeutral(Dict::S('Class:Project/Tab:Summary+'),2);
+                    $oTitle->SetIcon($this->GetImage('document.png',false));
+                    $oTitle->AddCSSClass('pmp-summary-title');
+                    $oPage->AddUiBlock($oTitle);
+                    $oPage->add_style(".pmp-summary-title .ibo-title--icon-background{    width: 48px;  height: 48px;}");
                     $oPage->AddUiBlock($oTitle);
 
                     $oMulticolumn = Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumnUIBlockFactory::MakeStandard();
@@ -520,8 +551,10 @@
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
                       );
-                      $oPanelContactProject = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare'),MetaModel::GetClassIcon('Contact',false));
-                      $oPage->AddUiBlock($oPanelContactProject);
+                      $aExtraParam['panel_title'] = Dict::S('Class:WBS/Attribute:contacts_list_proj_displaybare');
+                      $aExtraParam["surround_with_panel"] = true;
+                      $aExtraParam["panel_class"] = 'Contact';
+                      $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('Contact',false);
 
                       $oBlock = new DisplayBlock($oContactProjectSet->GetFilter(), 'list', false);
                       $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'project_contacts', $aExtraParam));
@@ -534,16 +567,22 @@
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
                       );
-                      $oPanelContactWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare'),MetaModel::GetClassIcon('Contact', false));
-                      $oPage->AddUiBlock($oPanelContactWBS);
+                      $aExtraParam['panel_title'] = Dict::S('Class:WBS/Attribute:contacts_list_wbs_displaybare');
+                      $aExtraParam["surround_with_panel"] = true;
+                      $aExtraParam["panel_class"] = 'Contact';
+                      $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('Contact',false);
+
                       $oBlock = new DisplayBlock($oContactWBSSet->GetFilter(), 'list', false);
                       $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'WBS_contacts', $aExtraParam));
                   }
                   if ($iWBSSet > 0)
                   {
                       $aExtraParam = array ('menu'=>true, 'display_limit'=>false);
-                      $oTitleWBS = Combodo\iTop\Application\UI\Base\Component\Title\TitleUIBlockFactory::MakeForPageWithIcon(Dict::S('Class:Project/Attribute:wbss_list_displaybare'),MetaModel::GetClassIcon('WBS',false));
-                      $oPage->AddUiBlock($oTitleWBS);
+                      $aExtraParam['panel_title'] = Dict::S('Class:Project/Attribute:wbss_list_displaybare');
+                      $aExtraParam["surround_with_panel"] = true;
+                      $aExtraParam["panel_class"] = 'WBS';
+                      $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('WBS',false);
+
                       $oBlock = new DisplayBlock($oWBSSet->GetFilter(), 'list', false);
                       $oPage->AddSubBlock($oBlock->GetDisplay($oPage, 'project_open_deliverables', $aExtraParam));
 
