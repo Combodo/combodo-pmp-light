@@ -506,6 +506,7 @@
                     $oPage->AddUiBlock($oTitle);
 
                     $oMulticolumn = Combodo\iTop\Application\UI\Base\Layout\MultiColumn\MultiColumnUIBlockFactory::MakeStandard();
+                    $oMulticolumn->AddCSSClass('display_block');
                     $oPage->AddSubBlock($oMulticolumn);
 
                     $oFieldSetCol1 = Combodo\iTop\Application\UI\Base\Component\FieldSet\FieldSetUIBlockFactory::MakeStandard(Dict::S('Class:Project:Summary_general'));
