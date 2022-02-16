@@ -131,9 +131,8 @@
                         $oBlock = new DisplayBlock($oOQLWBSSet->GetFilter(), 'list', false);
                         $oBlock->Display($oPage, 'WBS_contact', $aExtraParam);
                      }
+						     }
 								 parent::DisplayBareRelations($oPage, $bEditMode);
-
-						}
 					 }
 						]]></code>
         </method>
