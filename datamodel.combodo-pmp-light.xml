@@ -1490,6 +1490,11 @@
             <attribute id="ref"/>
           </attributes>
         </reconciliation>
+        <order>
+          <columns>
+            <column id="re_estimated_start_date" ascending="true"/>
+          </columns>
+        </order>
         <icon>../combodo-pmp-light/asset/img/WBS.png</icon>
         <uniqueness_rules/>
       </properties>
