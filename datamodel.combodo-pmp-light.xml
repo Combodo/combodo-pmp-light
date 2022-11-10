@@ -88,7 +88,7 @@
                       if (version_compare(ITOP_DESIGN_LATEST_VERSION, 3.0) < 0) {
                           $oPage->p(MetaModel::GetClassIcon('Project').'&nbsp;'.Dict::S('Class:Contact/Attribute:project_list'));
                       } else {
-                            $aExtraParam['panel_title'] = Dict::S('Contact:Info:ProjectManager');
+                            $aExtraParam['panel_title'] = Dict::S('Class:Contact/Attribute:project_list');
                             $aExtraParam["surround_with_panel"] = true;
                             $aExtraParam["panel_class"] = 'Project';
                             $aExtraParam["panel_icon"] = MetaModel::GetClassIcon('Project',false);
