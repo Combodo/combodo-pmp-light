@@ -474,7 +474,7 @@
 						public function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
 						{
 		            $iProjectid = $this->GetKey();
-		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status !='closed'";
+		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel','closed')";
 			          $sOQLWBSCost = "SELECT WBS WHERE project_id = :project";
 		            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
 		            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
@@ -3195,7 +3195,7 @@
               <dashlet id="3" xsi:type="DashletGroupByTable">
                 <rank>10</rank>
                 <title>UI-ProjectManagementOverview-OpenProjectByStatus</title>
-                <query>SELECT Project WHERE status NOT IN ('closed','resolved')</query>
+                <query>SELECT Project WHERE status NOT IN ('closed','resolved','cancelled')</query>
                 <group_by>status</group_by>
                 <style>table</style>
               </dashlet>
@@ -3238,7 +3238,7 @@
     <menu xsi:type="OQLMenuNode" id="MyProject" _delta="define">
       <parent>ProjectMenu</parent>
       <rank>20</rank>
-      <oql>SELECT Project WHERE agent_id = :current_contact_id AND status != "closed"</oql>
+      <oql>SELECT Project WHERE agent_id = :current_contact_id AND NOT IN ('cancelled','closed')</oql>
       <do_search>1</do_search>
     </menu>
     <menu xsi:type="TemplateMenuNode" id="WBSMenu" _delta="define">
@@ -3258,7 +3258,7 @@
     <menu xsi:type="OQLMenuNode" id="MyWBS" _delta="define">
       <parent>WBSMenu</parent>
       <rank>11</rank>
-      <oql>SELECT WBS WHERE wbs_owner_id= :current_contact_id AND status != "closed"</oql>
+      <oql>SELECT WBS WHERE wbs_owner_id= :current_contact_id AND NOT IN ('cancel','closed')</oql>
       <do_search>1</do_search>
     </menu>
   </menus>
