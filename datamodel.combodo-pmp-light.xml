@@ -475,7 +475,7 @@
 						{
 		            $iProjectid = $this->GetKey();
 		            $sOQLWBS = "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel','closed')";
-			          $sOQLWBSCost = "SELECT WBS WHERE project_id = :project status NOT IN ('cancel')";
+			          $sOQLWBSCost = "SELECT WBS WHERE project_id = :project AND status NOT IN ('cancel')";
 		            $sOQLContactProject = "SELECT lnkContactToTicket AS l1 WHERE l1.ticket_id = :project";
 		            $sOQLContactWBS = "SELECT lnkContactToWBS AS l2 JOIN WBS AS wbs ON l2.wbs_id=wbs.id WHERE wbs.status NOT IN ('cancel','closed') AND wbs.project_id=:project";
 
