@@ -80,7 +80,7 @@
                    if ( $iContactProjectSet> 0) {
                       $aDetails = array();
                       $aExtraParam = array ('menu'=>true,
-                        'zlist' => false,
+                        'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                         'display_limit'=>false,
                         'view_link'=>false,
                         'extra_fields' => 'ticket_id,influence,power,allocated_percent,allocated_days',
@@ -115,7 +115,7 @@
                     {
                         $aDetails = array();
                         $aExtraParam = array ('menu'=>true,
-                          'zlist' => false,
+                          'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                           'display_limit'=>false,
                           'view_link'=>false,
                           'extra_fields' => 'project_id,wbs_id,influence,power,allocated_percent,allocated_days',
