@@ -546,7 +546,7 @@
                   if ( $iContactProjectSet> 0)
                   {
                       $aExtraParam = array ('menu'=>true,
-                        'zlist' => false,
+                        'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                         'display_limit'=>false,
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
@@ -562,7 +562,7 @@
                   if ( $iContactWBSSet> 0)
                   {
                       $aExtraParam = array ('menu'=>true,
-                        'zlist' => false,
+                        'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                         'display_limit'=>false,
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
@@ -674,7 +674,7 @@
                   if ( $iContactProjectSet> 0)
                   {
                       $aExtraParam = array ('menu'=>true,
-                        'zlist' => false,
+                        'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                         'display_limit'=>false,
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,influence,power,allocated_percent,allocated_days',
@@ -686,7 +686,7 @@
                   if ( $iContactWBSSet> 0)
                   {
                       $aExtraParam = array ('menu'=>true,
-                        'zlist' => false,
+                        'zlist' => version_compare(ITOP_DESIGN_LATEST_VERSION, 3.1, '<') ? false : 'list',
                         'display_limit'=>false,
                         'view_link'=>false,
                         'extra_fields' => 'category,contact_id,wbs_id,influence,power,allocated_percent,allocated_days',
