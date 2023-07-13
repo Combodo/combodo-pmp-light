@@ -2860,6 +2860,14 @@
             <attribute id="parent_wbs_id"/>
           </attributes>
         </reconciliation>
+        <uniqueness_rules>
+          <rule id="no_duplicate">
+            <attributes>
+              <attribute id="child_wbs_id"/>
+              <attribute id="parent_wbs_id"/>
+            </attributes>
+          </rule>
+        </uniqueness_rules>
       </properties>
       <fields>
         <field id="child_wbs_id" xsi:type="AttributeExternalKey">
@@ -2972,6 +2980,14 @@
             <attribute id="wbs_id"/>
           </attributes>
         </reconciliation>
+        <uniqueness_rules>
+          <rule id="no_duplicate">
+            <attributes>
+              <attribute id="contact_id"/>
+              <attribute id="wbs_id"/>
+            </attributes>
+          </rule>
+        </uniqueness_rules>
       </properties>
       <fields>
         <field id="contact_id" xsi:type="AttributeExternalKey">
