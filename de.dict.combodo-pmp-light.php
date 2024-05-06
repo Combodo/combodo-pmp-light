@@ -2,7 +2,7 @@
 /**
  * Localized data
  *
- * @copyright   Copyright (C) 2013-2022 Combodo, ITOMIG GmbH
+ * @copyright   Copyright (C) 2013-2024 Combodo SAS, ITOMIG GmbH
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
