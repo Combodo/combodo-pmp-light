@@ -10,7 +10,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'combodo-pmp-light/1.1.3',
+	'combodo-pmp-light/1.2.0',
 	array(
 		// Identification
 		//
@@ -69,7 +69,7 @@ if (!class_exists('PMPLightInstaller'))
 			//create a delivrable from a project
 			$aNewRule = array(
 				'source_scope' => 'SELECT Project WHERE status NOT IN (\'closed\',\'monitored\',\'cancel\')',
-				'allowed_profiles' => 'Project Manager,Administrator',
+				'allowed_profiles' => 'Project Manager,SuperUser,Administrator',
 				'menu_label' => Dict::s('Class:Project/CreateDeliverable'),
 				'form_label' => Dict::s('Class:Project/CreateDeliverableForm'),
 				'report_label' => Dict::s('Class:Project/ReportLabel'),
@@ -111,7 +111,7 @@ if (!class_exists('PMPLightInstaller'))
 			$aNewRule = array(
 				'id' => 'CopyProjectLight',
 				'source_scope' => 'SELECT Project WHERE status NOT IN (\'closed\',\'monitored\')',
-				'allowed_profiles' => 'Project Manager,Administrator',
+				'allowed_profiles' => 'Project Manager,SuperUser,Administrator',
 				'menu_label' => Dict::s('Class:Project/DuplicateProject'),
 				'form_label' => Dict::s('Class:Project/DuplicateProjectForm'),
 				'report_label' =>  Dict::s('Class:Project/ReportLabel'),
