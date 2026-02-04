@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.2">
   <classes>
     <class id="Ticket" _created_in="itop-tickets" _delta="must_exist">
       <fields>
@@ -149,7 +148,12 @@
             <attribute id="title"/>
           </attributes>
         </naming>
-        <icon>../combodo-pmp-light/asset/img/project.png</icon>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
+        <style>
+          <icon>../combodo-pmp-light/asset/img/project.png</icon>
+        </style>
         <reconciliation>
           <attributes>
             <attribute id="ref"/>
@@ -200,12 +204,24 @@
         <field id="status" xsi:type="AttributeEnum">
           <sql>status</sql>
           <values>
-            <value id="initiated">initiated</value>
-            <value id="planned">planned</value>
-            <value id="executed">executed</value>
-            <value id="monitored">monitored</value>
-            <value id="closed">closed</value>
-            <value id="cancelled">cancelled</value>
+            <value id="initiated">
+              <code>initiated</code>
+            </value>
+            <value id="planned">
+              <code>planned</code>
+            </value>
+            <value id="executed">
+              <code>executed</code>
+            </value>
+            <value id="monitored">
+              <code>monitored</code>
+            </value>
+            <value id="closed">
+              <code>closed</code>
+            </value>
+            <value id="cancelled">
+              <code>cancelled</code>
+            </value>
           </values>
           <default_value>initiated</default_value>
           <is_null_allowed>false</is_null_allowed>
@@ -1075,7 +1091,6 @@
       </presentation>
       <parent>Ticket</parent>
       <lifecycle>
-        <attribute>status</attribute>
         <stimuli>
           <stimulus id="ev_plan" xsi:type="StimulusUserAction"/>
           <stimulus id="ev_execute" xsi:type="StimulusUserAction"/>
@@ -1359,8 +1374,12 @@
         <field id="influence" xsi:type="AttributeEnum" _delta="define">
           <sql>influence</sql>
           <values>
-            <value id="objector">objector</value>
-            <value id="partner">partner</value>
+            <value id="objector">
+              <code>objector</code>
+            </value>
+            <value id="partner">
+              <code>partner</code>
+            </value>
           </values>
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
@@ -1376,8 +1395,12 @@
           <is_null_allowed>true</is_null_allowed>
           <label/>
           <values>
-            <value id="low">low</value>
-            <value id="strong">strong</value>
+            <value id="low">
+              <code>low</code>
+            </value>
+            <value id="strong">
+              <code>strong</code>
+            </value>
           </values>
           <description/>
           <display_style/>
@@ -1405,8 +1428,12 @@
           <is_null_allowed>true</is_null_allowed>
           <label/>
           <values>
-            <value id="1">1</value>
-            <value id="2">2</value>
+            <value id="1">
+              <code>1</code>
+            </value>
+            <value id="2">
+              <code>2</code>
+            </value>
           </values>
           <description/>
           <display_style/>
@@ -1495,7 +1522,12 @@
             <column id="re_estimated_start_date" ascending="true"/>
           </columns>
         </order>
-        <icon>../combodo-pmp-light/asset/img/WBS.png</icon>
+        <fields_semantic>
+          <state_attribute>status</state_attribute>
+        </fields_semantic>
+        <style>
+          <icon>../combodo-pmp-light/asset/img/WBS.png</icon>
+        </style>
         <uniqueness_rules/>
       </properties>
       <fields>
@@ -1599,10 +1631,18 @@
         <field id="status" xsi:type="AttributeEnum">
           <sql>status</sql>
           <values>
-            <value id="running">running</value>
-            <value id="closed">closed</value>
-            <value id="pending_parent">pending_parent</value>
-            <value id="cancel">cancel</value>
+            <value id="running">
+              <code>running</code>
+            </value>
+            <value id="closed">
+              <code>closed</code>
+            </value>
+            <value id="pending_parent">
+              <code>pending_parent</code>
+            </value>
+            <value id="cancel">
+              <code>cancel</code>
+            </value>
           </values>
           <default_value>running</default_value>
           <is_null_allowed>true</is_null_allowed>
@@ -1681,7 +1721,6 @@
         </field>
       </fields>
       <lifecycle>
-        <attribute>status</attribute>
         <highlight_scale></highlight_scale>
         <states>
           <state id="running">
@@ -2579,14 +2618,15 @@
 					]]></code>
           <arguments/>
         </method>
-				<method id="SetProjectCompletion" _delta="define">
-					<comment>/**
-						*
-						* @author Axelle Bost
-						*/</comment>
-					<static>false</static>
-					<access>public </access>
-					<code><![CDATA[	public function SetProjectCompletion()
+        <method id="SetProjectCompletion" _delta="define">
+          <comment>/**
+            *
+            * @author Axelle Bost
+            */
+          </comment>
+          <static>false</static>
+          <access>public</access>
+          <code><![CDATA[	public function SetProjectCompletion()
 	{
 	    //  current completion of all project's WBS related are consolidated to define project completion
               $iProjectId = $this->Get('project_id');
@@ -3014,8 +3054,12 @@
           <description/>
           <validation_pattern/>
           <values>
-            <value id="objector">objector</value>
-            <value id="partner">partner</value>
+            <value id="objector">
+              <code>objector</code>
+            </value>
+            <value id="partner">
+              <code>partner</code>
+            </value>
           </values>
           <display_style>list</display_style>
           <dependencies>
@@ -3028,8 +3072,12 @@
           <is_null_allowed>true</is_null_allowed>
           <label>Influence power</label>
           <values>
-            <value id="strong">strong</value>
-            <value id="low">low</value>
+            <value id="strong">
+              <code>strong</code>
+            </value>
+            <value id="low">
+              <code>low</code>
+            </value>
           </values>
           <description/>
           <display_style>list</display_style>
@@ -3057,8 +3105,12 @@
           <is_null_allowed>true</is_null_allowed>
           <label>Category</label>
           <values>
-            <value id="1">1</value>
-            <value id="2">2</value>
+            <value id="1">
+              <code>1</code>
+            </value>
+            <value id="2">
+              <code>2</code>
+            </value>
           </values>
           <description/>
           <display_style>list</display_style>

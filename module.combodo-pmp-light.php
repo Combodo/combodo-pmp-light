@@ -20,7 +20,7 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => array(
-			'itop-tickets/2.7.0',
+			'itop-tickets/3.2.0',
 			'itop-config-mgmt/2.0.0',
 			'itop-object-copier/1.3.4',
 			'combodo-gantt-view/1.0.2',
